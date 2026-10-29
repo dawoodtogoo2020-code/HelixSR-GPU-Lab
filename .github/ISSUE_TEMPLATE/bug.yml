@@ -1,0 +1,14 @@
+name: Host tooling bug
+description: Report a verifier, benchmark or metadata-contract problem.
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Expected result, actual result and reproduction steps
+      description: Include tool version and host platform. Remove private paths, addresses and credentials. Do not upload game/model assets.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Sanitized error or test output

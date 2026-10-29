@@ -1,0 +1,22 @@
+{
+  "backend": null,
+  "backend_version": null,
+  "model_hash": null,
+  "precision": null,
+  "input_size": null,
+  "output_size": null,
+  "dynamic_resolution_policy": null,
+  "shader_graph_hash": null,
+  "timing_boundary": null,
+  "timing_type": null,
+  "scene": null,
+  "game": null,
+  "game_version": null,
+  "device": null,
+  "compiler": null,
+  "driver": null,
+  "compilation_info": null,
+  "calibration": {"verified": false, "method": null, "uncertainty_ms": null},
+  "sample_unit": null,
+  "samples": []
+}

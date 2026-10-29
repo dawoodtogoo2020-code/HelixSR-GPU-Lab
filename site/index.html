@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="HelixSR GPU Lab: experimental PS5 upscaling research, CONTROL Resonant results, compatibility and developer tools. Public console installer not yet released.">
+  <meta name="theme-color" content="#121810">
+  <meta property="og:title" content="HelixSR GPU Lab">
+  <meta property="og:description" content="A PS5 upscaling project, starting with CONTROL Resonant. Explore the evidence, compatibility and developer preview.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dawoodtogoo2020-code.github.io/HelixSR-GPU-Lab/">
+  <link rel="icon" href="mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <title>HelixSR GPU Lab | PS5 upscaling research</title>
+  <script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav wrap">
+  <a class="brand" href="#" aria-label="HelixSR GPU Lab home"><img src="mark.svg" width="34" height="34" alt=""><span>HelixSR <b>GPU LAB</b></span></a>
+  <nav aria-label="Main navigation"><a href="#compatibility">Compatibility</a><a href="#install">Get started</a><a href="#roadmap">Roadmap</a><a class="repo-link" href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab">GitHub ↗</a></nav>
+</header>
+<main id="main">
+<section class="hero wrap">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="dot"></span> INDEPENDENT PS5 RESEARCH · DEVELOPER PREVIEW</p>
+    <h1>A new path to<br><span>PS5 upscaling.</span></h1>
+    <p class="lead">HelixSR GPU Lab is building toward a simpler way to bring neural upscaling to PlayStation 5 games. Our first live integration is in <strong>CONTROL Resonant</strong>. More games are the next step.</p>
+    <div class="actions"><a class="button primary" href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab">Explore the project <span aria-hidden="true">↗</span></a><a class="button secondary" href="#compatibility">Check compatibility</a></div>
+    <p class="release-note">Host tools available now. A public PS5 upscaler installer is not yet released.</p>
+  </div>
+  <div class="pipeline" aria-label="Conceptual upscaling pipeline, not a gameplay capture">
+    <div class="pipeline-top"><span>THE FRAME PIPELINE</span><span class="micro-tag">CONCEPT</span></div>
+    <div class="pixels" aria-hidden="true"><div class="pixel-source"></div><span class="connector">→</span><div class="pixel-result"></div></div>
+    <div class="pipeline-labels"><span>LOWER-RES INPUT</span><span>RECONSTRUCTED OUTPUT</span></div>
+    <div class="signal-list"><span>Color</span><span>Depth</span><span>Motion</span><span>History</span></div>
+    <div class="pipeline-bottom"><span class="bracket">[ ]</span><p>Each game needs a verified adapter.<br><strong>FSR detection alone is not enough.</strong></p></div>
+  </div>
+</section>
+<div class="status-strip"><div class="wrap status-inner"><span class="status-label">CURRENT RELEASE</span><strong>Source + host tools</strong><span class="divider"></span><span>One title with bounded live lab evidence</span><a href="#install">What you can download <span aria-hidden="true">↓</span></a></div></div>
+<section class="wrap section" id="compatibility">
+  <div class="section-head"><div><p class="eyebrow">01 / COMPATIBILITY</p><h2>Evidence before a support badge.</h2></div><p>We track each game and build separately. No game has a public installable adapter in this preview.</p></div>
+  <div class="filter-row"><label for="game-search">Find a game or title ID</label><input id="game-search" type="search" placeholder="Try CONTROL or PPSA34547" autocomplete="off"></div>
+  <div class="table-scroll"><table><caption class="sr-only">Current game compatibility</caption><thead><tr><th scope="col">Game</th><th scope="col">Evidence level</th><th scope="col">Public install</th></tr></thead><tbody id="game-rows">
+    <tr data-search="control resonant ppsa34547 01.300.300"><td><strong>CONTROL Resonant</strong><small>PPSA34547 · 01.300.300</small></td><td><span class="pill lab">Live lab integration</span><small>Bounded tests on the recorded build</small></td><td>Not released</td></tr>
+    <tr data-search="saros"><td><strong>SAROS</strong><small>Exact installed build unverified</small></td><td><span class="pill research">Under investigation</span><small>Historical static discovery only</small></td><td>Unsupported</td></tr>
+    <tr data-search="other ps5 games fsr"><td><strong>Other PS5 FSR games</strong><small>Per-build adapters required</small></td><td><span class="pill planned">Future work</span><small>No qualified adapter</small></td><td>Unsupported</td></tr>
+  </tbody></table></div>
+  <p id="search-result" class="table-note" role="status" aria-live="polite">3 entries. Detection does not establish safe activation.</p>
+  <a class="text-link" href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/blob/main/docs/compatibility.md">Read the full compatibility record ↗</a>
+</section>
+<section class="evidence-band" id="evidence"><div class="wrap section">
+  <div class="section-head"><div><p class="eyebrow">02 / IN THE LAB</p><h2>Real progress.<br>Clearly bounded results.</h2></div><p>The lab has tested game-specific rendering and optimization. These experiments are distinct from a release that other users can install.</p></div>
+  <div class="cards">
+    <article class="card"><span class="card-number">01</span><h3>Performance mode</h3><div class="resolution">1505 × 847<span>→ 2560 × 1440</span></div><p>Observed dimensions in the CONTROL lab integration. Exact title and build matter.</p></article>
+    <article class="card"><span class="card-number">02</span><h3>Cinematic experiment</h3><div class="resolution">2258 × 1270<span>→ 3840 × 2160</span></div><p>A resource fix passed bounded startup and mode switching. It was restored afterward; r17 remains the baseline.</p></article>
+    <article class="card"><span class="card-number">03</span><h3>Optimization finding</h3><div class="finding">Live benefit<br><span>inconclusive.</span></div><p>k5f improved in isolation. Scene differences prevent attributing the small live timing change to that optimization.</p></article>
+  </div>
+  <div class="evidence-foot"><p>No locked-60-FPS, input-latency or stock-FSR parity claim.</p><a class="text-link" href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/blob/main/docs/validation.md">Methods, results and limits ↗</a></div>
+</div></section>
+<section class="wrap section install-grid" id="install">
+  <div><p class="eyebrow">03 / GET STARTED</p><h2>Explore the tools.<br>Help build the next step.</h2><p class="body-large">The developer preview runs on your computer. It includes a bundle verifier, benchmark comparator and temporal-resource metadata contract.</p><a class="button primary" href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases/tag/v0.1.0-dev-preview">Download developer preview ↗</a><p class="release-note">Source archive · Python 3.10+ · No console connection</p></div>
+  <div class="install-panel"><div class="panel-title"><span>DEVELOPER QUICK START</span><span class="micro-tag">HOST ONLY</span></div><ol><li><span>Download and extract the preview</span><small>Keep the extracted folder on your computer.</small></li><li><span>Inspect the available tools</span><pre><code>python tools/install_support.py --help</code></pre></li><li><span>Run the host tests</span><pre><code>python -m unittest discover -s tests</code></pre></li></ol><div class="notice"><strong>Looking for the PS5 installer?</strong><p>It is not available yet. The current lab package depends on assets and build steps that are not cleared and reproducible for public distribution. This download does not enable the upscaler on a console.</p><a href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/blob/main/docs/installation.md">Installation status and requirements ↗</a></div></div>
+</section>
+<section class="wrap section roadmap" id="roadmap">
+  <div class="section-head"><div><p class="eyebrow">04 / WHAT COMES NEXT</p><h2>From a lab integration<br>to a usable release.</h2></div><p>The goal is a short installation flow with verified compatibility and reliable restoration.</p></div>
+  <div class="steps"><article><span class="step-label">01 / PACKAGE</span><h3>A distributable foundation</h3><p>Clear asset provenance, public build dependencies and game-specific packages without bundled game files.</p></article><article><span class="step-label">02 / INSTALL</span><h3>A verified console setup</h3><p>Portable delivery, exact checks, clean installation, activation and recovery on an independently configured PS5.</p></article><article><span class="step-label">03 / EXPAND</span><h3>More qualified games</h3><p>Investigate each title's live FSR path and resource contract, then validate an adapter for that build.</p></article></div>
+  <a class="text-link" href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/blob/main/docs/roadmap.md">Follow the release roadmap ↗</a>
+</section>
+<section class="wrap section faq" id="faq"><p class="eyebrow">05 / COMMON QUESTIONS</p><h2>Before you download.</h2>
+  <details><summary>Will it work with every PS5 game that uses FSR?</summary><p>That is a long-term direction, not current support. Each game build needs a validated native adapter, the right frame resources, synchronization and an original-path recovery procedure. A scanner finding FSR is not enough.</p></details>
+  <details><summary>Can I install it on a stock retail PS5?</summary><p>This preview has no console installer and certifies no stock-retail or firmware compatibility. The private lab uses a compatible homebrew environment. The project does not install that environment or provide exploits.</p></details>
+  <details><summary>Does “CONTROL Resonant” mean two supported games?</summary><p>No. CONTROL Resonant is the title in the lab's test records. There is no verified Resident Evil support in this project.</p></details>
+  <details><summary>Could a single payload make installation easier?</summary><p>Yes, payload delivery is a planned option. It can automate installation once the components are distributable and tested. It cannot make an unqualified game compatible or replace missing model and adapter work.</p></details>
+  <details><summary>Is this the official HelixSR project?</summary><p>This is independent PS5 research. <a href="https://github.com/lonewolf0622/HelixSR">Lone Wolf's HelixSR</a> is the upstream PC project. This preview contains original host tools, not its runtime or generated model assets.</p></details>
+</section>
+<section class="wrap contribute"><div><p class="eyebrow">BUILD WITH US</p><h2>Make the next result reproducible.</h2><p>Help with independently licensed adapters, portable builds, lifecycle validation or matched benchmarks.</p></div><a class="button secondary" href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/blob/main/CONTRIBUTING.md">Contribute ↗</a></section>
+</main>
+<footer class="wrap"><a class="brand" href="#">HelixSR <b>GPU LAB</b></a><p>Independent research by Dawood and contributors.<br>Not affiliated with Sony, AMD, NVIDIA or the upstream HelixSR project.</p><div><a href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/blob/main/LICENSE">License</a><a href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/blob/main/docs/provenance.md">Provenance</a><a href="https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/issues">Issues</a></div></footer>
+</body>
+</html>

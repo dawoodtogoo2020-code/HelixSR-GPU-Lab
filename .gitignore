@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.build/
+dist/
+.venv/
+*.elf
+*.bin
+*.prx
+*.pkg
+*.dll
+*.zip
+*.mp4
+*.mkv
+.env*
+!*.example

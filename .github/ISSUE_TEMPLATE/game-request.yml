@@ -1,0 +1,30 @@
+name: Game investigation request
+description: Suggest a title for adapter research. This does not imply support.
+title: "Game investigation: "
+labels: [compatibility]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Game title
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Title ID and exact game version
+      description: Non-sensitive metadata only. Do not attach game files or personal identifiers.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and proposed investigation
+      description: Explain what is known about the active upscaler. Static strings do not prove a usable hook.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: I understand this is an unsupported research request, not an installable adapter.
+          required: true
