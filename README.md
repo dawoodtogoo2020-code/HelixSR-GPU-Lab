@@ -4,6 +4,8 @@
 
 [Project website](https://dawoodtogoo2020-code.github.io/HelixSR-GPU-Lab/) · [Developer preview](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) · [Compatibility](docs/compatibility.md) · [Installation status](docs/installation.md) · [Roadmap](docs/roadmap.md)
 
+[Join Blackheart 909 Gaming on Discord](https://discord.gg/k4UWq8DqK) · [Support my work on Ko-fi](https://ko-fi.com/blackheart909)
+
 GPU Lab is working toward a simple way to discover compatible games, select a qualified upscaler, and return to the original rendering path. The lab has demonstrated a game-specific HelixSR integration in CONTROL Resonant. Extending that work to more PS5 games requires an adapter and validation for each exact game build.
 
 > **Release status: developer preview.** This repository contains host tools and a metadata contract. It does not include a PS5 application, injection payload, neural model, or installable game patch. There is currently no public end-user upscaler bundle. Downloading this preview does not enable HelixSR on a PS5.
@@ -56,6 +58,18 @@ Before that download can ship, we need a reproducible native build, distributabl
 ## Contribute
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Useful contributions include independently licensed adapters, resource/lifecycle validation, portable packaging and reproducible matched benchmarks. Report only non-sensitive metadata. Do not upload game dumps, SDKs, model weights, keys, private device addresses or raw recordings containing personal information.
+
+## Community and support
+
+Report bugs, ask questions and share feedback in the [Blackheart 909 Gaming Server](https://discord.gg/k4UWq8DqK). Join the server first, then choose the relevant channel under **HelixSR**:
+
+- [HelixSR Plugin](https://discord.com/channels/1555240126139867169/1565267596863864852): Decky plugin questions and issues.
+- [HelixSR PlayStation 5](https://discord.com/channels/1555240126139867169/1565267777135312987): GPU Lab and PS5 research questions and issues.
+- [HelixSR Armada](https://discord.com/channels/1555240126139867169/1565267979422138409): Armada Linux plugin questions and issues.
+
+Include your device, relevant versions, reproduction steps, expected result and actual result. Remove private information from logs and screenshots. You can also use [GitHub Issues](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/issues) for reproducible GPU Lab bugs. [Reporting guide](docs/community.md).
+
+If you would like to support my development and testing, visit [Blackheart909 on Ko-fi](https://ko-fi.com/blackheart909). Support is optional; reporting an issue and using public releases do not require a donation.
 
 ## Credits and licensing
 

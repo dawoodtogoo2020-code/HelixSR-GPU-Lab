@@ -5,3 +5,8 @@
   .pixel-source, .pixel-result { flex: 1 1 0; min-width: 0; max-width: 125px; height: auto; aspect-ratio: 1; }
   .connector { flex: 0 0 auto; }
 }
+.community { border-top: 1px solid var(--line); }
+.community-cards { margin-top: 28px; }
+.community-card:hover { border-color: var(--accent); text-decoration: none; }
+.community-card h3 { overflow-wrap: anywhere; }
+footer > div { flex-wrap: wrap; }
