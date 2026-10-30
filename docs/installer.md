@@ -1,5 +1,7 @@
 # Support bundle verification preview
 
+> To install HelixSR GPU Lab on a PS5, use the [install guide](install-ps5.md) and `gpulab.py`. This page describes the older, separate bundle verifier from the v0.1.0 developer preview.
+
 No approved or provenance-verified binary bundle is available. This tool validates a local extracted bundle and prints a dry-run plan. It never connects to a console. The `--install` option deliberately fails closed, including after a successful verification. Do not use the plan as evidence of installation or platform compatibility.
 
 A prospective bundle has `manifest.json` at its root and exactly these manifest entries: `app/eboot.bin`, `app/sce_module/libc.prx`, `app/sce_sys/icon0.png`, `app/sce_sys/param.json`, `payloads/helixsr-launch.elf`, and `payloads/helixsr-inventory.elf`. The JSON format is `{"format":1,"files":{"app/eboot.bin":{"size":123,"sha256":"<64 lowercase hex characters>"}, ...}}`, with an entry for each file. The manifest itself must be UTF-8, and the separately supplied SHA-256 must cover its exact bytes. Files must be ordinary files, and path components may not be symbolic links or Windows reparse points.

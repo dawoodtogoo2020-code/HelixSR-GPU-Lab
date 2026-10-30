@@ -1,0 +1,89 @@
+{
+ "id": "sotc-live3",
+ "name": "SHADOW OF THE COLOSSUS",
+ "title": "CUSA08809",
+ "version": "01.00",
+ "models": [
+  "ps5-pro"
+ ],
+ "about": "HelixSR live3 in the Cinematic graphics mode: 2560x1440 -> 3840x2160, about 38 FPS. Its input is still the game's finished image (no depth or motion vectors yet).",
+ "howto": "open GPU Lab, select SHADOW OF THE COLOSSUS, press Cross to switch HelixSR ON or OFF, press Triangle to start the game. In the game choose the Cinematic graphics mode.",
+ "param": {
+  "paths": [
+   "/system_data/priv/appmeta/CUSA08809/param.sfo",
+   "/user/appmeta/CUSA08809/param.sfo"
+  ],
+  "format": "sfo",
+  "key": "APP_VER"
+ },
+ "inputs": [],
+ "files": [
+  {
+   "remote": "/data/homebrew/backports/CUSA08809/fakelib2/libSceGnmDriver.sprx",
+   "bundle": "games/sotc-live3/fakelib2/libSceGnmDriver.sprx",
+   "sha256": "7d09f4941c9a8facd6279f16edd5b610cc1c16f4dc54e6c0a8a80b3dc5500642",
+   "accept": [
+    [
+     145485,
+     "7d09f4941c9a8facd6279f16edd5b610cc1c16f4dc54e6c0a8a80b3dc5500642"
+    ],
+    [
+     192304,
+     "482d19ca90f037971317e758cfa61ad025ce8b91b57a1803ab64a57ed0102fb9"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/backports/CUSA08809/fakelib2/libSceGnmDriverForNeoMode.sprx",
+   "bundle": "games/sotc-live3/fakelib2/libSceGnmDriverForNeoMode.sprx",
+   "sha256": "1ccbe6ba6dd52d9ac08e43d282b25c206d2e876dd83cc5953b31d15b218047de",
+   "accept": [
+    [
+     145513,
+     "1ccbe6ba6dd52d9ac08e43d282b25c206d2e876dd83cc5953b31d15b218047de"
+    ],
+    [
+     192340,
+     "6972429fbafbaecc6a7a25824ad66290af2866002ded85ce571eb8786d627be7"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/helixsr-hook/CUSA08809/helixsr-live.bin",
+   "patches": [
+    "games/sotc-live3/patches/helixsr-live.bin.hxd"
+   ],
+   "sha256": "c407e323041d5313515ecc08b521d3f2d4c7e0c66b0c24046917b2e6d845cefa",
+   "accept": [
+    [
+     17009120,
+     "c407e323041d5313515ecc08b521d3f2d4c7e0c66b0c24046917b2e6d845cefa"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/helixsr-hook/CUSA08809/helixsr.txt",
+   "text": "helixsr=on\n",
+   "kind": "setting",
+   "sha256": "2df1ae947de6efaae105565644eeadd288077f91a2975eaad8aa8182fcfa41e7",
+   "accept": [
+    [
+     11,
+     "2df1ae947de6efaae105565644eeadd288077f91a2975eaad8aa8182fcfa41e7"
+    ],
+    [
+     12,
+     "55f5c1a93f83288259ed32109f37e724dcdad9097a75aae16d15af1334263fe7"
+    ]
+   ]
+  }
+ ],
+ "dirs": [],
+ "switch": {
+  "kind": "text",
+  "path": "/data/helixsr-hook/CUSA08809/helixsr.txt",
+  "on": "helixsr=on\n",
+  "off": "helixsr=off\n",
+  "gpulab": true
+ }
+}

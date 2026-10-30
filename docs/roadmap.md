@@ -1,4 +1,20 @@
-# Roadmap to an installable release
+# Roadmap
+
+## Done in v0.2.0-beta (30 Oct 2026)
+
+- **Distribution.** HelixSR's PS5 ports ship with Lone Wolf's permission. No game or NVIDIA files ship: patches start from your own game files, and the network is built from NVIDIA's DLL on your PC.
+- **One installer** (`gpulab.py`): it checks every file against the tested builds, backs up and journals every change, and has ON/OFF and a full uninstall. It was tested end to end against a simulated PS5 loaded with stock game files.
+- **Three games:** CONTROL Resonant and Alan Wake 2 (regular PS5), and SHADOW OF THE COLOSSUS (PS5 Pro).
+
+## Next
+
+- **Reports from real consoles:** other firmware versions and homebrew setups, clean install and uninstall. The installer's first runs on other PS5s are this beta.
+- **One GPU Lab build for both consoles,** with an Alan Wake 2 switch.
+- **Alan Wake 2:** Quality mode, sharpening (the game asks for 0.6 RCAS), history reset on camera cuts.
+- **SHADOW OF THE COLOSSUS:** 60 FPS with HelixSR on (HelixSR needs about 5 ms per frame; it takes 17 ms today), and the game's own depth, motion and jitter.
+- **CONTROL:** frame-timed r18, fallback and reset qualification, PS5 Pro.
+
+## Earlier plan (kept for reference)
 
 ## 1. Distributable CONTROL preview
 

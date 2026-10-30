@@ -1,0 +1,121 @@
+{
+ "id": "aw2-t12",
+ "name": "Alan Wake 2",
+ "title": "PPSA02572",
+ "version": "01.200.007",
+ "models": [
+  "ps5"
+ ],
+ "about": "HelixSR t12: Performance 1505x847 -> 2560x1440 at 60 FPS on the game's own colour, depth and motion. Other modes use the game's own FSR2.",
+ "howto": "HelixSR is ON. Start Alan Wake 2 from the home screen and use Performance mode. GPU Lab has no Alan Wake 2 switch yet: turn it off or on with \"gpulab off aw2-t12\" / \"gpulab on aw2-t12\" on your PC.",
+ "param": {
+  "paths": [
+   "/user/appmeta/PPSA02572/param.json"
+  ],
+  "format": "json",
+  "key": "contentVersion"
+ },
+ "inputs": [
+  {
+   "name": "eboot.bin",
+   "accept": [
+    [
+     74527761,
+     "7f86ea1418b4c9fc72e862ed3f5157f46a409afc1f2998efb49a4dced00c6b11"
+    ],
+    [
+     74641075,
+     "5650ffbdfdf36a9784be1e95fb2aaa20e6b4321a836e49308d0e1a8b2587d411"
+    ]
+   ],
+   "path": "eboot.bin"
+  },
+  {
+   "name": "shaders/build/ps5/copy.binrfx",
+   "accept": [
+    [
+     177945,
+     "3d09e78d1518c3ac63497c3db6e58d26a816c40bbef66d22b6cd8f8013451acc"
+    ]
+   ],
+   "path": "shaders/build/ps5/copy.binrfx"
+  },
+  {
+   "name": "shaders/build/ps5/ffx_fsr2_reconstruct_previous_depth_pass.binrfx",
+   "accept": [
+    [
+     6109,
+     "bdcec9a9547fbbfcd6ea769257799ed86b669ce9af7b775562d563a4585cb4b1"
+    ]
+   ],
+   "path": "shaders/build/ps5/ffx_fsr2_reconstruct_previous_depth_pass.binrfx"
+  }
+ ],
+ "files": [
+  {
+   "remote": "/data/homebrew/backports/PPSA02572/eboot.bin",
+   "patches": [
+    "games/aw2-t12/patches/eboot.bin.from-elf.hxd",
+    "games/aw2-t12/patches/eboot.bin.from-self.hxd"
+   ],
+   "sha256": "5c6a93a6cec2255b1c412ca74dd9593891ead0d1b4f31c40c1d077b2a07e6521",
+   "accept": [
+    [
+     74641075,
+     "5c6a93a6cec2255b1c412ca74dd9593891ead0d1b4f31c40c1d077b2a07e6521"
+    ],
+    [
+     74527761,
+     "a4e890645a310ae5aa5818d5aab01d2a10ba191892ab2113c5e190572dd32d18"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/helixsr-aw2-t12/copy.bin",
+   "patches": [
+    "games/aw2-t12/patches/copy.binrfx.hxd"
+   ],
+   "sha256": "9813366beb23417c521a0e07ac6f8be29351ebd8438d68295e085143989d9b0b",
+   "accept": [
+    [
+     419609,
+     "9813366beb23417c521a0e07ac6f8be29351ebd8438d68295e085143989d9b0b"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/helixsr-aw2-t12/chain.bin",
+   "patches": [
+    "games/aw2-t12/patches/chain.bin.hxd"
+   ],
+   "sha256": "712fa3e9f807a97d92e525f0c3f3f95442a5e5d5e00b1ecf287835ad659786d1",
+   "accept": [
+    [
+     2638944,
+     "712fa3e9f807a97d92e525f0c3f3f95442a5e5d5e00b1ecf287835ad659786d1"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/helixsr-aw2-t12/status.bin",
+   "zeros": 256,
+   "kind": "telemetry",
+   "sha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+   "accept": [
+    [
+     256,
+     "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1"
+    ]
+   ]
+  }
+ ],
+ "dirs": [
+  "/data/helixsr-speed/packages/PPSA02572-01.200.007/stored"
+ ],
+ "switch": {
+  "kind": "folder",
+  "on": "/data/homebrew/backports/PPSA02572",
+  "off": "/data/helixsr-speed/packages/PPSA02572-01.200.007/stored/game",
+  "gpulab": false
+ }
+}

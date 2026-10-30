@@ -1,0 +1,84 @@
+{
+ "model": "ps5",
+ "name": "PS5 (regular)",
+ "gpulab": "GPU Lab u03 with launch payload u08 (switches CONTROL Resonant r18)",
+ "files": [
+  {
+   "remote": "/data/homebrew/PPSA99272/eboot.bin",
+   "bundle": "console/ps5/PPSA99272/eboot.bin",
+   "sha256": "521d82e4cadd57b5da34ccca13ab3953df2a4d224ffdd0e79d44a698e919914c",
+   "accept": [
+    [
+     1380597,
+     "521d82e4cadd57b5da34ccca13ab3953df2a4d224ffdd0e79d44a698e919914c"
+    ],
+    [
+     1672216,
+     "4840e22a5685edbe62d84c1d96a4fff424f7ae84a9e96b91d00c045a6c850a0d"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/PPSA99272/sce_module/libc.prx",
+   "bundle": "console/ps5/PPSA99272/sce_module/libc.prx",
+   "sha256": "e6ff45d16adf687855cc3b33b0c8a4132b6504360b221e0a34c7e99fb3ba0036",
+   "accept": [
+    [
+     1284674,
+     "e6ff45d16adf687855cc3b33b0c8a4132b6504360b221e0a34c7e99fb3ba0036"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/PPSA99272/sce_sys/param.json",
+   "bundle": "console/ps5/PPSA99272/sce_sys/param.json",
+   "sha256": "a19e41e5dc77116f4c1ee295212c628aba0d878566c56d4d4873cd7d0c594cf9",
+   "accept": [
+    [
+     675,
+     "a19e41e5dc77116f4c1ee295212c628aba0d878566c56d4d4873cd7d0c594cf9"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/PPSA99272/sce_sys/icon0.png",
+   "bundle": "console/ps5/PPSA99272/sce_sys/icon0.png",
+   "sha256": "5780fa463fc2ab6ec570609e139f3ed2566ebadf3dd7d7c553fe978916df9b03",
+   "accept": [
+    [
+     63976,
+     "5780fa463fc2ab6ec570609e139f3ed2566ebadf3dd7d7c553fe978916df9b03"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-launch.elf",
+   "bundle": "console/ps5/payloads/helixsr-launch.elf",
+   "sha256": "4fcfaccb7e5e95ec83055a4017911c512d0c7e3ad98de4575cf787a3fe309583",
+   "accept": [
+    [
+     146264,
+     "4fcfaccb7e5e95ec83055a4017911c512d0c7e3ad98de4575cf787a3fe309583"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-inventory.elf",
+   "bundle": "console/ps5/payloads/helixsr-inventory.elf",
+   "sha256": "3ed91946454753e92a7ed2a25b6a02f632cd9142f9b841cb7f707da10efdbe16",
+   "accept": [
+    [
+     110992,
+     "3ed91946454753e92a7ed2a25b6a02f632cd9142f9b841cb7f707da10efdbe16"
+    ]
+   ]
+  }
+ ],
+ "dirs": [
+  "/data/helixsr-speed/scan",
+  "/data/helixsr-speed/profiles",
+  "/data/helixsr-speed/install",
+  "/data/helixsr-speed/packages"
+ ],
+ "texts": []
+}

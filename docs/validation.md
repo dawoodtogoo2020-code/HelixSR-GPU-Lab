@@ -1,5 +1,17 @@
 # Validation record
 
+## 30 Oct 2026: what the v0.2.0-beta release installs
+
+| Game | Build | Lab result |
+| --- | --- | --- |
+| CONTROL Resonant (regular PS5) | r18 | Performance (1505×847 → 2560×1440, faster enc_1 encoder) and Cinematic (2258×1270 → 3840×2160) on one install. Any other layout runs stock FSR2. R17 dipped to about 58 FPS in the first heavy pans after loading. R18 has not been frame-timed. |
+| Alan Wake 2 (regular PS5) | t12 | The full HelixSR network replaces FSR2 every Performance frame, on the game's own colour, depth and motion. 60 FPS over 834 s (mean 59.95, minimum 59), no faults. Matched captures vs stock FSR2: stock looks crisper at rest (the game asks for 0.6 RCAS sharpening; HelixSR applies none). In motion FSR2 breaks foliage into blocky clumps and HelixSR stays clean. |
+| SHADOW OF THE COLOSSUS (PS5 Pro) | live3 | HelixSR runs in every Cinematic frame and its 4K output is shown. GPU Lab switches it. ON about 38 FPS (HelixSR takes 17.2 ms of GPU per frame), OFF 60 FPS. Frame 0 inside the game matched NVIDIA's own kernels at 84.7 dB. The inputs are still the game's finished image. |
+
+The installer was tested against a simulated PS5 loaded with stock game files. It rebuilt every tested file byte for byte, switched OFF/ON, made no writes on a second install, refused wrong versions and foreign files, and its uninstall restored the console byte for byte. Its first runs on real consoles other than the developer's are the public beta.
+
+## Earlier record (29 Oct 2026)
+
 This public summary records the lab's bounded results as of 2026-10-29. Private recordings, game data and device-specific logs are not included. These results describe the tested lab integration, not a reproducible public PS5 installation.
 
 ## CONTROL rendering work

@@ -1,78 +1,72 @@
 # HelixSR GPU Lab
 
-**An experimental PS5 upscaling project, starting with CONTROL Resonant.**
+**Neural upscaling for PS5 games: Lone Wolf's HelixSR running inside CONTROL Resonant, Alan Wake 2 and SHADOW OF THE COLOSSUS.**
 
-[Project website](https://dawoodtogoo2020-code.github.io/HelixSR-GPU-Lab/) · [Developer preview](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) · [Compatibility](docs/compatibility.md) · [Installation status](docs/installation.md) · [Roadmap](docs/roadmap.md)
+[Download](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) · [Install guide](docs/install-ps5.md) · [Compatibility](docs/compatibility.md) · [Results](docs/validation.md) · [Project website](https://dawoodtogoo2020-code.github.io/HelixSR-GPU-Lab/)
 
 [Join Blackheart 909 Gaming on Discord](https://discord.gg/k4UWq8DqK) · [Support my work on Ko-fi](https://ko-fi.com/blackheart909)
 
-GPU Lab is working toward a simple way to discover compatible games, select a qualified upscaler, and return to the original rendering path. The lab has demonstrated a game-specific HelixSR integration in CONTROL Resonant. Extending that work to more PS5 games requires an adapter and validation for each exact game build.
+> **Public beta (v0.2.0-beta).** The HelixSR builds it installs ran on the developer's own regular PS5 and PS5 Pro. The installer is new, and this is its first run on other consoles. Everything it does is checked and can be undone with `uninstall`. Please [report your results](docs/install-ps5.md#help).
 
-> **Release status: developer preview.** This repository contains host tools and a metadata contract. It does not include a PS5 application, injection payload, neural model, or installable game patch. There is currently no public end-user upscaler bundle. Downloading this preview does not enable HelixSR on a PS5.
+## Install in three steps
 
-## Compatibility today
+1. **Download** `HelixSR-GPU-Lab-v0.2.0-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it on your PC.
+2. **Run** `install.bat` (Windows: double-click) or `sh install.sh` (Mac / Linux).
+3. **Answer its questions:**
+   - your PS5's IP address
+   - whether it is a PS5 Pro
+   - **yes** to NVIDIA's DLSS license
+   - then start, and later close, the game when it asks
 
-| Game | Evidence | Public installation |
-| --- | --- | --- |
-| CONTROL Resonant, PPSA34547, 01.300.300 | Bounded live integration in the private lab. Experimental Performance and Cinematic mode work is documented below. | Not released |
-| SAROS | Candidate for investigation; historical static discovery only. | Unsupported |
-| Other PS5 games using FSR | Long-term target. No qualified adapter in this release. | Unsupported |
+Then open **HelixSR GPU Lab** on the PS5. **Cross** switches HelixSR on or off, and **Triangle** starts the game.
 
-FSR detection is a starting point, not compatibility proof. Temporal upscaling needs the right color, depth, motion, exposure, jitter, history and output resources, with correct synchronization. A PC upscaler DLL cannot simply be dropped into a PS5 title. See the [adapter contract](docs/adapter-contract.md).
+**You need** a jailbroken PS5 running ftpsrv (port 2121), pldmgr (port 8084) and ShadowMount+, plus one of these games at exactly this version:
 
-## What you can use now
+| Game | Version | Console | HelixSR |
+| --- | --- | --- | --- |
+| CONTROL Resonant (PPSA34547) | 01.300.300 | regular PS5 | Performance 1505×847 → 1440p (60 FPS target) · Quality 2258×1270 → 4K (30 FPS) |
+| Alan Wake 2 (PPSA02572) | 01.200.007 | regular PS5 | Performance 1505×847 → 1440p, 60 FPS (mean 59.95, minimum 59) |
+| SHADOW OF THE COLOSSUS (CUSA08809) | 01.00 | PS5 Pro | Cinematic 1440p → 4K, about 38 FPS |
 
-- **Bundle verifier:** validates a locally supplied support manifest and prints a dry-run installation plan. It never connects to a console. There is no approved bundle yet.
-- **Temporal adapter contract:** a standalone C gate for checking caller-supplied identity, resource and lifecycle metadata. It does not hook a game or submit GPU work.
-- **Benchmark comparator:** refuses mismatched workloads and reports descriptive comparisons from supplied measurements. [Input format and limits](docs/benchmark.md).
-- **Compatibility, evidence and release requirements:** a public record of what works in the lab and what still needs validation.
+All the details are in the [install guide](docs/install-ps5.md): what each question means, ON/OFF, uninstall and help.
 
-Download the developer preview from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases), extract it on your computer, and use Python 3.10 or newer:
+## How it works without shipping anyone's files
 
-```sh
-python tools/install_support.py --help
-python tools/benchmark.py --help
-python -m unittest discover -s tests -p 'test_*.py'
-```
+- **No game files ship.** Each game's HelixSR files are built on your PC from your own copy of the game, which the installer reads from your PS5 while the game runs. The download holds only small patches.
+- **No NVIDIA files ship.** HelixSR's network comes from NVIDIA's DLSS DLL. As in HelixSR's own setup, the installer downloads it from NVIDIA after you accept NVIDIA's license, builds the network on your PC (`tools/helixsr_weights.py`) and deletes the DLL.
+- **Everything is checked.** Every built file must match the exact build that was tested, byte for byte. If your game version or a file differs, nothing is written.
+- **Everything can be undone.** Each change on the PS5 is journalled on your PC. Anything replaced is backed up first, and `uninstall` restores it.
 
-The C contract can be tested on a Linux host with a C compiler:
+On the PS5, HelixSR replaces the game's own upscaler:
+- **CONTROL and Alan Wake 2:** it replaces FSR2, inside the game's own render graph.
+- **SHADOW OF THE COLOSSUS** (a PS4 title on the Pro): it hooks the game's GNM graphics driver.
 
-```sh
-bash tests/run_native_tests.sh
-```
+## In this repository
 
-Start with [installation status](docs/installation.md) before using any bundle. Do not send the source archive to a payload loader.
+| Path | What |
+| --- | --- |
+| `install.bat`, `install.sh`, `uninstall.*`, `gpulab.*`, `alan-wake-2-*.bat` | Launchers for the installer |
+| `tools/gpulab.py` | The installer: install, status, on/off, uninstall (Python standard library only) |
+| `tools/helixsr_weights.py`, `tools/helixsr_model_tables.py` | Builds HelixSR's network on your PC from NVIDIA's DLSS DLL (no NVIDIA data inside) |
+| `tools/helixsr_patch.py` | HXD1 patches: your game file in, the tested HelixSR file out |
+| `tools/ps5_console.py` | FTP and process-list access to the PS5, with a "nothing running" check before every write |
+| `games/*/game.json`, `console/*/console.json` | What is installed where, with the SHA-256 of every tested file |
+| `tests/` | Installer tests against a simulated PS5, plus the earlier host tools' tests |
+| `docs/` | Install guide, compatibility, results, provenance, roadmap |
 
-## What the lab results establish
+The patches, the GPU Lab app and payloads, and the SHADOW OF THE COLOSSUS hook ship in the release zip. Their source code is in the release's source zip.
 
-The CONTROL integration is specific to the recorded title and build. Performance mode has used 1505 × 847 input at 2560 × 1440 output. An experimental combined resource fix passed bounded Performance/Cinematic switching, with Cinematic using 2258 × 1270 input at 3840 × 2160 output. That experiment is separate from the retained r17 baseline.
+Earlier host tools are still here: the bundle verifier, the benchmark comparator and the temporal adapter contract (`tools/install_support.py`, `tools/benchmark.py`, `native/`).
 
-An isolated k5f experiment reduced its measured kernel interval by 7.22%, but the live enc1 versus enc1+k5f comparison was inconclusive. Its roughly 0.40% lower measured interval occurred across different scene paths. No candidate was promoted from that test, and no locked-60-FPS, input-latency or stock-FSR parity claim is supported. [Evidence and limits](docs/validation.md).
-
-## Toward a simple PS5 install
-
-The intended flow is **check compatibility → install GPU Lab → choose a qualified game → apply → verify → restore when needed**. A future payload can automate delivery, but cannot supply missing game adapters or redistribution rights.
-
-Before that download can ship, we need a reproducible native build, distributable runtime/model assets, per-build packages that do not bundle game files, and a clean installation and recovery test on a separately configured supported console. [Release roadmap](docs/roadmap.md).
-
-## Contribute
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). Useful contributions include independently licensed adapters, resource/lifecycle validation, portable packaging and reproducible matched benchmarks. Report only non-sensitive metadata. Do not upload game dumps, SDKs, model weights, keys, private device addresses or raw recordings containing personal information.
-
-## Community and support
-
-Report bugs, ask questions and share feedback in the [Blackheart 909 Gaming Server](https://discord.gg/k4UWq8DqK). Join the server first, then choose the relevant channel under **HelixSR**:
-
-- [HelixSR Plugin](https://discord.com/channels/1555240126139867169/1565267596863864852): Decky plugin questions and issues.
-- [HelixSR PlayStation 5](https://discord.com/channels/1555240126139867169/1565267777135312987): GPU Lab and PS5 research questions and issues.
-- [HelixSR Armada](https://discord.com/channels/1555240126139867169/1565267979422138409): Armada Linux plugin questions and issues.
-
-Include your device, relevant versions, reproduction steps, expected result and actual result. Remove private information from logs and screenshots. You can also use [GitHub Issues](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/issues) for reproducible GPU Lab bugs. [Reporting guide](docs/community.md).
-
-If you would like to support my development and testing, visit [Blackheart909 on Ko-fi](https://ko-fi.com/blackheart909). Support is optional; reporting an issue and using public releases do not require a donation.
+Run the tests with `python -m unittest discover -s tests -p 'test_*.py'`.
 
 ## Credits and licensing
 
-This is an independent PS5 research project maintained by Dawood. [Lone Wolf's HelixSR](https://github.com/lonewolf0622/HelixSR) is the upstream PC project. This repository is not an official Sony, AMD, NVIDIA or upstream HelixSR release.
+- **HelixSR** is [Lone Wolf's](https://github.com/lonewolf0622/HelixSR) upscaler, which runs NVIDIA's DLSS network as standard compute shaders. GPU Lab's PS5 ports of HelixSR are distributed with Lone Wolf's permission.
+- **The PS5 integration, installer and GPU Lab** are by Dawood (Blackheart909).
+- **Licenses:**
+  - Original tools and docs here are [MIT licensed](LICENSE).
+  - The GPU Lab app, payloads and hook binaries are built with GPL-3.0 toolchains, and their source is published with each release.
+  - Third-party terms are listed in [NOTICE.md](NOTICE.md) and [docs/provenance.md](docs/provenance.md).
 
-The original tooling and documentation included here are [MIT licensed](LICENSE). That license does not grant rights to upstream HelixSR, game code, SDKs, models or generated shaders, none of which are bundled. [Provenance and third-party boundaries](docs/provenance.md).
+This is an independent project. It is not affiliated with or endorsed by Sony, NVIDIA, AMD, Remedy, Bluepoint or the upstream HelixSR project. Use it at your own risk, on single-player games only.

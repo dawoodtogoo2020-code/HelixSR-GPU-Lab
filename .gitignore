@@ -13,3 +13,7 @@ dist/
 *.mkv
 .env*
 !*.example
+
+# Your PS5 state, backups, game files and NVIDIA-derived weights (gpulab.py): never commit or share
+my-ps5/
+*.hxd

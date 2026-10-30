@@ -1,0 +1,89 @@
+{
+ "model": "ps5-pro",
+ "name": "PS5 Pro",
+ "gpulab": "GPU Lab u10 with payloads u06 (switches SHADOW OF THE COLOSSUS)",
+ "files": [
+  {
+   "remote": "/data/homebrew/PPSA99272/eboot.bin",
+   "bundle": "console/ps5-pro/PPSA99272/eboot.bin",
+   "sha256": "5e47e1c4461ab95306241fdaf92dbf813e4230572552a8a8f3839158a627ff50",
+   "accept": [
+    [
+     1437077,
+     "5e47e1c4461ab95306241fdaf92dbf813e4230572552a8a8f3839158a627ff50"
+    ],
+    [
+     1704472,
+     "fce76537484deb176d878edc518103ac85ebcfc6b46f878b3a2beb2d736e7d78"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/PPSA99272/sce_module/libc.prx",
+   "bundle": "console/ps5-pro/PPSA99272/sce_module/libc.prx",
+   "sha256": "e6ff45d16adf687855cc3b33b0c8a4132b6504360b221e0a34c7e99fb3ba0036",
+   "accept": [
+    [
+     1284674,
+     "e6ff45d16adf687855cc3b33b0c8a4132b6504360b221e0a34c7e99fb3ba0036"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/PPSA99272/sce_sys/param.json",
+   "bundle": "console/ps5-pro/PPSA99272/sce_sys/param.json",
+   "sha256": "a19e41e5dc77116f4c1ee295212c628aba0d878566c56d4d4873cd7d0c594cf9",
+   "accept": [
+    [
+     675,
+     "a19e41e5dc77116f4c1ee295212c628aba0d878566c56d4d4873cd7d0c594cf9"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/PPSA99272/sce_sys/icon0.png",
+   "bundle": "console/ps5-pro/PPSA99272/sce_sys/icon0.png",
+   "sha256": "5780fa463fc2ab6ec570609e139f3ed2566ebadf3dd7d7c553fe978916df9b03",
+   "accept": [
+    [
+     63976,
+     "5780fa463fc2ab6ec570609e139f3ed2566ebadf3dd7d7c553fe978916df9b03"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-launch.elf",
+   "bundle": "console/ps5-pro/payloads/helixsr-launch.elf",
+   "sha256": "3b383c8206f4da25b368168d2dd75f3d099825be1bb79269b6e24f9d6c1b7a4d",
+   "accept": [
+    [
+     146360,
+     "3b383c8206f4da25b368168d2dd75f3d099825be1bb79269b6e24f9d6c1b7a4d"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-inventory.elf",
+   "bundle": "console/ps5-pro/payloads/helixsr-inventory.elf",
+   "sha256": "99b3e480764f45b1413d2a56aef841ae048b936883ac2dc9ff97124c6d18419d",
+   "accept": [
+    [
+     111128,
+     "99b3e480764f45b1413d2a56aef841ae048b936883ac2dc9ff97124c6d18419d"
+    ]
+   ]
+  }
+ ],
+ "dirs": [
+  "/data/helixsr-speed/scan",
+  "/data/helixsr-speed/profiles",
+  "/data/helixsr-speed/install",
+  "/data/helixsr-speed/packages"
+ ],
+ "texts": [
+  {
+   "remote": "/data/helixsr-speed/device.txt",
+   "text": "ps5-pro\n"
+  }
+ ]
+}

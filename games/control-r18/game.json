@@ -1,0 +1,165 @@
+{
+ "id": "control-r18",
+ "name": "CONTROL Resonant",
+ "title": "PPSA34547",
+ "version": "01.300.300",
+ "models": [
+  "ps5"
+ ],
+ "about": "HelixSR r18: Performance 1505x847 -> 2560x1440 (60 FPS target) and Cinematic (in-game Quality) 2258x1270 -> 3840x2160 (30 FPS). Other modes and OFF use the game's own FSR2.",
+ "howto": "open GPU Lab, select CONTROL Resonant, press Cross to switch HelixSR ON or OFF, press Triangle to start the game. In the game choose Performance (1440p) or Quality (4K).",
+ "param": {
+  "paths": [
+   "/user/appmeta/PPSA34547/param.json"
+  ],
+  "format": "json",
+  "key": "contentVersion"
+ },
+ "inputs": [
+  {
+   "name": "data_pack2/generic/base-generic-000.rmdblob",
+   "accept": [
+    [
+     363376,
+     "d47c1a0469f1d596b126bbc6c03448a5492803c1d630dbd86c778b06466716ae"
+    ]
+   ],
+   "path": "data_pack2/generic/base-generic-000.rmdblob"
+  },
+  {
+   "name": "data_pack2/prospero/base-generic-005.rmdblob@201616860+12029",
+   "accept": [
+    [
+     12029,
+     "33e2346b5b89f401b99645edd7ab1c949368d11860696a071d38e7a8dd111c19"
+    ]
+   ],
+   "path": "data_pack2/prospero/base-generic-005.rmdblob",
+   "offset": 201616860
+  },
+  {
+   "name": "data_pack2/prospero/base-generic-007.rmdblob@413475335+25720",
+   "accept": [
+    [
+     25720,
+     "8d27233f396c0d0c229c2aae57bb9fe8132c7e948bfb2961756b91e91dfb0c98"
+    ]
+   ],
+   "path": "data_pack2/prospero/base-generic-007.rmdblob",
+   "offset": 413475335
+  },
+  {
+   "name": "data_pack2/prospero/base-generic.rmdtoc",
+   "accept": [
+    [
+     10600552,
+     "f9fd019f1620c0fb5cf4ca334c9891114aca35c9b49b301347368e95f91cf3a7"
+    ]
+   ],
+   "path": "data_pack2/prospero/base-generic.rmdtoc"
+  },
+  {
+   "name": "eboot.bin",
+   "accept": [
+    [
+     95341728,
+     "7e083a7f9cc86d2df94950b54d45de2d3b45f02de022f5caa27dae9c85d028f9"
+    ],
+    [
+     95473302,
+     "6efa03a328a40a35e6c42b830f603aa84c9f8cdf037f3efbe0503c4504a3730b"
+    ]
+   ],
+   "path": "eboot.bin"
+  },
+  {
+   "name": "shaders/build/ps5/postprocess.binrfx",
+   "accept": [
+    [
+     317371,
+     "309713de2a083a1591a5fcf2d77bbc19f4e12497a07e2c811f9ef18199ccee70"
+    ]
+   ],
+   "path": "shaders/build/ps5/postprocess.binrfx"
+  }
+ ],
+ "files": [
+  {
+   "remote": "/data/homebrew/backports/PPSA34547/eboot.bin",
+   "patches": [
+    "games/control-r18/patches/eboot.bin.from-elf.hxd",
+    "games/control-r18/patches/eboot.bin.from-self.hxd"
+   ],
+   "sha256": "d0f3c69ed019cd1ab06a04038d1a48239c8cfeeac5c5f7da5e716bd1e1c9be9e",
+   "accept": [
+    [
+     95481558,
+     "d0f3c69ed019cd1ab06a04038d1a48239c8cfeeac5c5f7da5e716bd1e1c9be9e"
+    ],
+    [
+     95341728,
+     "5fd8484a84ee9df60d327aedbfa7c22b84efca47df1601e17a17bd3aa96ce196"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/backports/PPSA34547/data_pack2/generic/base-generic-000.rmdblob",
+   "patches": [
+    "games/control-r18/patches/base-generic-000.rmdblob.hxd"
+   ],
+   "sha256": "458f289f0f19ff281a689320982abcf8a5691e77e97b1e41d0a754c5eba44014",
+   "accept": [
+    [
+     197245072,
+     "458f289f0f19ff281a689320982abcf8a5691e77e97b1e41d0a754c5eba44014"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/backports/PPSA34547/data_pack2/prospero/base-generic.rmdtoc",
+   "patches": [
+    "games/control-r18/patches/base-generic.rmdtoc.hxd"
+   ],
+   "sha256": "485f21faeda6e57a1bb763f47a39e6bb3048edad0f96d2bd848d010679e8e6ed",
+   "accept": [
+    [
+     10600552,
+     "485f21faeda6e57a1bb763f47a39e6bb3048edad0f96d2bd848d010679e8e6ed"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/homebrew/backports/PPSA34547/shaders/build/ps5/postprocess.binrfx",
+   "patches": [
+    "games/control-r18/patches/postprocess.binrfx.hxd"
+   ],
+   "sha256": "5c8e0bcf369b04c1723ce1916b91de6fd37c275d0b63f55b5b93bebdb13aca1e",
+   "accept": [
+    [
+     431513,
+     "5c8e0bcf369b04c1723ce1916b91de6fd37c275d0b63f55b5b93bebdb13aca1e"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/helixsr-speed/packages/PPSA34547-01.300.300/READY",
+   "text": "HPKG1 control-r18-20261029\nHelixSR r18, Performance + Cinematic, faster encoder (off = stock FSR2)\n",
+   "sha256": "72a4f2ad21c7c10177f6d93c44b72b333b433df7c1f89dc0d16f69f73e7856f6",
+   "accept": [
+    [
+     99,
+     "72a4f2ad21c7c10177f6d93c44b72b333b433df7c1f89dc0d16f69f73e7856f6"
+    ]
+   ]
+  }
+ ],
+ "dirs": [
+  "/data/helixsr-speed/packages/PPSA34547-01.300.300/stored"
+ ],
+ "switch": {
+  "kind": "folder",
+  "on": "/data/homebrew/backports/PPSA34547",
+  "off": "/data/helixsr-speed/packages/PPSA34547-01.300.300/stored/game",
+  "gpulab": true
+ }
+}

@@ -1,34 +1,34 @@
-# Installation status
+# Installation
 
-## Available now: developer tools on your computer
+**To install HelixSR GPU Lab on your PS5, follow the [install guide](install-ps5.md).** It covers requirements, the three steps, ON/OFF, uninstall and help.
 
-1. Download the developer preview from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases).
-2. Extract the archive. Use Python 3.10 or newer on Windows, Linux or macOS.
-3. Run `python tools/install_support.py --help` to inspect the bundle verifier, or run the tests in the README.
+## What the installer changes on the PS5
 
-This installs no console component. The archive contains source and host tools, not a PS5 payload. No Python package installation or account credential is required by the tools.
+| Where | What | Removed by `uninstall` |
+| --- | --- | --- |
+| `/data/homebrew/PPSA99272/` | The GPU Lab app (ShadowMount+ shows it on the home screen) | yes |
+| `/data/pldmgr/payloads/local/helixsr-devloop/` | GPU Lab's launch and inventory payloads | yes |
+| `/data/helixsr-speed/` | GPU Lab's data folders, `device.txt` (PS5 Pro), and each game's READY marker and OFF slot | yes |
+| `/data/homebrew/backports/PPSA34547/` | CONTROL's HelixSR files: eboot, archive, TOC, effect | yes |
+| `/data/homebrew/backports/PPSA02572/`, `/data/helixsr-aw2-t12/` | Alan Wake 2's HelixSR eboot, effect, chain and status | yes |
+| `/data/homebrew/backports/CUSA08809/fakelib2/`, `/data/helixsr-hook/CUSA08809/` | SHADOW OF THE COLOSSUS's GNM hook, HelixSR package and switch | yes |
 
-## PS5 upscaler installation: not yet released
+- **Replaced files are kept.** A file that is already there is copied to your PC and renamed on the PS5 to `<name>.bak-<id>`. `uninstall` deletes what was added and renames those back.
+- **Writes need everything closed.** Each write needs a full process list with no game or app running.
+- **Every write is checked.** Each file is read back and must match its tested hash. The console may serve an executable in another form, and the manifests list both forms.
+- **Changed files are protected.** `uninstall` refuses if a file it would remove was changed after install.
+- **ON/OFF is a move.** For CONTROL and Alan Wake 2, the game's backport folder moves between `backports/<title>` (ON) and `/data/helixsr-speed/packages/<title>-<version>/stored/game` (OFF), so ShadowMount+ applies nothing when it is OFF. For SHADOW OF THE COLOSSUS, the switch is `helixsr.txt`.
 
-There is no approved public PS5 app, payload or CONTROL package in this preview. We cannot give a working end-user install command until the native application, model assets and game adapter can be distributed and validated together.
+## On the PC
 
-The private lab uses a compatible homebrew environment, GPU Lab, a payload manager and an exact game-specific package. The current lab installer contains local assumptions and cannot be reused safely as a general installer. This project does not install homebrew prerequisites, supply firmware exploits, bypass game licensing or establish support for a stock retail console. No firmware range or general PS5 Pro compatibility is certified by this release.
+`my-ps5/` in the unzipped folder holds:
+- `settings.json` (the PS5's address)
+- `<IP>/journal.json` and backups
+- `game-files/` (your copies of the game files the patches start from)
+- `weights.ngx.bin` (the network built from NVIDIA's DLL)
 
-## Planned end-user flow
+It is yours. Do not share it or commit it.
 
-1. Check the exact title ID, game version and supported console environment against the released compatibility list.
-2. Download a versioned GPU Lab support bundle and verify its published digest.
-3. Review the install plan and choose the intended console.
-4. Install only GPU Lab's support files, then launch the application and discover games.
-5. Select a separately qualified game adapter. Apply only while the game is closed, with validated recovery available.
-6. Launch the game, confirm the active rendering path, and use the documented original-path restore flow when required.
+## Developer tools
 
-These are release design requirements, not instructions for an available console release. A one-payload delivery option remains planned.
-
-## Bundle verification
-
-The [verifier documentation](installer.md) describes the supported manifest format and dry-run checks. A future support bundle is limited to GPU Lab application/payload files. Game files, model packages, activation requests and console device markers are outside its scope. The tool refuses installation in this version.
-
-## Recovery and removal
-
-This preview changes no console files, so it requires no PS5 rollback. Remove the extracted developer-tools folder when you no longer need it. For an existing private lab installation, use its owning version's recorded recovery procedure; these tools must not be used to remove or overwrite that installation.
+The earlier host tools still work: the bundle verifier, the benchmark comparator and the temporal adapter contract. See [installer.md](installer.md) and [benchmark.md](benchmark.md).

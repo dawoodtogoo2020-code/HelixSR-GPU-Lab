@@ -19,7 +19,7 @@ Include the following, where relevant:
 3. Steps to reproduce, expected behavior and actual behavior.
 4. Whether the original upscaler works, plus a short redacted log or screenshot if useful.
 
-Do not attach credentials, keys, serial numbers, private network details, game dumps or generated model assets. The PS5 developer preview still contains host tools and source only; a support channel does not imply a released console installer or additional game compatibility.
+Do not attach credentials, keys, serial numbers, private network details, game dumps or generated model assets. For GPU Lab install reports, include the installer's last lines and your console, firmware and game versions; leave out your IP address and your `my-ps5` folder (see the [install guide](install-ps5.md#help)).
 
 Reproducible GPU Lab bugs can also be filed in [GitHub Issues](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/issues). Questions about the separate integrations belong in their Discord channels or their own repositories: [HelixSR Decky](https://github.com/dawoodtogoo2020-code/HelixSR-Decky) and [HelixSR Decky Armada](https://github.com/dawoodtogoo2020-code/HelixSR-Decky-Armada).
 
