@@ -76,6 +76,17 @@
      "55f5c1a93f83288259ed32109f37e724dcdad9097a75aae16d15af1334263fe7"
     ]
    ]
+  },
+  {
+   "remote": "/data/helixsr-speed/packages/CUSA08809-01.00/CATALOG",
+   "text": "ps5-pro\tCUSA08809\t01.00\t482d19ca90f037971317e758cfa61ad025ce8b91b57a1803ab64a57ed0102fb9\tSHADOW OF THE COLOSSUS\n",
+   "sha256": "2a4769398055a933b45fb309ebc2501973129f234b4963192b35ea39b4c11c09",
+   "accept": [
+    [
+     112,
+     "2a4769398055a933b45fb309ebc2501973129f234b4963192b35ea39b4c11c09"
+    ]
+   ]
   }
  ],
  "dirs": [],

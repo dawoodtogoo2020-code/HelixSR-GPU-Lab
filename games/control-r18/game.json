@@ -142,6 +142,17 @@
    ]
   },
   {
+   "remote": "/data/helixsr-speed/packages/PPSA34547-01.300.300/CATALOG",
+   "text": "ps5-regular\tPPSA34547\t01.300.300\t5fd8484a84ee9df60d327aedbfa7c22b84efca47df1601e17a17bd3aa96ce196\tCONTROL Resonant\n",
+   "sha256": "f2b61d4661c2c251568abaf59259912ac02aead55bd68f04d75f5a3f285b4bba",
+   "accept": [
+    [
+     115,
+     "f2b61d4661c2c251568abaf59259912ac02aead55bd68f04d75f5a3f285b4bba"
+    ]
+   ]
+  },
+  {
    "remote": "/data/helixsr-speed/packages/PPSA34547-01.300.300/READY",
    "text": "HPKG1 control-r18-20261029\nHelixSR r18, Performance + Cinematic, faster encoder (off = stock FSR2)\n",
    "sha256": "72a4f2ad21c7c10177f6d93c44b72b333b433df7c1f89dc0d16f69f73e7856f6",
@@ -157,9 +168,26 @@
   "/data/helixsr-speed/packages/PPSA34547-01.300.300/stored"
  ],
  "switch": {
-  "kind": "folder",
+  "kind": "overlay-files",
   "on": "/data/homebrew/backports/PPSA34547",
   "off": "/data/helixsr-speed/packages/PPSA34547-01.300.300/stored/game",
   "gpulab": true
- }
+ },
+ "preserved_dependencies": [
+  {
+   "remote": "/data/homebrew/backports/PPSA34547/fakelib2/libSceAgc.sprx",
+   "bytes": 366600,
+   "sha256": "09899ec2963c3f82ef1bc8f5774cebe5ec4a09f7c0c2792912140ac022b55e1b"
+  },
+  {
+   "remote": "/data/homebrew/backports/PPSA34547/fakelib2/libSceAgcDriver.sprx",
+   "bytes": 174688,
+   "sha256": "5590ee3fe3c2f73200674e17938a6f3e3dece8826a0ecc7249dcba2183adcf07"
+  },
+  {
+   "remote": "/data/homebrew/backports/PPSA34547/fakelib2/libScePsml.sprx",
+   "bytes": 1550320,
+   "sha256": "4bf75f27e24eaf03c43def7a678fb79b4c582c633cace1129ef0e11b2ed01ea5"
+  }
+ ]
 }

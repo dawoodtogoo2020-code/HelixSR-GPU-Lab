@@ -1,22 +1,37 @@
 {
  "model": "ps5",
  "name": "PS5 (regular)",
- "gpulab": "GPU Lab u03 with launch payload u08 (switches CONTROL Resonant r18)",
+ "gpulab": "SAROS v27: native PS5 controller ON/OFF, launch, stock restoration and 4K nominal-60 gameplay verified; prior other-game scope unchanged",
  "files": [
   {
    "remote": "/data/homebrew/PPSA99272/eboot.bin",
    "bundle": "console/ps5/PPSA99272/eboot.bin",
-   "sha256": "521d82e4cadd57b5da34ccca13ab3953df2a4d224ffdd0e79d44a698e919914c",
+   "sha256": "36bb48d73d5fb2d88b6193fd58635d608e281fd4b854b5cbf6a28904e49d9d61",
    "accept": [
     [
-     1380597,
-     "521d82e4cadd57b5da34ccca13ab3953df2a4d224ffdd0e79d44a698e919914c"
+     1443957,
+     "36bb48d73d5fb2d88b6193fd58635d608e281fd4b854b5cbf6a28904e49d9d61"
     ],
     [
-     1672216,
-     "4840e22a5685edbe62d84c1d96a4fff424f7ae84a9e96b91d00c045a6c850a0d"
+     1721208,
+     "a6a176503abeb2692374a235d301a8997952f181d258cdeb99635cda457eae10"
     ]
-   ]
+   ],
+   "normalized_elf": {
+    "bytes": 1721208,
+    "sha256": "e373a1d9ca43b136f7cece8d6590fb12bf9da39155620684b592a427eade5cfc",
+    "zero_ranges": [
+     [
+      40,
+      48
+     ],
+     [
+      58,
+      64
+     ]
+    ],
+    "max_zero_tail": 75
+   }
   },
   {
    "remote": "/data/homebrew/PPSA99272/sce_module/libc.prx",
@@ -26,8 +41,27 @@
     [
      1284674,
      "e6ff45d16adf687855cc3b33b0c8a4132b6504360b221e0a34c7e99fb3ba0036"
+    ],
+    [
+     1335962,
+     "7e82ce9a4259d0db815e7e734ed49afd7bd4aaf33beaefa968ba6d1ff8a8b315"
     ]
-   ]
+   ],
+   "normalized_elf": {
+    "bytes": 1335962,
+    "sha256": "831186cc478be7e888420c33a1b79ca3f15ab11cdd9f0ebb6d3029f0ad5da539",
+    "zero_ranges": [
+     [
+      40,
+      48
+     ],
+     [
+      58,
+      64
+     ]
+    ],
+    "max_zero_tail": 75
+   }
   },
   {
    "remote": "/data/homebrew/PPSA99272/sce_sys/param.json",
@@ -54,22 +88,22 @@
   {
    "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-launch.elf",
    "bundle": "console/ps5/payloads/helixsr-launch.elf",
-   "sha256": "4fcfaccb7e5e95ec83055a4017911c512d0c7e3ad98de4575cf787a3fe309583",
+   "sha256": "3b462f3124ba2a84d5a4541051acb5ec447d908cfffdf2f9bd2de758fe34f297",
    "accept": [
     [
-     146264,
-     "4fcfaccb7e5e95ec83055a4017911c512d0c7e3ad98de4575cf787a3fe309583"
+     143208,
+     "3b462f3124ba2a84d5a4541051acb5ec447d908cfffdf2f9bd2de758fe34f297"
     ]
    ]
   },
   {
    "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-inventory.elf",
    "bundle": "console/ps5/payloads/helixsr-inventory.elf",
-   "sha256": "3ed91946454753e92a7ed2a25b6a02f632cd9142f9b841cb7f707da10efdbe16",
+   "sha256": "e08e0fc0edb9c169becdd06d94b8a334a8699388da00b9cbf19757516aa53f88",
    "accept": [
     [
-     110992,
-     "3ed91946454753e92a7ed2a25b6a02f632cd9142f9b841cb7f707da10efdbe16"
+     90760,
+     "e08e0fc0edb9c169becdd06d94b8a334a8699388da00b9cbf19757516aa53f88"
     ]
    ]
   }
@@ -80,5 +114,10 @@
   "/data/helixsr-speed/install",
   "/data/helixsr-speed/packages"
  ],
- "texts": []
+ "texts": [
+  {
+   "remote": "/data/helixsr-speed/device.txt",
+   "text": "ps5-regular\n"
+  }
+ ]
 }

@@ -7,7 +7,7 @@
   "ps5"
  ],
  "about": "HelixSR t12: Performance 1505x847 -> 2560x1440 at 60 FPS on the game's own colour, depth and motion. Other modes use the game's own FSR2.",
- "howto": "HelixSR is ON. Start Alan Wake 2 from the home screen and use Performance mode. GPU Lab has no Alan Wake 2 switch yet: turn it off or on with \"gpulab off aw2-t12\" / \"gpulab on aw2-t12\" on your PC.",
+ "howto": "Open GPU Lab, select Alan Wake 2, choose HelixSR ON or OFF with Cross, then press Triangle to apply it and launch. Use Performance mode; Quality still uses stock FSR2. This unified app candidate needs console validation.",
  "param": {
   "paths": [
    "/user/appmeta/PPSA02572/param.json"
@@ -67,6 +67,10 @@
     [
      74527761,
      "a4e890645a310ae5aa5818d5aab01d2a10ba191892ab2113c5e190572dd32d18"
+    ],
+    [
+     74527836,
+     "31a3ffd1b582b6d363da7432c41962e1b48ba59fcaa14befaae916d38cb66c35"
     ]
    ]
   },
@@ -107,6 +111,28 @@
      "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1"
     ]
    ]
+  },
+  {
+   "remote": "/data/helixsr-speed/packages/PPSA02572-01.200.007/CATALOG",
+   "text": "ps5-regular\tPPSA02572\t01.200.007\ta4e890645a310ae5aa5818d5aab01d2a10ba191892ab2113c5e190572dd32d18\tAlan Wake 2\n",
+   "sha256": "a6b8ff836d603a300328a5cf96201ec1b67e98242f08d38d757fcbe1f59f4243",
+   "accept": [
+    [
+     110,
+     "a6b8ff836d603a300328a5cf96201ec1b67e98242f08d38d757fcbe1f59f4243"
+    ]
+   ]
+  },
+  {
+   "remote": "/data/helixsr-speed/packages/PPSA02572-01.200.007/READY",
+   "text": "HPKG1 aw2-t12\nHelixSR t12, Performance 1505x847 -> 2560x1440; Quality uses stock FSR2\n",
+   "sha256": "af4d16ed319536666e7d5b88bb5b7e8890f44114bc1a0a21be826ab198ac05da",
+   "accept": [
+    [
+     86,
+     "af4d16ed319536666e7d5b88bb5b7e8890f44114bc1a0a21be826ab198ac05da"
+    ]
+   ]
   }
  ],
  "dirs": [
@@ -116,6 +142,6 @@
   "kind": "folder",
   "on": "/data/homebrew/backports/PPSA02572",
   "off": "/data/helixsr-speed/packages/PPSA02572-01.200.007/stored/game",
-  "gpulab": false
+  "gpulab": true
  }
 }

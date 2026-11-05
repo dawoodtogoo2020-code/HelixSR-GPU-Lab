@@ -1,0 +1,498 @@
+[
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/app-symbols.map",
+    "sha": "9f1c896d1a89bb356102a7a1228e70ef9ec85cf4",
+    "size": 284,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/app_cpp_runtime.cpp",
+    "sha": "f7f80a4e69f2dd992de4dac53ed33d6ed1fd48f4",
+    "size": 3466,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/app_crt.cpp",
+    "sha": "f6cbd54a293e2916c420bbf14b79cff510085415",
+    "size": 2585,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/elf_object.cpp",
+    "sha": "964a0ce5b0e00a0fc724e9d33bc7f7f04d0e0981",
+    "size": 12125,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/elf_object.hpp",
+    "sha": "91928f7dbb7cebc6b05cf9e7778d298503ee2de7",
+    "size": 3748,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/hash.hpp",
+    "sha": "df287efde1fc73a3fd491b9f3a35aeff478dcddc",
+    "size": 6220,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/libc_builder.cpp",
+    "sha": "f67de88495155a15b8a235d0290c52c07052299f",
+    "size": 41450,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/native_app_builder.cpp",
+    "sha": "8c3b055768c7fe7ae3bcf93eb2ce2140fd07c682",
+    "size": 11600,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/ps5-pie.ld",
+    "sha": "91fd169b4de5b54ffb55915992bd14cb41f53461",
+    "size": 2388,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/sce_module_writer.cpp",
+    "sha": "25e8fc26da2d11206e2d00410ac45bbb057c8915",
+    "size": 37431,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/sce_module_writer.hpp",
+    "sha": "7a7c4e53018b8b4d78bc5a2f1ee3bfc7ddaf90ea",
+    "size": 869,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/self_container.cpp",
+    "sha": "205dce1bbdd0e8b6c3a95f3ec978f4cbe8188027",
+    "size": 22199,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/native/self_container.hpp",
+    "sha": "a695d9415e9f44a8cddcf99f2bf586f2b877253d",
+    "size": 2305,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/prospero-clang18",
+    "sha": "be8f272d1402575d6e0197ab672275f6672de98b",
+    "size": 1114,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tooling/psbc/ps5-pie-unwind.ld",
+    "sha": "7486ae4079b143a26b03b1aec26aa7f7d721edff",
+    "size": 776,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "vendor/ps5/sdk/stubs/agc_canary_link_stub.c",
+    "sha": "8cd7dd973cea3b5ec0581e9e5369de771048b1d7",
+    "size": 3430,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "vendor/ps5/sdk/stubs/agc_driver_canary_link_stub.c",
+    "sha": "40b60d71db93e269dc7b4c6e3371af69c1f296b2",
+    "size": 1259,
+    "folder": "vulkan"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "include/freebsd/sys/_ucontext.h",
+    "sha": "9295453e730d6bc3d38015119751261baa040483",
+    "size": 2459,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/agc.h",
+    "sha": "42247891e73541b2f4c09de8008f913b9e4fea5d",
+    "size": 3478,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/context.h",
+    "sha": "e5c8b3529c9e0dbe92a8fed1b4b31b866a84b5cf",
+    "size": 1127,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/exec.h",
+    "sha": "26fa1a5f7795f1413ddf60c5e950d48f038a6dac",
+    "size": 3863,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/fp.h",
+    "sha": "8d8f8d7fa755fe8150779c8c5506e8ee32189dc4",
+    "size": 983,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/heap.h",
+    "sha": "ca7e41766d08d605c9698bcb72c5a80cbb2e6db0",
+    "size": 3495,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/kernel.h",
+    "sha": "0a4a11c1f20116c6c6bbec9f8cf635d6c6b20f61",
+    "size": 3524,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/klog.h",
+    "sha": "3b99cf9c1fca9ecfefcb1560ffb1297bfd8b708e",
+    "size": 1113,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/libc.h",
+    "sha": "c0359b12e0013f4cd880f1dae4f5fcf1a25630e9",
+    "size": 14502,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/platform.h",
+    "sha": "1f04d7ced0a6bfcd7b923dab691c770133811cfb",
+    "size": 855,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/probe.h",
+    "sha": "2b039424a0f14359a493347ee2eddf262b79757a",
+    "size": 2286,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/shm.h",
+    "sha": "8e773fad76e1f04b47aab4ce38b3bd8220799bf3",
+    "size": 2341,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/include/ps5platform/videoout.h",
+    "sha": "602d624a4247403171477310d1d9419db0025d5c",
+    "size": 4785,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/at.h",
+    "sha": "2d5da42f286846cea918fa3e4fa396532c96ef70",
+    "size": 476,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/cxa.c",
+    "sha": "0c27ac6118d6a0443ccb93fcdeb665ccc3dceadf",
+    "size": 2389,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/directory.c",
+    "sha": "27cf6c1b47e18781016162adcbad4dfd72974115",
+    "size": 8683,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/dlmalloc/SOURCE",
+    "sha": "6e5defcd6f9cb8e5c422c48fabb7f603fff9a5ad",
+    "size": 295,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/dlmalloc/malloc.c",
+    "sha": "35003d1925947d2689bc9d7480839bfce246d615",
+    "size": 222021,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/dlmalloc/mspace.c",
+    "sha": "e435b21a134a49dd0b08bfa4bcf0247aa9ef3d76",
+    "size": 1543,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/exec.c",
+    "sha": "6f3361211b33cbdaa53e3086f94451f9988bee67",
+    "size": 8083,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/fp.c",
+    "sha": "e72e11aad645cd8bb3c19fc3079486aeb5f6c04f",
+    "size": 389,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/heap.c",
+    "sha": "56a3c5e802415636c6afc159735ccbb584bc7ede",
+    "size": 9694,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/heap_wrap.c",
+    "sha": "c767db60882d3e2d23f32119230a41c427372b08",
+    "size": 5270,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/klog.c",
+    "sha": "37d358bc41dfd2ea9c23c18ada93a469fd4c3835",
+    "size": 2712,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/libc.c",
+    "sha": "1182b62a285b4cc09bb3ec72efcb81bdfa1be615",
+    "size": 8333,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/locale.c",
+    "sha": "46f49891e8352e0b77378e0dc1928e2bfa941fdb",
+    "size": 3514,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/memstream.c",
+    "sha": "001da50baad54734f32cdc1979c33faeeb9ff88e",
+    "size": 7291,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/placement.c",
+    "sha": "9e68b7d300c6abc7405ff33845c946184b8297af",
+    "size": 4111,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/placement.h",
+    "sha": "4d202e76ca68fc05e3ee809c00fe14f12197d355",
+    "size": 2213,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/posix.c",
+    "sha": "e922d4e34cab97c1363a215c5b0e871b1c403d23",
+    "size": 6363,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/probe.c",
+    "sha": "926e8342dad9e8429f3ebf69dcbcb994932c1f49",
+    "size": 49195,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/probe_files.c",
+    "sha": "9cc12e5c71180b7a51ca2814ae3c5997d5d74265",
+    "size": 8686,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/probe_threads.c",
+    "sha": "d726ae6f6ff70b67836bb03ec87b156b39a5ae2b",
+    "size": 8543,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex.c",
+    "sha": "bc7daa83f80cf668a497372175ceff1c2f5e3259",
+    "size": 6248,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex/COPYRIGHT.musl",
+    "sha": "c1628e9ac84f927fe791124ec172fb61c760bb9b",
+    "size": 6204,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex/musl_regex.h",
+    "sha": "e999619b1e13f16b46902c7f836f9fd668b4a759",
+    "size": 1715,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex/regcomp.c",
+    "sha": "d5369b295f6c349a0fa9c3dc52241592aa57500c",
+    "size": 76223,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex/regexec.c",
+    "sha": "8650fbb7520dfe1d4cc63915485e9536df43f07a",
+    "size": 29096,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex/tre-mem.c",
+    "sha": "86f809d45564ee3190be8d65aac328f97f2882b4",
+    "size": 4067,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex/tre.h",
+    "sha": "7984e164890836d5a612309ef9342f50a0a1a42a",
+    "size": 7577,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/regex_abi.c",
+    "sha": "f05c8ee46cd1cb8951c1c1af91b21892bce2cac3",
+    "size": 1961,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/report.c",
+    "sha": "325639cebb02be0ca7e07306093c4be2880594a5",
+    "size": 858,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/shm.c",
+    "sha": "130a4a7ab766a837ee7454a62fd24f5d0951bc60",
+    "size": 5536,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/threads.c",
+    "sha": "5a42ac90629966496bcf9ba1076652129e989b51",
+    "size": 13001,
+    "folder": "sdk"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "platform/src/xlocale.c",
+    "sha": "413a15f81e10629e6efd762e9acd161d361cf320",
+    "size": 13086,
+    "folder": "sdk"
+  }
+]

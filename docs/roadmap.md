@@ -1,5 +1,9 @@
 # Roadmap
 
+## Unreleased unified app candidate (1 Nov 2026)
+
+Native unified app, AW2 in-app choice/launch and installer recovery changes are implemented for host validation. They are not a released or console-qualified milestone. See [candidate notes](unified-candidate.md) for exact scope and remaining graphics and hardware work.
+
 ## Done in v0.2.0-beta (30 Oct 2026)
 
 - **Distribution.** HelixSR's PS5 ports ship with Lone Wolf's permission. No game or NVIDIA files ship: patches start from your own game files, and the network is built from NVIDIA's DLL on your PC.

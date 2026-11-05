@@ -141,12 +141,47 @@ class GpuLabTest(unittest.TestCase):
         self.assertEqual(self.run_cli('off', 'demo')[0], 0)
         self.assertIn('HelixSR OFF', self.run_cli('status', '--model', 'ps5')[1])
         writes = self.ps5.writes
-        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)   # switches back ON, writes nothing new
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
         self.assertEqual(self.ps5.writes, writes)
+        self.assertIn('HelixSR OFF', self.run_cli('status', '--model', 'ps5')[1])
         self.run_cli('off', 'demo')
         rc, out, _ = self.run_cli('uninstall')
         self.assertEqual(rc, 0, out)
         self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_status_observes_folder_without_local_state(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        self.assertEqual(self.run_cli('off', 'demo')[0], 0)
+        shutil.rmtree(gpulab.HOME)
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('status', '--model', 'ps5')
+        self.assertEqual(rc, 0, out)
+        self.assertIn('HelixSR OFF', out)
+        self.assertEqual(self.ps5.snapshot(), before)
+        self.assertFalse(gpulab.HOME.exists())
+
+        g = gpulab.games()['demo']
+        self.ps5.add_file(g['switch']['off'] + '/eboot.bin', b'unknown')
+        rc, out, _ = self.run_cli('status', '--model', 'ps5')
+        self.assertEqual(rc, 2, out)
+        self.assertIn('unverified', out)
+
+    def test_status_distinguishes_absent_complete_and_partial_file_overlays(self):
+        g = self.overlay_game()
+        deps = g['preserved_dependencies']
+        for dep, content in zip(deps, (b'library a', b'library b', b'library c')):
+            self.ps5.add_file(dep['remote'], content)
+        for expected_rc, text, added in (
+                (0, 'not configured', None),
+                (2, 'unverified', ('on', 'eboot.bin', self.release.eboot)),
+                (2, 'switch interrupted', ('off', 'data/x.bin', self.release.data))):
+            if added:
+                side, name, data = added
+                self.ps5.add_file(g['switch'][side] + '/' + name, data)
+            rc, out, _ = self.run_cli('status', '--model', 'ps5')
+            self.assertEqual(rc, expected_rc, out)
+            self.assertIn(text, out)
+        self.assertFalse(gpulab.HOME.exists())
 
     def test_wrong_game_version_changes_nothing(self):
         self.ps5.files['/user/appmeta/PPSA00001/param.json'] = b'{"contentVersion": "01.010.000"}'
@@ -177,6 +212,453 @@ class GpuLabTest(unittest.TestCase):
         rc, out, _ = self.run_cli('uninstall')
         self.assertEqual(rc, 2)
         self.assertIn('changed on the PS5', out)
+
+    def test_off_reinstall_refusal_does_not_move_folder(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        self.assertEqual(self.run_cli('off', 'demo')[0], 0)
+        g = gpulab.games()['demo']
+        self.ps5.add_file(g['switch']['off'] + '/foreign.bin', b'other')
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('install', '--model', 'ps5')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_bad_bundle_does_not_switch_off_overlay(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        self.assertEqual(self.run_cli('off', 'demo')[0], 0)
+        (self.release.root / 'console/ps5/PPSA99272/eboot.bin').write_bytes(b'damaged')
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('install', '--model', 'ps5')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_off_uninstall_refusal_does_not_move_folder(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        self.assertEqual(self.run_cli('off', 'demo')[0], 0)
+        g = gpulab.games()['demo']
+        self.ps5.files[g['switch']['off'] + '/data/x.bin'] = b'changed'
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('uninstall')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_interrupted_backup_rename_can_be_uninstalled(self):
+        before = self.ps5.snapshot()
+        rename = self.ps5.rename
+        def fail_after(old, new):
+            rename(old, new)
+            if '.bak-' in new:
+                raise gpulab.Refused('injected interruption')
+        self.ps5.rename = fail_after
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 2)
+        self.ps5.rename = rename
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 2)
+        rc, out, _ = self.run_cli('uninstall')
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_interrupted_restore_can_be_retried(self):
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        rename = self.ps5.rename
+        def fail_after(old, new):
+            rename(old, new)
+            if '.bak-' in old:
+                raise gpulab.Refused('injected interruption')
+        self.ps5.rename = fail_after
+        self.assertEqual(self.run_cli('uninstall')[0], 2)
+        self.ps5.rename = rename
+        rc, out, _ = self.run_cli('uninstall')
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_failed_reinstall_keeps_overlay_off(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        self.assertEqual(self.run_cli('off', 'demo')[0], 0)
+        g = gpulab.games()['demo']
+        # Force a write to fail after preflight and after the app has been checked.
+        self.ps5.files[g['switch']['off'] + '/data/x.bin'] = b'old'
+        write = self.ps5.write
+        def fail_write(path, data):
+            if path.endswith('/data/x.bin'):
+                raise gpulab.Refused('injected write failure')
+            write(path, data)
+        self.ps5.write = fail_write
+        rc, out, _ = self.run_cli('install', '--model', 'ps5')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(gpulab.folder_state(self.ps5, g), 'off')
+        self.ps5.write = write
+        self.assertEqual(self.run_cli('uninstall')[0], 2)
+        self.ps5.files[g['switch']['off'] + '/data/x.bin'] = self.release.data
+        self.assertEqual(self.run_cli('uninstall')[0], 0)
+
+    def test_interrupted_upload_refuses_foreign_replacement(self):
+        write = self.ps5.write
+        def fail_write(path, data):
+            if path.endswith('/eboot.bin') and '/backports/' in path:
+                self.ps5.files[path] = b'foreign replacement'
+                raise gpulab.Refused('injected interruption')
+            write(path, data)
+        self.ps5.write = fail_write
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 2)
+        self.ps5.write = write
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('uninstall')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+        self.assertIn('changed on the PS5', out)
+
+    def test_pending_mkdir_does_not_remove_uncertain_directory(self):
+        path = '/data/preexisting-empty'
+        self.ps5.add_dir(path)
+        journal = gpulab.Journal('10.0.0.9')
+        journal.add(op='mkdir', path=path, pending=True)
+        rc, out, _ = self.run_cli('uninstall')
+        self.assertEqual(rc, 0, out)
+        self.assertIn(path, self.ps5.dirs)
+
+    def test_switch_refuses_foreign_files(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = gpulab.games()['demo']
+        self.ps5.add_file(g['switch']['on'] + '/foreign.bin', b'other')
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('off', 'demo')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_switch_refuses_backup_named_foreign_file(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = gpulab.games()['demo']
+        self.ps5.add_file(g['switch']['on'] + '/foreign.bak-user', b'user')
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('off', 'demo')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_switch_refuses_damaged_or_missing_expected_files(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        self.assertEqual(self.run_cli('off', 'demo')[0], 0)
+        g = gpulab.games()['demo']
+        path = g['switch']['off'] + '/eboot.bin'
+        self.ps5.files[path] = b'damaged'
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('on', 'demo')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+        del self.ps5.files[path]
+        self.assertEqual(self.run_cli('on', 'demo')[0], 2)
+
+    def test_unknown_overlay_cannot_be_overwritten_on_install(self):
+        g = gpulab.games()['demo']
+        self.ps5.add_file(g['switch']['on'] + '/eboot.bin', b'foreign')
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_unavailable_overlay_listing_refuses_switch(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = gpulab.games()['demo']
+        listing = self.ps5.listing
+        self.ps5.listing = lambda p: None if p == g['switch']['on'] else listing(p)
+        self.assertEqual(self.run_cli('off', 'demo')[0], 2)
+
+    def test_setting_changed_is_preserved_on_uninstall(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        path = '/data/helixsr-speed/custom-setting'
+        self.ps5.add_file(path, b'custom')
+        j = gpulab.Journal('10.0.0.9')
+        j.add(op='put', path=path, kind='setting', accept=[[2, sha(b'on')], [3, sha(b'off')]],
+              prior=None, already=False, done=True)
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('uninstall')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_aw2_support_is_required_only_on_activation(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = gpulab.games()['demo']
+        g['id'] = 'aw2-t12'
+        for name in ('copy.bin', 'chain.bin'):
+            path = '/data/helixsr-aw2-t12/' + name
+            g['files'].append(dict(remote=path, accept=[[2, sha(b'ok')]]))
+            self.ps5.add_file(path, b'ok')
+        self.assertIn('OFF', gpulab.switch(self.ps5, g, 'off'))
+        self.ps5.files['/data/helixsr-aw2-t12/copy.bin'] = b'bad'
+        with self.assertRaises(gpulab.Refused): gpulab.switch(self.ps5, g, 'on')
+        self.assertIn('already OFF', gpulab.switch(self.ps5, g, 'off'))
+        self.ps5.files['/data/helixsr-aw2-t12/copy.bin'] = b'ok'
+        self.assertIn('ON', gpulab.switch(self.ps5, g, 'on'))
+    def test_normalized_elf_accepts_only_pinned_bytes_and_zero_tail(self):
+        elf = bytearray(b'\x7fELF\x02\x01' + b'Q' * 94)
+        normalized = bytearray(elf)
+        normalized[40:48] = bytes(8); normalized[58:64] = bytes(6)
+        spec = dict(bytes=len(elf), sha256=sha(normalized), zero_ranges=[[40, 48], [58, 64]], max_zero_tail=75)
+        path = '/data/test.elf'
+        self.ps5.add_file(path, bytes(elf) + bytes(75))
+        self.assertEqual(gpulab.state_of(self.ps5, path, [(1, sha(b'x'))], normalized_elf=spec), 'ours')
+        for data in (bytes(elf) + bytes(76), bytes(elf) + b'X', bytes(elf[:70]) + b'X' + bytes(elf[71:])):
+            self.ps5.files[path] = data
+            self.assertEqual(gpulab.state_of(self.ps5, path, [(1, sha(b'x'))], normalized_elf=spec), 'other')
+        self.ps5.files[path] = bytes(elf)
+        bad = dict(spec, zero_ranges=[[0, 8]])
+        with self.assertRaises(gpulab.Refused):
+            gpulab.state_of(self.ps5, path, [(1, sha(b'x'))], normalized_elf=bad)
+
+    def existing_aw2_for_adoption(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        p = self.release.root / 'games/demo/game.json'
+        g = json.loads(p.read_text())
+        g['id'] = 'aw2-t12'
+        package = '/data/helixsr-speed/packages/PPSA02572-01.200.007'
+        g['switch']['off'] = package + '/stored/game'
+        g['dirs'] = [package + '/stored']
+        for name, data in (('copy.bin', b'copy support'), ('chain.bin', b'chain support')):
+            path = '/data/helixsr-aw2-t12/' + name
+            self.ps5.add_file(path, data)
+            g['files'].append(dict(remote=path, text=data.decode(), sha256=sha(data), accept=[[len(data), sha(data)]]))
+        p.write_text(json.dumps(g))
+        shutil.rmtree(gpulab.HOME)
+        self.ps5.files['/data/homebrew/PPSA99272/eboot.bin'] = b'prior app'
+        return g, package
+
+    def test_adopt_creates_missing_stored_directory_without_touching_overlay(self):
+        g, package = self.existing_aw2_for_adoption()
+        before = {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/')}
+        self.assertNotIn(package + '/stored', self.ps5.dirs)
+        rc, out, _ = self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'aw2-t12')
+        self.assertEqual(rc, 0, out)
+        self.assertIn(package + '/stored', self.ps5.dirs)
+        self.assertEqual(before, {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/')})
+        self.assertEqual(gpulab.folder_state(self.ps5, g), 'on')
+        journal = gpulab.Journal('10.0.0.9')
+        self.assertTrue(any(e['op'] == 'mkdir' and e['path'] == package + '/stored' and not e.get('pending')
+                            for e in journal.data['entries']))
+
+    def test_adopt_conflicting_game_directory_refuses_before_app_write(self):
+        g, package = self.existing_aw2_for_adoption()
+        self.ps5.add_file(package + '/stored', b'not a directory')
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'aw2-t12')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_adopt_fresh_journal_uninstall_preserves_preexisting_overlay(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        # Simulate an existing installation made by another PC, with no local journal.
+        shutil.rmtree(gpulab.HOME)
+        before = {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/')}
+        rc, out, _ = self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.run_cli('uninstall')[0], 0)
+        self.assertEqual(before, {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/')})
+
+    def check_adoption_uninstall_mode(self, initial):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        for dep, data in zip(g['preserved_dependencies'], (b'library a', b'library b', b'library c')):
+            self.ps5.add_file(dep['remote'], data)
+        if initial == 'off':
+            self.assertEqual(self.run_cli('off', 'control-r18')[0], 0)
+        original = {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/') or p.startswith(g['switch']['off'] + '/')}
+        shutil.rmtree(gpulab.HOME)
+        app = '/data/homebrew/PPSA99272/eboot.bin'
+        self.ps5.files[app] = b'older app for migration'
+        rc, out, _ = self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.run_cli('off' if initial == 'on' else 'on', 'control-r18')[0], 0)
+        rc, out, _ = self.run_cli('uninstall')
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(gpulab.overlay_state(self.ps5, g), initial)
+        self.assertEqual(self.ps5.files[app], b'older app for migration')
+        self.assertEqual(original, {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/') or p.startswith(g['switch']['off'] + '/')})
+
+    def test_adopt_on_restore_on(self):
+        self.check_adoption_uninstall_mode('on')
+
+    def test_adopt_off_restore_off(self):
+        self.check_adoption_uninstall_mode('off')
+
+    def test_uninstall_retries_interrupted_mode_restoration_before_app_restore(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        shutil.rmtree(gpulab.HOME)
+        app = '/data/homebrew/PPSA99272/eboot.bin'
+        self.ps5.files[app] = b'previous app'
+        self.assertEqual(self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')[0], 0)
+        self.assertEqual(self.run_cli('off', 'control-r18')[0], 0)
+        rename = self.ps5.rename
+        def fail_after(old, new):
+            rename(old, new)
+            if old.startswith(g['switch']['off'] + '/'):
+                raise gpulab.Refused('injected interruption')
+        self.ps5.rename = fail_after
+        self.assertEqual(self.run_cli('uninstall')[0], 2)
+        self.assertEqual(self.ps5.files[app], self.release.app)
+        self.ps5.rename = rename
+        self.assertEqual(self.run_cli('uninstall')[0], 0)
+        self.assertEqual(gpulab.overlay_state(self.ps5, g), 'on')
+        self.assertEqual(self.ps5.files[app], b'previous app')
+
+    def test_repeated_adopt_retains_first_mode_for_uninstall(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        shutil.rmtree(gpulab.HOME)
+        self.assertEqual(self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')[0], 0)
+        self.assertEqual(self.run_cli('off', 'control-r18')[0], 0)
+        self.assertEqual(self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')[0], 0)
+        self.assertEqual(self.run_cli('uninstall')[0], 0)
+        self.assertEqual(gpulab.overlay_state(self.ps5, g), 'on')
+
+    def test_adoption_preflights_later_backup_collision(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        self.overlay_game()
+        shutil.rmtree(gpulab.HOME)
+        p = self.release.root / 'console/ps5/console.json'
+        bundle = json.loads(p.read_text())
+        row = dict(bundle['files'][0], remote='/data/homebrew/other/eboot.bin')
+        bundle['files'].append(row);p.write_text(json.dumps(bundle))
+        old = b'previous second app'
+        self.ps5.add_file(row['remote'], old)
+        self.ps5.add_file(row['remote'] + '.bak-' + sha(old)[:8], b'occupied')
+        self.ps5.files[bundle['files'][0]['remote']] = b'first old app'
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_recovery_allows_only_exact_journal_overlay_backup(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        shutil.rmtree(gpulab.HOME)
+        path = g['switch']['on'] + '/eboot.bin'
+        old = b'earlier original overlay'
+        backup = path + '.bak-' + sha(old)[:8]
+        self.ps5.add_file(backup, old)
+        j = gpulab.Journal('10.0.0.9')
+        row = g['files'][0]
+        j.add(op='put', path=path, accept=row['accept'], prior=dict(console=backup, sha256=sha(old), bytes=len(old), pc='unused'), already=False, done=True)
+        self.assertEqual(self.run_cli('uninstall')[0], 0)
+        self.assertEqual(self.ps5.files[path], old)
+        self.assertNotIn(backup, self.ps5.files)
+
+    def test_unowned_backup_in_overlay_is_refused_before_mutation(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        self.ps5.add_file(g['switch']['on'] + '/eboot.bin.bak-unknown', b'foreign')
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('uninstall')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_missing_console_side_backup_refuses_uninstall(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        shutil.rmtree(gpulab.HOME)
+        app = '/data/homebrew/PPSA99272/eboot.bin'
+        old = b'older app for recovery'
+        self.ps5.files[app] = old
+        self.assertEqual(self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')[0], 0)
+        del self.ps5.files[app + '.bak-' + sha(old)[:8]]
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('uninstall')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def overlay_game(self):
+        p = self.release.root / 'games/demo/game.json'
+        g = json.loads(p.read_text())
+        g['id'] = 'control-r18'
+        g['switch']['kind'] = 'overlay-files'
+        root = g['switch']['on']
+        g['preserved_dependencies'] = [dict(remote=root + '/fakelib2/' + n, bytes=len(b), sha256=sha(b))
+                                       for n, b in [('a.sprx', b'library a'), ('b.sprx', b'library b'), ('c.sprx', b'library c')]]
+        p.write_text(json.dumps(g))
+        return g
+
+    def test_overlay_files_preserves_dependencies_and_recovers_mixed(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        for dep, content in zip(g['preserved_dependencies'], (b'library a', b'library b', b'library c')):
+            self.ps5.add_file(dep['remote'], content)
+        rename = self.ps5.rename
+        count = [0]
+        def fail_after(old, new):
+            rename(old, new)
+            count[0] += 1
+            if count[0] == 1:
+                raise gpulab.Refused('injected failure')
+        self.ps5.rename = fail_after
+        self.assertEqual(self.run_cli('off', 'control-r18')[0], 2)
+        self.ps5.rename = rename
+        self.assertEqual(gpulab.overlay_state(self.ps5, g), 'mixed')
+        self.assertEqual(self.run_cli('off', 'control-r18')[0], 0)
+        self.assertEqual(gpulab.overlay_state(self.ps5, g), 'off')
+        for dep, content in zip(g['preserved_dependencies'], (b'library a', b'library b', b'library c')):
+            self.assertEqual(self.ps5.files[dep['remote']], content)
+        self.assertEqual(self.run_cli('on', 'control-r18')[0], 0)
+        self.assertEqual(gpulab.overlay_state(self.ps5, g), 'on')
+
+    def test_overlay_refuses_partial_or_foreign_dependencies_without_changes(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        self.ps5.add_file(g['preserved_dependencies'][0]['remote'], b'library a')
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('off', 'control-r18')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+        for dep, content in zip(g['preserved_dependencies'][1:], (b'library b', b'library c')):
+            self.ps5.add_file(dep['remote'], content)
+        self.ps5.add_file(g['switch']['on'] + '/fakelib2/extra.sprx', b'foreign')
+        before = self.ps5.snapshot()
+        self.assertEqual(self.run_cli('off', 'control-r18')[0], 2)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_adopt_keeps_game_bytes_and_never_reads_inputs_or_weights(self):
+        self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+        g = self.overlay_game()
+        original = {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/')}
+        gpulab.ensure_weights = lambda *a: self.fail('weights requested during adoption')
+        self.ps5.app0.clear()
+        rc, out, _ = self.run_cli('install', '--model', 'ps5', '--adopt', '--game', 'control-r18')
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(original, {p: v for p, v in self.ps5.files.items() if p.startswith(g['switch']['on'] + '/')})
+
+
+
+class ConsoleListingTest(unittest.TestCase):
+    def test_ftpsrv_226_delete_requires_confirmed_absence(self):
+        import ftplib
+        from ps5_console import Console, Refused
+        c = Console('example')
+        c.gate = lambda: None
+
+        class FTP:
+            reply = '226 File deleted'
+            def delete(self, path):
+                raise ftplib.error_reply(self.reply)
+
+        c.ftp = FTP()
+        c.exists = lambda path: False
+        c.delete('/removed')
+        c.exists = lambda path: True
+        with self.assertRaises(Refused):
+            c.delete('/still-present')
+        c.ftp.reply = '350 Incomplete'
+        with self.assertRaises(ftplib.error_reply):
+            c.delete('/still-present')
+
+    def test_existing_parent_unavailable_is_not_treated_as_absent(self):
+        from ps5_console import Console, Refused
+        c = Console('example')
+        def listing(path):
+            return {'data': {'dir': True, 'bytes': 0}} if path == '/' else None
+        c.listing = listing
+        with self.assertRaises(Refused): c.stat('/data/file')
+        self.assertIsNone(c.stat('/missing/file'))
+
+    def test_refuses_unparseable_or_symlink_entries(self):
+        from ps5_console import Console, Refused
+        class FTP:
+            def __init__(self, line): self.line = line
+            def retrlines(self, cmd, callback): callback(self.line)
+        for line in ('not a listing', 'lrwxrwxrwx 1 user group 2 Jan 01 00:00 eboot.bin -> /else'):
+            c = Console('example'); c.ftp = FTP(line)
+            with self.assertRaises(Refused): c.listing('/data/example')
+
 
 
 class PatchTest(unittest.TestCase):

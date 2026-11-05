@@ -24,7 +24,7 @@ HelixSR GPU Lab puts [Lone Wolf's HelixSR](https://github.com/lonewolf0622/Helix
 
 ## Install (about 10 minutes)
 
-1. **Download** `HelixSR-GPU-Lab-v0.2.0-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
+1. **Download** `HelixSR-GPU-Lab-v0.3.0-saros-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
 2. **Start the installer:**
    - **Windows:** double-click `install.bat`.
    - **Mac / Linux:** open a terminal in the folder and run `sh install.sh`.
@@ -77,3 +77,7 @@ To report a result, good or bad, post in the [#helixsr-playstation-5](https://di
 - the installer's last lines
 
 Leave out your IP address and your `my-ps5` folder.
+
+## SAROS
+
+See [SAROS setup and measured limits](saros.md). To install only SAROS: `python tools/gpulab.py install --game saros-native-v1`. To recognize an already installed, matching SAROS v27 integration and update the app, add `--adopt`. Adoption verifies the existing executable and sidecar; it cannot upgrade an older SAROS trial.

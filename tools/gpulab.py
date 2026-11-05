@@ -34,7 +34,7 @@ ROOT = HERE.parent
 GAMES = ROOT / 'games'
 CONSOLES = ROOT / 'console'
 HOME = ROOT / 'my-ps5'
-VERSION = '0.2.0-beta'
+VERSION = '0.3.0-saros-beta'
 CONSOLE = Console   # tests swap in a simulated PS5
 APP0 = ('/mnt/sandbox/{title}_000/app0', '/mnt/sandbox/pfsmnt/{title}-app0')
 
@@ -117,13 +117,15 @@ def mkdirs(c, journal, path):
         p = '/' + '/'.join(parts[:i])
         st = c.stat(p)
         if st is None:
+            row = journal.add(op='mkdir', path=p, pending=True)
             c.mkdir(p)
-            journal.add(op='mkdir', path=p)
+            row['pending'] = False
+            journal.save()
         else:
             need(st['dir'], 'Expected a folder on the PS5, found a file: ' + p)
 
 
-def state_of(c, path, accept, kind='file', cap=None):
+def state_of(c, path, accept, kind='file', cap=None, normalized_elf=None):
     """'absent', 'ours' (one of the accepted forms) or 'other'."""
     st = c.stat(path)
     if st is None:
@@ -132,16 +134,59 @@ def state_of(c, path, accept, kind='file', cap=None):
         return 'other'
     if kind == 'telemetry':
         return 'ours' if any(st['bytes'] == b for b, _ in accept) else 'other'
-    if not any(st['bytes'] == b for b, _ in accept):
-        return 'other'
-    n, h = c.hash(path, (cap or max(b for b, _ in accept)) + 1)
-    return 'ours' if (n, h) in accept else 'other'
+    if any(st['bytes'] == b for b, _ in accept):
+        n, h = c.hash(path, (cap or max(b for b, _ in accept)) + 1)
+        if (n, h) in accept:
+            return 'ours'
+    if normalized_elf is not None:
+        spec = normalized_elf
+        n = spec.get('bytes')
+        digest = spec.get('sha256', '')
+        need(type(n) is int and 64 <= n <= 256 * 1024 * 1024 and
+             spec.get('zero_ranges') == [[40, 48], [58, 64]] and
+             type(spec.get('max_zero_tail')) is int and 0 <= spec['max_zero_tail'] <= 75 and
+             isinstance(digest, str) and len(digest) == 64 and all(x in '0123456789abcdef' for x in digest),
+             'Invalid normalized ELF manifest')
+        if n <= st['bytes'] <= n + spec['max_zero_tail']:
+            data = c.read(path, n + spec['max_zero_tail'] + 1)
+            if len(data) == st['bytes'] and data[:6] == b'\x7fELF\x02\x01' and not any(data[n:]):
+                clean = bytearray(data[:n])
+                for lo, hi in spec['zero_ranges']:
+                    clean[lo:hi] = bytes(hi-lo)
+                if sha(clean) == digest:
+                    return 'ours'
+    return 'other'
 
 
-def put(c, journal, path, data, accept, kind='file', label=''):
+def preflight_put(c, path, data, accept, kind='file', normalized_elf=None):
+    """Inspect all existing ancestors and backup collisions without changing the console."""
+    parts = path.strip('/').split('/')
+    absent = False
+    for i in range(1, len(parts)):
+        parent = '/' + '/'.join(parts[:i])
+        if absent:
+            continue
+        st = c.stat(parent)
+        if st is None:
+            absent = True
+        else:
+            need(st['dir'], 'Expected a folder on the PS5: ' + parent)
+    if absent:
+        return
+    current = state_of(c, path, [tuple(a) for a in accept], kind, normalized_elf=normalized_elf)
+    if current == 'other':
+        st = c.stat(path)
+        need(not st['dir'], 'A folder is in the way on the PS5: ' + path)
+        old = c.read(path, st['bytes'] + 1)
+        need(len(old) == st['bytes'], 'Could not read existing file: ' + path)
+        aside = '%s.bak-%s' % (path, sha(old)[:8])
+        need(not c.exists(aside), 'Backup name already used on the PS5: ' + aside)
+
+
+def put(c, journal, path, data, accept, kind='file', label='', normalized_elf=None):
     """Upload one file. A different file already there is backed up to the PC and renamed on the PS5 first."""
     accept = [tuple(a) for a in accept]
-    current = state_of(c, path, accept, kind)
+    current = state_of(c, path, accept, kind, normalized_elf=normalized_elf)
     if current == 'ours':
         journal.add(op='put', path=path, kind=kind, accept=accept, prior=None, already=True)
         return False
@@ -157,14 +202,15 @@ def put(c, journal, path, data, accept, kind='file', label=''):
         need(sha(local.read_bytes()) == sha(old), 'Could not back up %s to the PC' % path)
         aside = '%s.bak-%s' % (path, tag)
         need(not c.exists(aside), 'Backup name already used on the PS5: ' + aside)
-        c.rename(path, aside)
         prior = dict(sha256=sha(old), bytes=len(old), console=aside, pc=str(local))
     else:
         mkdirs(c, journal, path.rsplit('/', 1)[0])
-    row = journal.add(op='put', path=path, kind=kind, accept=accept, prior=prior, already=False, done=False)
+    row = journal.add(op='put', path=path, kind=kind, accept=accept, prior=prior, already=False, done=False, normalized_elf=normalized_elf)
+    if prior:
+        c.rename(path, prior['console'])
     say(f'  writing {path}' + (f' ({label})' if label else ''))
     c.write(path, data)
-    need(state_of(c, path, accept, kind) == 'ours', 'The PS5 did not store %s correctly' % path)
+    need(state_of(c, path, accept, kind, normalized_elf=normalized_elf) == 'ours', 'The PS5 did not store %s correctly' % path)
     row['done'] = True
     journal.save()
     return True
@@ -274,6 +320,8 @@ def cached_inputs(g):
 
 
 def read_input(c, root, row, progress=None):
+    if row.get('raw_self'):
+        return c.read_raw_self(root + '/' + row['path'], max(b for b, _ in row['accept']) + 1, progress)
     if 'offset' in row:
         return c.read_range(root + '/' + row['path'], row['offset'], row['accept'][0][0])
     cap = max(b for b, _ in row['accept'])
@@ -366,6 +414,102 @@ def build_files(g, inputs, weights):
 
 # ---------------------------------------------------------------- switching
 
+def overlay_rows(g):
+    root = g['switch']['on']
+    return [r for r in g['files'] if r['remote'].startswith(root + '/')]
+
+
+def overlay_positions(c, g, complete=True, journal_entries=()):
+    """Validate both trees and return each managed file's sole location."""
+    on, off = g['switch']['on'], g['switch']['off']
+    rows = overlay_rows(g)
+    need(rows, 'Overlay manifest has no managed files')
+    deps = g.get('preserved_dependencies', [])
+    for dep in deps:
+        need(dep['remote'].startswith(on + '/'), 'Invalid dependency path')
+    managed = {r['remote'][len(on)+1:]: r for r in rows}
+    backups = {}
+    for e in journal_entries:
+        prior = e.get('prior')
+        path = e.get('path', '')
+        if e.get('op') != 'put' or e.get('undone') or not prior or not path.startswith(on + '/'):
+            continue
+        digest = prior.get('sha256', '')
+        if len(digest) != 64 or any(x not in '0123456789abcdef' for x in digest):
+            raise Refused('Invalid journal backup identity')
+        need(prior.get('console') == path + '.bak-' + digest[:8] and
+             type(prior.get('bytes')) is int and prior['bytes'] >= 0, 'Invalid journal backup path')
+        backups[prior['console'][len(on)+1:]] = prior
+    preserved = {d['remote'][len(on)+1:]: d for d in deps}
+    def inspect(root, allowed):
+        if not c.exists(root):
+            return set(), set()
+        need(c.stat(root)['dir'], 'Expected overlay directory: ' + root)
+        found, dirs = set(), set()
+        def walk(path, rel):
+            listing = c.listing(path)
+            need(listing is not None, 'Cannot inspect overlay: ' + path)
+            for name, st in listing.items():
+                need(name not in ('.', '..') and '/' not in name, 'Invalid overlay entry')
+                child = rel + name
+                if st['dir']:
+                    need(any(x.startswith(child + '/') for x in allowed), 'Unknown overlay directory: ' + child)
+                    dirs.add(child)
+                    walk(path + '/' + name, child + '/')
+                else:
+                    need(child in allowed, 'Unknown overlay file: ' + child)
+                    found.add(child)
+        walk(root, '')
+        return found, dirs
+    present_on, dirs_on = inspect(on, set(managed) | set(preserved) | set(backups))
+    present_off, _ = inspect(off, set(managed) | set(backups))
+    for rel, prior in backups.items():
+        located = [root for root, found in ((on, present_on), (off, present_off)) if rel in found]
+        need(len(located) <= 1, 'Journal backup is duplicated: ' + rel)
+        for root in located:
+            need(state_of(c, root + '/' + rel, [(prior['bytes'], prior['sha256'])]) == 'ours',
+                 'Journal backup is changed: ' + rel)
+    present_deps = present_on & set(preserved)
+    dependency_dirs = {p.rsplit('/', 1)[0] for p in preserved if '/' in p}
+    if present_deps or dependency_dirs & dirs_on:
+        need(present_deps == set(preserved), 'CONTROL dependencies are incomplete')
+    for rel in present_deps:
+        d = preserved[rel]
+        need(state_of(c, on + '/' + rel, [(d['bytes'], d['sha256'])]) == 'ours',
+             'CONTROL dependency is changed: ' + rel)
+    result = {}
+    for rel, row in managed.items():
+        locations = [side for side, found in (('on', present_on), ('off', present_off)) if rel in found]
+        need(len(locations) <= 1 and (locations or not complete), 'Overlay file missing or duplicated: ' + rel)
+        if locations:
+            side = locations[0]
+            need(state_of(c, g['switch'][side] + '/' + rel, accepts(row), row.get('kind', 'file')) == 'ours',
+                 'Overlay file changed: ' + rel)
+            result[rel] = side
+    return result
+
+
+def overlay_state(c, g, complete=True, *, allow_absent=False, journal_entries=()):
+    positions = overlay_positions(c, g, complete and not allow_absent, journal_entries)
+    if not positions:
+        return 'absent'
+    if complete and allow_absent:
+        need(len(positions) == len(overlay_rows(g)), 'Some managed overlay files are missing')
+    sides = set(positions.values())
+    return next(iter(sides)) if len(sides) == 1 else 'mixed'
+
+
+def ensure_remote_dirs(c, path):
+    parts = path.strip('/').split('/')
+    for i in range(1, len(parts)+1):
+        p = '/' + '/'.join(parts[:i])
+        st = c.stat(p)
+        if st is None:
+            c.mkdir(p)
+        else:
+            need(st['dir'], 'Expected a folder: ' + p)
+
+
 def folder_state(c, g):
     """'on', 'off', 'absent' or 'both' for a whole-folder game."""
     s = g['switch']
@@ -375,39 +519,101 @@ def folder_state(c, g):
 
 def switch(c, g, target):
     s = g['switch']
+    if s['kind'] == 'overlay-files':
+        positions = overlay_positions(c, g)
+        moves = [(rel, side) for rel, side in positions.items() if side != target]
+        for rel, side in moves:
+            dest = s[target] + '/' + rel
+            ensure_remote_dirs(c, dest.rsplit('/', 1)[0])
+            c.rename(s[side] + '/' + rel, dest)
+        need(overlay_state(c, g) == target, 'Switch did not verify')
+        return f"{g['name']}: HelixSR {target.upper()}"
     if s['kind'] == 'text':
         current = c.read(s['path'], 256) if c.exists(s['path']) else None
-        need(current is not None, f"{g['name']}: HelixSR is not installed")
+        need(current in (s['on'].encode(), s['off'].encode()),
+             f"{g['name']}: switch setting is missing or unrecognized")
         c.write(s['path'], s[target].encode())
         need(c.read(s['path'], 256) == s[target].encode(), 'Switch did not verify')
         return f"{g['name']}: HelixSR {target.upper()}"
     st = folder_state(c, g)
+    need(st in ('on', 'off'), f"{g['name']}: HelixSR is not installed (or both copies exist; run status)")
+    src = s[st]
+    verify_overlay(c, g, src, complete=True)
+    if target == 'on':
+        verify_support(c, g)
     if st == target:
         return f"{g['name']}: HelixSR was already {target.upper()}"
-    need(st in ('on', 'off'), f"{g['name']}: HelixSR is not installed (or both copies exist; run status)")
-    src, dst = (s['off'], s['on']) if target == 'on' else (s['on'], s['off'])
+    dst = s[target]
     c.rename(src, dst)
     need(folder_state(c, g) == target, 'Switch did not verify')
     return f"{g['name']}: HelixSR {target.upper()}"
 
 
-def foreign_files(c, g):
+def foreign_files(c, g, folder=None):
     """Files in the game's backport folder that are not HelixSR's (a folder switch would move them too)."""
     root = g['switch']['on']
+    folder = folder or root
     ours = {r['remote'][len(root) + 1:] for r in g['files'] if r['remote'].startswith(root + '/')}
     found = []
 
     def walk(folder, rel, depth):
-        listing = c.listing(folder) or {}
+        listing = c.listing(folder)
+        need(listing is not None, 'Cannot inspect overlay folder: ' + folder)
         for name, st in listing.items():
             r = rel + name
             if st['dir'] and depth < 6:
-                walk(folder + '/' + name, r + '/', depth + 1)
-            elif r not in ours and '.bak-' not in name:
+                if not any(path.startswith(r + '/') for path in ours):
+                    found.append(r + '/')
+                else:
+                    walk(folder + '/' + name, r + '/', depth + 1)
+            elif r not in ours:
                 found.append(r)
-    if c.exists(root):
-        walk(root, '', 0)
+    if c.exists(folder):
+        walk(folder, '', 0)
     return found
+
+
+def verify_overlay(c, g, folder, complete):
+    """Only known, hash-verified files may occupy a whole-folder overlay."""
+    extra = foreign_files(c, g, folder)
+    need(not extra, f"{g['name']}: other files in the overlay folder; refusing to move them")
+    root = g['switch']['on']
+    for row in g['files']:
+        if not row['remote'].startswith(root + '/'):
+            continue
+        path = folder + row['remote'][len(root):]
+        state = state_of(c, path, accepts(row), row.get('kind', 'file'))
+        need(state == 'ours' or (not complete and state == 'absent'),
+             f"{g['name']}: overlay file is missing or changed: {path}")
+
+
+def verify_support(c, g):
+    required = {'aw2-t12': {'/data/helixsr-aw2-t12/copy.bin', '/data/helixsr-aw2-t12/chain.bin'},
+                'saros-native-v1': {'/data/helixsr-saros-full/tile.bin'}}.get(g['id'])
+    if required is None:
+        return
+    rows = {r['remote']: r for r in g['files'] if r['remote'] in required}
+    need(set(rows) == required, g['name'] + ' support manifest is incomplete')
+    for path, row in rows.items():
+        need(state_of(c, path, accepts(row), row.get('kind', 'file')) == 'ours',
+             g['name'] + ' support file is missing or changed: ' + path)
+
+
+class FolderRedirect:
+    """Access the OFF folder while keeping journal paths in their canonical ON form."""
+    def __init__(self, console, on, off):
+        self.console, self.on, self.off = console, on, off
+
+    def path(self, path):
+        return self.off + path[len(self.on):] if path == self.on or path.startswith(self.on + '/') else path
+
+    def __getattr__(self, name):
+        method = getattr(self.console, name)
+        if name in ('stat', 'exists', 'read', 'hash', 'listing', 'mkdir', 'write', 'delete', 'rmdir'):
+            return lambda path, *args, **kwargs: method(self.path(path), *args, **kwargs)
+        if name == 'rename':
+            return lambda old, new: method(self.path(old), self.path(new))
+        return method
 
 
 # ---------------------------------------------------------------- commands
@@ -418,9 +624,82 @@ def connect(args, ui):
     host = args.ps5 or ui.ask("Your PS5's IP address (Settings > Network > View Connection Status):",
                                saved.get('ps5', ''))
     need(host, 'No IP address given')
-    HOME.mkdir(parents=True, exist_ok=True)
-    settings.write_text(json.dumps(dict(saved, ps5=host), indent=1) + '\n', encoding='utf-8')
+    if args.cmd != 'status':
+        HOME.mkdir(parents=True, exist_ok=True)
+        settings.write_text(json.dumps(dict(saved, ps5=host), indent=1) + '\n', encoding='utf-8')
     return host
+
+
+def adopt(c, journal, chosen, b, ui):
+    """Upgrade app and installer metadata without reading or writing game inputs."""
+    need(chosen and all(g['id'] in ('aw2-t12', 'control-r18', 'saros-native-v1') for g in chosen),
+         'Adoption supports existing AW2, CONTROL and SAROS integrations')
+    app_files = []
+    for row in b['files']:
+        data = (ROOT / row['bundle']).read_bytes()
+        need(sha(data) == row['sha256'], 'Damaged bundle: ' + row['bundle'])
+        app_files.append((row, data))
+    metadata = []
+    original_modes = {}
+    for g in chosen:
+        kind = g['switch']['kind']
+        if kind == 'overlay-files':
+            st = overlay_state(c, g)
+            need(st in ('on', 'off'), 'Finish the interrupted switch before adoption')
+        else:
+            st = folder_state(c, g)
+            need(st in ('on', 'off'), 'The existing overlay is missing or ambiguous')
+            verify_overlay(c, g, g['switch'][st], complete=True)
+        original_modes[g['id']] = st
+        verify_support(c, g)
+        for row in g['files']:
+            if row['remote'].endswith(('/READY', '/CATALOG')):
+                need('text' in row, 'Unsupported metadata format')
+                data = row['text'].encode()
+                need(sha(data) == row['sha256'], 'Metadata digest mismatch')
+                metadata.append((row, data))
+    wait_closed(c, ui)
+    # Recheck after the user closes games, before the first console mutation.
+    for g in chosen:
+        if g['switch']['kind'] == 'overlay-files':
+            st = overlay_state(c, g)
+            need(st == original_modes[g['id']], 'The overlay changed during preflight')
+        else:
+            st = folder_state(c, g)
+            need(st == original_modes[g['id']], 'The overlay changed during preflight')
+            verify_overlay(c, g, g['switch'][st], complete=True)
+        verify_support(c, g)
+    destinations = [(row['remote'], data, accepts(row), row.get('normalized_elf')) for row, data in app_files + metadata]
+    destinations += [(row['remote'], row['text'].encode(), [(len(row['text'].encode()), sha(row['text'].encode()))], None)
+                     for row in b.get('texts', [])]
+    paths = [x[0] for x in destinations]
+    need(len(paths) == len(set(paths)), 'Duplicate destination in migration manifest')
+    for path, data, accepted, normalized in destinations:
+        preflight_put(c, path, data, accepted, normalized_elf=normalized)
+    game_dirs = [d for g in chosen for d in g.get('dirs', [])]
+    for d in b.get('dirs', []) + game_dirs:
+        parts = d.strip('/').split('/')
+        for i in range(1, len(parts) + 1):
+            st = c.stat('/' + '/'.join(parts[:i]))
+            if st is None:
+                break
+            need(st['dir'], 'Expected a folder on the PS5: ' + d)
+    for row, data in app_files:
+        put(c, journal, row['remote'], data, accepts(row), normalized_elf=row.get('normalized_elf'))
+    for d in b.get('dirs', []) + game_dirs:
+        mkdirs(c, journal, d)
+    for row in b.get('texts', []):
+        data = row['text'].encode()
+        put(c, journal, row['remote'], data, [(len(data), sha(data))])
+    for row, data in metadata:
+        put(c, journal, row['remote'], data, accepts(row), normalized_elf=row.get('normalized_elf'))
+    for g in chosen:
+        prior = journal.data['games'].get(g['id'], {})
+        if prior.get('state') != 'adopted':
+            journal.data['games'][g['id']] = dict(state='adopted', original_mode=original_modes[g['id']], utc=now())
+    journal.save()
+    say('Existing game files verified and preserved; app and metadata upgraded.')
+    return 0
 
 
 def install(args, ui):
@@ -429,6 +708,10 @@ def install(args, ui):
     with CONSOLE(host) as c:
         c.running()   # pldmgr reachable, full list
         journal = Journal(host)
+        need(not any(e.get('undone') or e.get('pending') or (e['op'] == 'put' and not e.get('done', True))
+                     for e in journal.data['entries']) and
+             not any(v.get('mode_restored') for v in journal.data['games'].values()),
+             'An earlier operation was interrupted. Run uninstall to recover before installing again.')
         model = detect_model(c, ui, journal.data.get('model') or args.model)
         journal.data['model'] = model
         journal.save()
@@ -442,6 +725,8 @@ def install(args, ui):
             say('\nNo supported game is installed on this PS5, so nothing was changed. Supported games and versions are '
                 'listed in docs/install-ps5.md.')
             return 1
+        if args.adopt:
+            return adopt(c, journal, chosen, b, ui)
         weights = ensure_weights(ui, args.dlss)
         built = {}
         for g in chosen:
@@ -449,35 +734,38 @@ def install(args, ui):
             inputs = gather_inputs(c, ui, g, args.game_files) if g.get('inputs') else {}
             built[g['id']] = build_files(g, inputs, weights)
             say('  built and checked against the tested build')
-        say('\nInstalling on the PS5.')
-        wait_closed(c, ui)
-        for g in chosen:
-            if g['switch']['kind'] == 'folder':
-                st = folder_state(c, g)
-                need(st != 'both', f"{g['name']}: both an ON and an OFF copy exist on the PS5; run uninstall first")
-                if st == 'off':
-                    say(f"  {g['name']} was switched OFF; switching it ON to update it")
-                    switch(c, g, 'on')
-                extra = foreign_files(c, g)
-                if extra:
-                    raise Refused(f"{g['name']}: your PS5 already has other files in {g['switch']['on']} "
-                                  f"({', '.join(extra[:5])}). HelixSR's ON/OFF switch moves that whole folder, so it "
-                                  'would move yours too. Move them away first, then run the installer again.')
-        say('\nGPU Lab app:')
+        app_files = []
         for row in b['files']:
             data = (ROOT / row['bundle']).read_bytes()
             need(sha(data) == row['sha256'], 'Damaged download (%s): download GPU Lab again' % row['bundle'])
-            put(c, journal, row['remote'], data, accepts(row))
+            app_files.append((row, data))
+        say('\nInstalling on the PS5.')
+        wait_closed(c, ui)
+        for g in chosen:
+            if g['switch']['kind'] == 'overlay-files':
+                st = overlay_state(c, g, complete=False)
+                need(st != 'mixed', 'An interrupted switch must be completed first')
+            if g['switch']['kind'] == 'folder':
+                st = folder_state(c, g)
+                need(st != 'both', f"{g['name']}: both an ON and an OFF copy exist on the PS5; run uninstall first")
+                if st in ('on', 'off'):
+                    verify_overlay(c, g, g['switch'][st], complete=False)
+        off_games = [g for g in chosen if (g['switch']['kind'] == 'folder' and folder_state(c, g) == 'off') or
+                     (g['switch']['kind'] == 'overlay-files' and overlay_state(c, g, complete=False) == 'off')]
+        say('\nGPU Lab app:')
+        for row, data in app_files:
+            put(c, journal, row['remote'], data, accepts(row), normalized_elf=row.get('normalized_elf'))
         for d in b.get('dirs', []):
             mkdirs(c, journal, d)
         for row in b.get('texts', []):
             put(c, journal, row['remote'], row['text'].encode(), [(len(row['text']), sha(row['text'].encode()))])
         for g in chosen:
             say(f"\n{g['name']}:")
+            target = FolderRedirect(c, g['switch']['on'], g['switch']['off']) if g in off_games else c
             for d in g.get('dirs', []):
-                mkdirs(c, journal, d)
+                mkdirs(target, journal, d)
             for remote, (data, accept, kind) in built[g['id']].items():
-                put(c, journal, remote, data, accept, kind)
+                put(target, journal, remote, data, accept, kind)
             journal.data['games'][g['id']] = dict(state='installed', utc=now())
             journal.save()
         say('\nDone. On your PS5:')
@@ -489,6 +777,25 @@ def install(args, ui):
         return 0
 
 
+def configured_mode(c, g, journal_entries):
+    """Read the switch on the console even when this Mac did not install it."""
+    s = g['switch']
+    if s['kind'] == 'overlay-files':
+        return overlay_state(c, g, allow_absent=True, journal_entries=journal_entries)
+    if s['kind'] == 'folder':
+        st = folder_state(c, g)
+        if st in ('on', 'off'):
+            verify_overlay(c, g, s[st], complete=True)
+            if st == 'on':
+                verify_support(c, g)
+        return st
+    if not c.exists(s['path']):
+        return 'absent'
+    cur = c.read(s['path'], 256)
+    need(cur in (s['on'].encode(), s['off'].encode()), 'Unrecognized switch setting')
+    return 'on' if cur == s['on'].encode() else 'off'
+
+
 def status(args, ui):
     host = connect(args, ui)
     with CONSOLE(host) as c:
@@ -496,20 +803,21 @@ def status(args, ui):
         journal = Journal(host)
         model = journal.data.get('model') or detect_model(c, ui, args.model)
         say(f"PS5 {host} ({bundle(model)['name']})" + (f"; running: {', '.join(running)}" if running else ''))
+        rc = 0
         for g, version, ok, why in survey(c, model):
             line = f"  {g['name']}: {why}"
-            if ok and g['id'] in journal.data['games']:
-                if g['switch']['kind'] == 'folder':
-                    st = folder_state(c, g)
-                    line += '; HelixSR ' + {'on': 'ON', 'off': 'OFF', 'absent': 'not on the PS5',
-                                             'both': 'DAMAGED (both copies exist)'}[st]
-                else:
-                    s = g['switch']
-                    cur = c.read(s['path'], 256) if c.exists(s['path']) else b''
-                    line += '; HelixSR ' + ('ON' if cur == s['on'].encode() else 'OFF' if cur == s['off'].encode()
-                                            else 'not on the PS5')
+            if ok:
+                try:
+                    st = configured_mode(c, g, journal.data['entries'])
+                    line += '; HelixSR ' + {'on': 'ON', 'off': 'OFF', 'absent': 'not configured',
+                                            'both': 'DAMAGED (both copies exist)', 'mixed': 'switch interrupted'}[st]
+                    if st in ('both', 'mixed'):
+                        rc = 2
+                except Refused as exc:
+                    line += f'; HelixSR unverified ({exc})'
+                    rc = 2
             say(line)
-        return 0
+        return rc
 
 
 def onoff(args, ui, target):
@@ -530,40 +838,108 @@ def uninstall(args, ui):
     by_id = games()
     with CONSOLE(host) as c:
         wait_closed(c, ui)
-        for gid in journal.data['games']:
-            g = by_id.get(gid)
-            if g and g['switch']['kind'] == 'folder' and folder_state(c, g) == 'off':
-                say(f"  switching {g['name']} ON first, so its files are where they were installed")
-                switch(c, g, 'on')
+        mappings = []
+        for g in by_id.values():
+            if g['switch']['kind'] != 'folder':
+                continue
+            st = folder_state(c, g)
+            if st == 'both':
+                raise Refused(f"{g['name']}: both ON and OFF folders exist; resolve this before uninstalling")
+            if st == 'off':
+                mappings.append((g['switch']['on'], g['switch']['off']))
+
+        file_mappings = {}
+        for g in by_id.values():
+            if g['switch']['kind'] == 'overlay-files' and any(
+                    e.get('path', '').startswith(g['switch']['on'] + '/') for e in entries):
+                positions = overlay_positions(c, g, complete=False, journal_entries=entries)
+                for rel, side in positions.items():
+                    file_mappings[g['switch']['on'] + '/' + rel] = g['switch'][side] + '/' + rel
+                for e in entries:
+                    prior = e.get('prior') or {}
+                    backup = prior.get('console', '')
+                    if backup.startswith(g['switch']['on'] + '/'):
+                        off_backup = g['switch']['off'] + backup[len(g['switch']['on']):]
+                        if c.exists(off_backup):
+                            file_mappings[backup] = off_backup
+
+        def actual(path):
+            if path in file_mappings:
+                return file_mappings[path]
+            for on, off in mappings:
+                if path == on or path.startswith(on + '/'):
+                    return off + path[len(on):]
+            return path
+
         problems = []
         for e in entries:
-            if e['op'] == 'put' and not e.get('already'):
-                st = state_of(c, e['path'], [tuple(a) for a in e['accept']], e.get('kind', 'file'))
-                if st == 'other' and e.get('kind') != 'setting' and e.get('done', True):
-                    problems.append(e['path'])
+            if e.get('undone') or e['op'] != 'put' or e.get('already'):
+                continue
+            path = actual(e['path'])
+            prior = e.get('prior')
+            backup = actual(prior['console']) if prior else None
+            st = state_of(c, path, [tuple(a) for a in e['accept']], e.get('kind', 'file'), normalized_elf=e.get('normalized_elf'))
+            if prior and c.exists(backup):
+                bs = c.stat(backup)
+                if bs['dir'] or bs['bytes'] != prior['bytes'] or c.hash(backup, prior['bytes'] + 1) != (prior['bytes'], prior['sha256']):
+                    problems.append(backup)
+            elif prior:
+                if not c.exists(path) or c.stat(path)['dir'] or c.stat(path)['bytes'] != prior['bytes'] or c.hash(path, prior['bytes'] + 1) != (prior['bytes'], prior['sha256']):
+                    problems.append(backup)
+                continue
+            if st == 'other':
+                problems.append(path)
         if problems:
             raise Refused('These files changed on the PS5 after installing, so nothing was removed: ' +
                           ', '.join(problems))
+        # Restore the mode recorded at adoption before reinstating older launch payloads.
+        for gid, record in journal.data['games'].items():
+            if record.get('state') != 'adopted':
+                continue
+            g = by_id.get(gid)
+            need(g is not None and record.get('original_mode') in ('on', 'off'), 'Missing adopted game recovery data')
+            if g['switch']['kind'] == 'overlay-files':
+                overlay_positions(c, g)
+            else:
+                st = folder_state(c, g)
+                need(st in ('on', 'off'), 'Adopted overlay state is ambiguous')
+                verify_overlay(c, g, g['switch'][st], complete=True)
+        for gid, record in journal.data['games'].items():
+            if record.get('state') != 'adopted':
+                continue
+            switch(c, by_id[gid], record['original_mode'])
+            record['mode_restored'] = True
+            journal.save()
+        # A restored mode may have moved managed files since preflight.
+        for g in by_id.values():
+            if g['switch']['kind'] == 'overlay-files' and any(
+                    e.get('path', '').startswith(g['switch']['on'] + '/') for e in entries):
+                for rel, side in overlay_positions(c, g, complete=False, journal_entries=entries).items():
+                    file_mappings[g['switch']['on'] + '/' + rel] = g['switch'][side] + '/' + rel
         for e in reversed(entries):
             if e.get('undone'):
                 continue
+            path = actual(e['path'])
             if e['op'] == 'put' and not e.get('already'):
-                if c.exists(e['path']):
-                    c.delete(e['path'])
-                if e.get('prior'):
-                    c.rename(e['prior']['console'], e['path'])
-                say(f"  removed {e['path']}" + (' (your earlier file is back)' if e.get('prior') else ''))
-            elif e['op'] == 'mkdir':
-                listing = c.listing(e['path'])
+                prior = e.get('prior')
+                backup = actual(prior['console']) if prior else None
+                if not prior or c.exists(backup):
+                    if c.exists(path):
+                        c.delete(path)
+                    if prior:
+                        c.rename(backup, path)
+                say(f"  removed {path}" + (' (your earlier file is back)' if prior else ''))
+            elif e['op'] == 'mkdir' and not e.get('pending'):
+                listing = c.listing(path)
                 if listing is not None and not listing:
-                    c.rmdir(e['path'])
+                    c.rmdir(path)
             e['undone'] = True
             journal.save()
     journal.data['games'] = {}
     journal.data['uninstalled_utc'] = now()
     journal.save()
     os.replace(journal.path, journal.path.with_name('journal-uninstalled-%d.json' % int(time.time())))
-    say('Uninstalled: the PS5 is as it was before GPU Lab was installed.')
+    say('Uninstall completed; recorded files and adopted game modes were restored. Empty directories may remain.')
     return 0
 
 
@@ -576,10 +952,11 @@ def main(argv=None, ui=None):
         p.add_argument('--model', choices=('ps5', 'ps5-pro'), help='skip the PS5 Pro question')
         p.add_argument('--yes', action='store_true', help='answer every question with its default (scripts)')
         if name in ('on', 'off'):
-            p.add_argument('target_game', metavar='GAME', help='control-r18, aw2-t12 or sotc-live3')
+            p.add_argument('target_game', metavar='GAME', help='control-r18, aw2-t12, saros-native-v1 or sotc-live3')
         if name == 'install':
+            p.add_argument('--adopt', action='store_true', help='upgrade app and metadata using already installed verified game files')
             p.add_argument('--dlss', help="your own copy of NVIDIA's nvngx_dlss.dll (DLSS 310.7.0) instead of the download")
-            p.add_argument('--game', action='append', help='only this game (control-r18, aw2-t12, sotc-live3)')
+            p.add_argument('--game', action='append', help='only this game (control-r18, aw2-t12, saros-native-v1, sotc-live3)')
             p.add_argument('--game-files', action='append',
                            help="a folder on this PC with the game's files (its app0 contents), instead of reading them "
                                 'from the PS5')

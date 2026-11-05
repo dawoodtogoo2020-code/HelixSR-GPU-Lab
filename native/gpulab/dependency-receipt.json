@@ -1,0 +1,279 @@
+{
+  "format": "GPULAB_BUILD_INPUTS_1",
+  "ps5_vulkan_commit": "252bf912a745e3566a93b69b098bdc8ec4048837",
+  "sdk_revision": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+  "compiler_version": "Ubuntu clang version 18.1.8 (20ubuntu8)",
+  "compiler": {
+    "bytes": 140672,
+    "sha256": "690ac43e62210d7816e8d2c6a828549b5e690368c8c8b24dc1aa30fb5530b4c4"
+  },
+  "compiler_driver": {
+    "bytes": 266,
+    "sha256": "6064a69b2066e5cd81505eb0ffdcd6d866fe1abc69013a960b5455dc9638eb02"
+  },
+  "builtins": {
+    "bytes": 262228,
+    "sha256": "6ebef52a53e2b607200f58160634f4685034980ff3b7c63eeb8aaaab2f1aad5f"
+  },
+  "sdk_header_count": 2767,
+  "sdk_headers_tree_sha256": "44b81a8f68645456ef0d62705630360d28bda0d8c309c420ddcc2294abf029b5",
+  "inputs": {
+    "PS5_Vulkan/tooling/prospero-clang18": {
+      "bytes": 1114,
+      "sha256": "f9b8058179aeb25dbb2ace119a243c3b1f7b03990ddc5b4586765bff548b2eee"
+    },
+    "PS5_Vulkan/tools/radv-link.sh": {
+      "bytes": 7183,
+      "sha256": "efef0a82c7ba4ffd97c225f6969a31bc550938689b03e9fafe2cf69734e8d7c9"
+    },
+    "PS5_Vulkan/tools/setup-native-dependencies.sh": {
+      "bytes": 4731,
+      "sha256": "2c9b5de483183e79b87ad7e0ae25303209549a0cfab62a78e106cd004c30d1ba"
+    },
+    "PS5_Vulkan/tooling/native/app_crt.cpp": {
+      "bytes": 2585,
+      "sha256": "0c9d229f4053d87ff6b4f2fdbd7a86d6ae14fa3ec50f0535f63127b1408bb5db"
+    },
+    "PS5_Vulkan/tooling/native/app_cpp_runtime.cpp": {
+      "bytes": 3466,
+      "sha256": "7379cd8df8f41af0e1a178c9300992f2235f3a3f8b910171caf91608568dac67"
+    },
+    "PS5_Vulkan/tooling/native/app-symbols.map": {
+      "bytes": 284,
+      "sha256": "470ce72a27a7be8e35dd7a25b485faa733d61570bdaf24d3c75bb4e3e3c63cf7"
+    },
+    "PS5_Vulkan/tooling/psbc/ps5-pie-unwind.ld": {
+      "bytes": 776,
+      "sha256": "fed519884d92e96b079e6b2b3421de06d192be474dd323e7e2b35ac25478adbf"
+    },
+    "PS5_Vulkan/build/host/ps5-native-tool": {
+      "bytes": 207800,
+      "sha256": "c8c025040d389e01cf9db01e7fdb8afad5c4b53bbf76525c064b33d3be340449"
+    },
+    "PS5_Vulkan/runtime/libc.prx": {
+      "bytes": 1284674,
+      "sha256": "e6ff45d16adf687855cc3b33b0c8a4132b6504360b221e0a34c7e99fb3ba0036"
+    },
+    "PS5_Vulkan/vendor/ps5/sdk/stubs/agc_canary_link_stub.c": {
+      "bytes": 3430,
+      "sha256": "c01388bcf00659a3c56d6afac705efb359b1b89c01f998fc5a72a7d5748dda75"
+    },
+    "PS5_Vulkan/vendor/ps5/sdk/stubs/agc_driver_canary_link_stub.c": {
+      "bytes": 1259,
+      "sha256": "601e1c7ef28bbba8a860d7bb65188690b5df9ca48da94ebcd79ddaf2bbbf103b"
+    },
+    "SDK/target/lib/crt1.o": {
+      "bytes": 117720,
+      "sha256": "06b567109922d7a33c88d5852ec0ebae2216e4ff21d58affe993867f70239616"
+    },
+    "SDK/target/lib/crtbegin.o": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/crtbeginS.o": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/crtend.o": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/crtendS.o": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/crti.o": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/crtn.o": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/libc++.a": {
+      "bytes": 2304096,
+      "sha256": "b1480e6edcb7cffba5ea999cb13da0d40b0def4c215ead442649bba71d32414f"
+    },
+    "SDK/target/lib/libc++abi.a": {
+      "bytes": 692520,
+      "sha256": "fe074aba4cfd2d81025d05c248d4468a954b5b8e2eaef82c8da99d36c4cbbcc5"
+    },
+    "SDK/target/lib/libc++experimental.a": {
+      "bytes": 888,
+      "sha256": "b1dd319ddc97ecab8e138794ca8786d15e9f461026848db27227fdc46c90ec69"
+    },
+    "SDK/target/lib/libc.a": {
+      "bytes": 305114,
+      "sha256": "17b22ab7baec2107ee4ce4189257abbd773a9bb9ce854203e08e0581e10b72b3"
+    },
+    "SDK/target/lib/libc_stub_weak.so": {
+      "bytes": 358048,
+      "sha256": "c2d4fb695495e3dd33599eff1f283cf88615dbd06f4c4acb4547494d32a022b7"
+    },
+    "SDK/target/lib/libdl.a": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/libkernel.so": {
+      "bytes": 123864,
+      "sha256": "c6579f2614d8b8f905a673f810a1b562f1432b07397d61c11e876b5648428753"
+    },
+    "SDK/target/lib/libkernel_stub_weak.so": {
+      "bytes": 120464,
+      "sha256": "1a90c1f2515f84764408c9e351637b12a2d1f06c0d094b12b607cce5c34eabcc"
+    },
+    "SDK/target/lib/libkernel_sys.so": {
+      "bytes": 137752,
+      "sha256": "9d2d950b82a78cdc7c7d8d090b916bd4abdd3b6bb5ce4190881b0affdd7e0b6b"
+    },
+    "SDK/target/lib/libkernel_web.so": {
+      "bytes": 120464,
+      "sha256": "1a90c1f2515f84764408c9e351637b12a2d1f06c0d094b12b607cce5c34eabcc"
+    },
+    "SDK/target/lib/libmonosgen-2.0.so": {
+      "bytes": 108488,
+      "sha256": "75014e43567671e8b8ab22935d6301450592f06d191880d66b1f4a714feeefa2"
+    },
+    "SDK/target/lib/libps5platform.a": {
+      "bytes": 371972,
+      "sha256": "e1d012e259a3d395f05ac737736ab374338a4f5062f7748c0f3a79ec32eabdcd"
+    },
+    "SDK/target/lib/libpthread.a": {
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5"
+    },
+    "SDK/target/lib/libSceAppInstUtil.so": {
+      "bytes": 16016,
+      "sha256": "81755276daea2f083cbe5c05cf6391d22580215018394116ffaa81c620640272"
+    },
+    "SDK/target/lib/libSceAudioOut.so": {
+      "bytes": 18016,
+      "sha256": "4c93726db35c6cd78321950574932e699a87d9da7c8afd471b6564957d6400e2"
+    },
+    "SDK/target/lib/libSceFsInternalForVsh.so": {
+      "bytes": 29096,
+      "sha256": "8ab7dbefb1fd5c74db826cb9f4b976a9174d52f5c2718715710beca3fb5db4be"
+    },
+    "SDK/target/lib/libSceGLSlimVSH.so": {
+      "bytes": 22288,
+      "sha256": "536325e606a940c3d8f5ecfc04767ce06b7b0c754fd65f7c7464c03adbc813ec"
+    },
+    "SDK/target/lib/libSceGnmDriver.so": {
+      "bytes": 21128,
+      "sha256": "2bd4bf35a959a337214186143f1bce5a40f55e10eaf8abc0b88bc82e9100b85d"
+    },
+    "SDK/target/lib/libSceGnmDriverForNeoMode.so": {
+      "bytes": 21144,
+      "sha256": "d77af63935c6e89133d2037185a1806fe9c71a374d86ee1fe7041fb08eaffb1b"
+    },
+    "SDK/target/lib/libSceHttp.so": {
+      "bytes": 14384,
+      "sha256": "176f4170d1e31ee7b7fcb9529f912d38889260198e98db0f2f59886b3d623a08"
+    },
+    "SDK/target/lib/libSceHttp2.so": {
+      "bytes": 7904,
+      "sha256": "2085e8a1912b2dadc2c5a7e68b4391018df86df9abb2e08360ceb3dd00893fb8"
+    },
+    "SDK/target/lib/libSceImeDialog.so": {
+      "bytes": 3320,
+      "sha256": "628057771eb6ef3a0338463ca8d013caf28fd2340cb66d257d105f3ef12e82c9"
+    },
+    "SDK/target/lib/libSceIpmi.so": {
+      "bytes": 15816,
+      "sha256": "46546911739830005aba79524a2f41c439ece18162d7bb8f5ba2d82e56a19d47"
+    },
+    "SDK/target/lib/libSceKeyboard.so": {
+      "bytes": 4088,
+      "sha256": "0a834f227ca34b8ce461c0d7562081bed780d24e60e094ecc4708869c83a3ed7"
+    },
+    "SDK/target/lib/libSceLibcInternal.so": {
+      "bytes": 358048,
+      "sha256": "c2d4fb695495e3dd33599eff1f283cf88615dbd06f4c4acb4547494d32a022b7"
+    },
+    "SDK/target/lib/libSceNet.so": {
+      "bytes": 25680,
+      "sha256": "f15a91031b041e2820ca05e3807f922c4ba2ac1e9bbd2d7640001bd4debcc3ed"
+    },
+    "SDK/target/lib/libSceNetCtl.so": {
+      "bytes": 13160,
+      "sha256": "2d5cdbea1d54cdba5d7fba6edd5e78fb172a2e00d265cf4108658da530097c77"
+    },
+    "SDK/target/lib/libSceNotification.so": {
+      "bytes": 1936,
+      "sha256": "1c70163983a75ebe637cda86be6060997d62232bca31ae7f600a1ada22c8c185"
+    },
+    "SDK/target/lib/libScePad.so": {
+      "bytes": 16720,
+      "sha256": "1451aaf474891339f62d8e7b88b375b6634ea8a6c6576585f51db8d823ee5b6b"
+    },
+    "SDK/target/lib/libScePosixForWebKit.so": {
+      "bytes": 4888,
+      "sha256": "b25e400386fdee29cf6fc7aa1a609bd547471504fa2f22d31c05377148cfa894"
+    },
+    "SDK/target/lib/libSceRandom.so": {
+      "bytes": 1824,
+      "sha256": "3578f8c33837fa332deb83b26f1f54feb4685de3b06f8a32e5b779f125d4acc6"
+    },
+    "SDK/target/lib/libSceRegMgr.so": {
+      "bytes": 8568,
+      "sha256": "06cef43371be3b3b8e236258eb4fa90f7f8ebfdbd2857ee3b90531d322e501cf"
+    },
+    "SDK/target/lib/libSceRemoteplay.so": {
+      "bytes": 6880,
+      "sha256": "918846e1de6959d283a8a37e64f5573f36f45625320d80d621426fbdf6ae14cf"
+    },
+    "SDK/target/lib/libSceSsl.so": {
+      "bytes": 7312,
+      "sha256": "99741e6f96f3750b42f116fcb0471e2760daa063de58a6de1fd18dde8e5d3b77"
+    },
+    "SDK/target/lib/libSceSysCore.so": {
+      "bytes": 11608,
+      "sha256": "22ba83f6e4e2a51335b5ebdbb003a976f092e09ad3ad2a21bd7a719f5c47746c"
+    },
+    "SDK/target/lib/libSceSysmodule.so": {
+      "bytes": 3752,
+      "sha256": "77bc78185c821ed3576210089a9358688120652e274777c45e0fc2e89984f3d3"
+    },
+    "SDK/target/lib/libSceSystemService.so": {
+      "bytes": 72200,
+      "sha256": "ac8a30f030b6dbda8a192cfe2cb721b015bc77f40514428ed45a02c62bb88258"
+    },
+    "SDK/target/lib/libSceUserService.so": {
+      "bytes": 66336,
+      "sha256": "5a428293f3993892f902da32a61733e5536b65125b6cbfd49a5d26c4031c6f4b"
+    },
+    "SDK/target/lib/libSceVideoOut.so": {
+      "bytes": 22760,
+      "sha256": "1dceaba82650df972cc81ab0d660075dfabcca64c1e36af3a42422cbe26fb2c0"
+    },
+    "SDK/target/lib/libufs.a": {
+      "bytes": 20726,
+      "sha256": "8a833991c1c324edf3406ed8535ac11bf8055daad134ee93e80ee9337d923606"
+    },
+    "SDK/target/lib/libunwind.a": {
+      "bytes": 130658,
+      "sha256": "d5942a5ffb6585952855160d9230f6e597df1851e5f3dda1b338e08e24b2f2d0"
+    },
+    "SDK/target/lib/main.script": {
+      "bytes": 2524,
+      "sha256": "3bacf56a21602a1298752023a4c5b0c305954ddf6cdbce1464476fc9da9d9093"
+    },
+    "SDK/target/lib/prx.script": {
+      "bytes": 2524,
+      "sha256": "3bacf56a21602a1298752023a4c5b0c305954ddf6cdbce1464476fc9da9d9093"
+    },
+    "SDK/bin/prospero-clang": {
+      "bytes": 2940,
+      "sha256": "5ac42e6adab485067cda8c690e060eb40d541cb4fb8201162d67f595ba2fcbf6"
+    },
+    "SDK/bin/prospero-lld": {
+      "bytes": 2016,
+      "sha256": "4b6528d0b6d1d77b532f2bfcc2e26b0abf8f42cf7b526b3e85b2f7d3eafe37ad"
+    },
+    "SDK/bin/llvm-ar": {
+      "bytes": 1831,
+      "sha256": "a9bbe80b48adbaeed0511ab08af1362a33798cea03969865264bc90ad879d4af"
+    }
+  },
+  "limits": "Exact local inputs. Dependency bootstrap on an independent machine has not been reproduced."
+}

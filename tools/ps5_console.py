@@ -86,15 +86,25 @@ class Console:
         out = {}
         for line in lines:
             f = line.split(maxsplit=8)
-            if len(f) == 9 and len(f[0]) == 10 and f[8] not in ('.', '..'):
+            need(len(f) == 9 and len(f[0]) == 10 and f[0][0] in ('d', '-') and f[4].isdigit(),
+                 'Unrecognized FTP directory entry in ' + folder)
+            if f[8] not in ('.', '..'):
+                need(f[8] not in out and '/' not in f[8], 'Ambiguous FTP directory entry in ' + folder)
                 out[f[8]] = {'dir': f[0][0] == 'd', 'bytes': int(f[4])}
         return out
 
     def stat(self, path):
         """{'dir', 'bytes'} or None."""
         parent, name = path.rstrip('/').rsplit('/', 1)
-        listing = self.listing(parent or '/')
-        return None if listing is None else listing.get(name)
+        parent = parent or '/'
+        listing = self.listing(parent)
+        if listing is None:
+            if parent == '/':
+                raise Refused('Cannot inspect the console root directory')
+            ancestor = self.stat(parent)
+            need(ancestor is None, 'Cannot inspect directory: ' + parent)
+            return None
+        return listing.get(name)
 
     def exists(self, path):
         return self.stat(path) is not None
@@ -109,6 +119,24 @@ class Console:
                 progress(len(data))
         self.ftp.retrbinary('RETR ' + path, got, blocksize=262144)
         return bytes(data)
+
+    def read_raw_self(self, path, cap, progress=None):
+        """Read the owner's native SELF on a dedicated connection; leave normal ELF readback unchanged."""
+        ftp = self._connect()
+        data = bytearray()
+        try:
+            need('disabled' in ftp.sendcmd('SELF').lower(), 'FTP did not disable SELF conversion')
+            def got(chunk):
+                need(len(data) + len(chunk) <= cap, 'Unexpectedly large native SELF: ' + path)
+                data.extend(chunk)
+                if progress:
+                    progress(len(data))
+            ftp.retrbinary('RETR ' + path, got, blocksize=262144)
+            need(data[:4] in (bytes.fromhex('5414f5ee'), bytes.fromhex('4f153d1d')),
+                 'FTP did not return a native SELF')
+            return bytes(data)
+        finally:
+            ftp.close()
 
     def read_range(self, path, offset, length):
         """Bytes [offset, offset + length) of a file, on a separate connection (the transfer is cut short)."""
@@ -160,7 +188,13 @@ class Console:
 
     def delete(self, path):
         self.gate()
-        self.ftp.delete(path)
+        try:
+            self.ftp.delete(path)
+        except ftplib.error_reply as exc:
+            # ftpsrv 0.21.1 reports successful DELE with 226; ftplib expects 200/250.
+            if not str(exc).startswith('226 '):
+                raise
+            need(not self.exists(path), 'FTP reported deletion but the file remains: ' + path)
 
     def rmdir(self, path):
         self.gate()

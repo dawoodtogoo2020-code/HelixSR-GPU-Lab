@@ -30,11 +30,11 @@ class Site(HTMLParser):
 
 def main():
     try:
-        names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT, stderr=subprocess.DEVNULL).decode().split('\0')
+        names = subprocess.check_output(['git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z'], cwd=ROOT, stderr=subprocess.DEVNULL).decode().split('\0')
     except (OSError, subprocess.CalledProcessError):
         names = [str(p.relative_to(ROOT)).replace('\\', '/') for p in ROOT.rglob('*')
                  if p.is_file() and not any(x in {'.git', '.build', '__pycache__', 'dist'} for x in p.parts)]
-    names = [n for n in names if n]
+    names = sorted({n for n in names if n})
     if not names:
         raise ValueError('No publication files found')
     errors = []
@@ -45,6 +45,10 @@ def main():
             continue
         if path.stat().st_size > 1024 * 1024:
             errors.append('Review file over 1 MiB: ' + name)
+        if name == 'native/gpulab/app/source/icon0.png':
+            if not path.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'):
+                errors.append('Invalid bundled app icon: ' + name)
+            continue
         content = path.read_text(encoding='utf-8')
         if name != 'tools/check_public_tree.py' and PRIVATE.search(content):
             errors.append('Private path/address/credential pattern: ' + name)

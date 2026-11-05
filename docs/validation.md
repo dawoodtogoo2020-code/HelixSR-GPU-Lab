@@ -40,3 +40,7 @@ Raw ticks are not calibrated milliseconds, gameplay FPS or input latency. No mat
 ## Public tooling tests
 
 The CI workflow validates the bundle verifier, benchmark comparator, standalone C metadata contract and public site/repository consistency. Synthetic host tests establish those tools' behavior only. They do not validate GPU submission, live resources, PS5 firmware compatibility or console installation.
+
+## SAROS v27 (2026-11-05)
+
+See [native SAROS qualification](saros.md) for four nominal-60 callback captures, full 4K output, graphics tradeoffs, model validation, controller ON/OFF and stock restoration. Other-game findings above are unchanged.

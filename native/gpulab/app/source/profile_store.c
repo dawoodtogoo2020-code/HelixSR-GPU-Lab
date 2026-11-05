@@ -1,0 +1,16 @@
+#include "profile_store.h"
+#include <string.h>
+#define PROFILE_SIZE 277u
+static const char profile_key[]="profile.v1";
+int ps_io_valid(const ps_io *i){return i&&i->read&&i->stage&&i->sync_stage&&i->commit&&i->sync_directory;}
+int ps_identity_equal(const ap_identity *a,const ap_identity *b){return ap_identity_valid(a)&&ap_identity_valid(b)&&!strcmp(a->device,b->device)&&!strcmp(a->title,b->title)&&!strcmp(a->build,b->build)&&!strcmp(a->executable_hash,b->executable_hash);}
+void ps_encode_identity(unsigned char *p,const ap_identity *i){memset(p,0,257);memcpy(p,i->device,strlen(i->device));memcpy(p+64,i->title,strlen(i->title));memcpy(p+128,i->build,strlen(i->build));memcpy(p+192,i->executable_hash,64);}
+int ps_decode_identity(ap_identity *i,const unsigned char *p){unsigned char canonical[257];memcpy(i->device,p,64);memcpy(i->title,p+64,64);memcpy(i->build,p+128,64);memcpy(i->executable_hash,p+192,65);if(!ap_identity_valid(i))return 0;ps_encode_identity(canonical,i);return !memcmp(canonical,p,257);}
+uint64_t ps_get64(const unsigned char *p){uint64_t n=0;unsigned j;for(j=0;j<8;j++)n|=(uint64_t)p[j]<<(j*8);return n;}
+void ps_put64(unsigned char *p,uint64_t n){unsigned j;for(j=0;j<8;j++)p[j]=(unsigned char)(n>>(j*8));}
+static uint32_t checksum(const unsigned char *p,size_t n){uint32_t h=2166136261u;size_t j;for(j=0;j<n;j++)h=(h^p[j])*16777619u;return h;}
+void ps_seal(unsigned char *p,size_t n){uint32_t h=checksum(p,n-4);unsigned j;for(j=0;j<4;j++)p[n-4+j]=(unsigned char)(h>>(j*8));}
+int ps_sealed(const unsigned char *p,size_t n){uint32_t h=0;unsigned j;if(n<4)return 0;for(j=0;j<4;j++)h|=(uint32_t)p[n-4+j]<<(j*8);return h==checksum(p,n-4);}
+ps_result ps_atomic_write(const ps_io *i,const char *k,const unsigned char *p,size_t n){if(!ps_io_valid(i)||!p||n>PS_MAX_RECORD)return PS_INVALID;if(i->stage(i->context,k,p,n)!=n||i->sync_stage(i->context,k)||i->commit(i->context,k)||i->sync_directory(i->context,k))return PS_IO_ERROR;return PS_OK;}
+ps_result ps_load(const ps_io *i,const ap_identity *id,ps_profile *out){unsigned char p[PS_MAX_RECORD];size_t n=0;int r;ap_identity stored;if(!ps_io_valid(i)||!ap_identity_valid(id)||!out)return PS_INVALID;memset(out,0,sizeof(*out));out->identity=*id;r=i->read(i->context,profile_key,p,sizeof(p),&n);if(r==0)return PS_DEFAULT;if(r!=1)return PS_IO_ERROR;if(n!=PROFILE_SIZE||memcmp(p,"HSP1",4)||p[4]!=1||p[5]>1||p[6]>4||p[7]||!ps_sealed(p,n)||!ps_decode_identity(&stored,p+16)||!ps_get64(p+8))return PS_CORRUPT;if(!ps_identity_equal(&stored,id))return PS_DEFAULT;out->revision=ps_get64(p+8);out->desired=(ap_desired)p[5];out->quality=p[6];return PS_OK;}
+ps_result ps_save(const ps_io *i,const ps_profile *value,uint64_t expected,ps_profile *saved){ps_profile old;ps_result r;unsigned char p[PROFILE_SIZE]={0};if(!value||!saved||!ap_identity_valid(&value->identity)||(value->desired!=AP_OFF&&value->desired!=AP_ON)||value->quality>4||expected==UINT64_MAX)return PS_INVALID;r=ps_load(i,&value->identity,&old);if(r!=PS_OK&&r!=PS_DEFAULT)return r;if(old.revision!=expected)return PS_CONFLICT;memcpy(p,"HSP1",4);p[4]=1;p[5]=(unsigned char)value->desired;p[6]=(unsigned char)value->quality;ps_put64(p+8,expected+1);ps_encode_identity(p+16,&value->identity);ps_seal(p,sizeof(p));r=ps_atomic_write(i,profile_key,p,sizeof(p));if(r==PS_OK){*saved=*value;saved->revision=expected+1;}return r;}

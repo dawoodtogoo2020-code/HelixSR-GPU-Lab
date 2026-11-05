@@ -1,0 +1,92 @@
+[
+  {
+    "repo": "llvm/llvm-project",
+    "ref": "llvmorg-18.1.8",
+    "path": "compiler-rt/LICENSE.TXT",
+    "blob_sha": "5a79a1b9d5cb0af9a779751f07033e44ca3b14d8",
+    "sha256": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d",
+    "bytes": 16708,
+    "local": "work/gpulab-deps/compiler-rt/LICENSE.TXT",
+    "source": "https://github.com/llvm/llvm-project/blob/llvmorg-18.1.8/compiler-rt/LICENSE.TXT"
+  },
+  {
+    "repo": "llvm/llvm-project",
+    "ref": "llvmorg-18.1.8",
+    "path": "compiler-rt/lib/builtins/int_types.h",
+    "blob_sha": "ca97391fc28466b9c4f1921c3ae014262a8f8485",
+    "sha256": "26517abcfb05e989f4ac18b38779bc118637e0a5b3e44536c3733cc47b33026e",
+    "bytes": 7061,
+    "local": "work/gpulab-deps/compiler-rt/int_types.h",
+    "source": "https://github.com/llvm/llvm-project/blob/llvmorg-18.1.8/compiler-rt/lib/builtins/int_types.h"
+  },
+  {
+    "repo": "llvm/llvm-project",
+    "ref": "llvmorg-18.1.8",
+    "path": "compiler-rt/lib/builtins/int_endianness.h",
+    "blob_sha": "291c6b58c8ed9ed2ff2cc970bbfc0b486cc338ec",
+    "sha256": "ec5175561075845b7b16a92ad5ecdfd42a284de2736dd07e4ca7011b75c37709",
+    "bytes": 2804,
+    "local": "work/gpulab-deps/compiler-rt/int_endianness.h",
+    "source": "https://github.com/llvm/llvm-project/blob/llvmorg-18.1.8/compiler-rt/lib/builtins/int_endianness.h"
+  },
+  {
+    "repo": "llvm/llvm-project",
+    "ref": "llvmorg-18.1.8",
+    "path": "compiler-rt/lib/builtins/int_util.h",
+    "blob_sha": "c372c2edc637137d28926ad9af948f31766907ba",
+    "sha256": "63d06198ab720a75c20bfd84be895c2746581b129168bae6201e7384bbb0473b",
+    "bytes": 2221,
+    "local": "work/gpulab-deps/compiler-rt/int_util.h",
+    "source": "https://github.com/llvm/llvm-project/blob/llvmorg-18.1.8/compiler-rt/lib/builtins/int_util.h"
+  },
+  {
+    "repo": "llvm/llvm-project",
+    "ref": "llvmorg-18.1.8",
+    "path": "compiler-rt/lib/builtins/int_lib.h",
+    "blob_sha": "f6c1b7cff4b99b5dfbd6915bab7b75bc0aaea55e",
+    "sha256": "b31130f10484636895daa13b91b63d47ea82b45547f29e4dd136b48a67854d30",
+    "bytes": 5106,
+    "local": "work/gpulab-deps/compiler-rt/int_lib.h",
+    "source": "https://github.com/llvm/llvm-project/blob/llvmorg-18.1.8/compiler-rt/lib/builtins/int_lib.h"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "tools/radv-link.sh",
+    "blob_sha": "3d830cc13717eec87896731a5e2ec608531a9e84",
+    "sha256": "efef0a82c7ba4ffd97c225f6969a31bc550938689b03e9fafe2cf69734e8d7c9",
+    "bytes": 7183,
+    "local": "work/gpulab-deps/vulkan/tools/radv-link.sh",
+    "source": "https://github.com/mihawk-99/PS5_Vulkan/blob/252bf912a745e3566a93b69b098bdc8ec4048837/tools/radv-link.sh"
+  },
+  {
+    "repo": "mihawk-99/PS5_Vulkan",
+    "ref": "252bf912a745e3566a93b69b098bdc8ec4048837",
+    "path": "LICENSE",
+    "blob_sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+    "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "bytes": 35149,
+    "local": "work/gpulab-deps/vulkan/LICENSE",
+    "source": "https://github.com/mihawk-99/PS5_Vulkan/blob/252bf912a745e3566a93b69b098bdc8ec4048837/LICENSE"
+  },
+  {
+    "repo": "mihawk-99/PS5_PayloadSDK",
+    "ref": "b83202be73e930050e00de0f1b4d9ec46c0391bf",
+    "path": "LICENSE",
+    "blob_sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+    "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "bytes": 35149,
+    "local": "work/gpulab-deps/sdk/LICENSE",
+    "source": "https://github.com/mihawk-99/PS5_PayloadSDK/blob/b83202be73e930050e00de0f1b4d9ec46c0391bf/LICENSE"
+  },
+  {
+    "repo": "llvm/llvm-project",
+    "ref": "llvmorg-18.1.8",
+    "path": "compiler-rt/lib/builtins/emutls.c",
+    "blob_sha": "390ffb25f6cf00e640a1d27da3bbc836fc0bb8aa",
+    "sha256": "a4437f3e329a0835adbc7df38e36df12f358d05c073b11813c409f849c2345d2",
+    "bytes": 13660,
+    "local": "work/gpulab-deps/compiler-rt/emutls.c",
+    "source": "https://github.com/llvm/llvm-project/blob/llvmorg-18.1.8/compiler-rt/lib/builtins/emutls.c"
+  }
+]

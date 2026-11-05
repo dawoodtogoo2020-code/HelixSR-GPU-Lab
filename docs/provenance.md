@@ -15,7 +15,7 @@ HelixSR's PS5 ports (the kernels compiled for the PS5 and PS4 GPUs, the plans an
 ## What never ships
 
 - **NVIDIA's DLSS DLL and anything built from it.** Your PC downloads the DLL from NVIDIA after you accept NVIDIA's license, builds the network and deletes the DLL. The network stays in `my-ps5/`.
-- **Game executables, archives, effects or shaders** from Remedy, Sony or Bluepoint. Patches copy those bytes from your own installed game. The one exception: a patch may carry changed bytes where HelixSR modified game code or effects (for example, a call to HelixSR, or a shader variant that gates FSR2).
+- **Game executables, archives, effects or shaders** from Remedy, Sony, Bluepoint or Housemarque. Patches copy those bytes from your own installed game. The one exception: a patch may carry changed bytes where HelixSR modified game code or effects (for example, a call to HelixSR, or a shader variant that gates FSR2).
 - **Sony SDK headers or libraries, console keys, game dumps, private recordings, and the lab's console addresses or receipts.**
 
 ## How this was checked
@@ -32,3 +32,7 @@ HelixSR's PS5 ports (the kernels compiled for the PS5 and PS4 GPUs, the plans an
 - [NVIDIA DLSS](https://github.com/NVIDIA/DLSS): source of the network the installer downloads under NVIDIA's license
 
 Each project keeps its own license. Naming a project does not imply affiliation or endorsement.
+
+## SAROS release inputs
+
+The v27 update replaces the regular-PS5 app and payloads, adds the SAROS HXD recipes, and preserves the previously published PS5 Pro binaries. No new Pro qualification is claimed. The SAROS asset contains authored/ported kernels and plans with locally filled weights. The native executable patch adds 10,266 bytes and copies the remainder from the owner file. The asset patch carries no complete original shader record or model-weight blob.
