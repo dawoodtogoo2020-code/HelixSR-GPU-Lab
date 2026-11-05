@@ -31,10 +31,10 @@ static const hs_file aw2_files[]={
      {"5c6a93a6cec2255b1c412ca74dd9593891ead0d1b4f31c40c1d077b2a07e6521","a4e890645a310ae5aa5818d5aab01d2a10ba191892ab2113c5e190572dd32d18","31a3ffd1b582b6d363da7432c41962e1b48ba59fcaa14befaae916d38cb66c35"}},
 };
 static const hs_file saros_files[]={
- {"eboot.bin","eboot.bin",{NULL,NULL},{"68a69da47a55e10aa524f778e2bfd6a9a4fa83ecdc73c97f29b7f64cdd0c6c22",NULL}}
+ {"eboot.bin","eboot.bin",{NULL,NULL},{"6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11",NULL}}
 };
 static const hs_package packages[]={
- {"PPSA07631","01.000.000","saros-native-v1","SAROS 4K performance preset; shadows and volumetric fog off",1,saros_files,1},
+ {"PPSA07631","01.000.000","saros-native-v1","SAROS 1440p reconstruction to 4K; shadows and fog on",1,saros_files,1},
     {"PPSA02572","01.200.007","aw2-t12","HelixSR t12 Performance",1,aw2_files,1},
     {"PPSA34547","01.300.300","control-r18-20261029","HelixSR r18, Performance + Cinematic, faster encoder (off = stock FSR2)",
      sizeof control_files/sizeof *control_files,control_files,2},
@@ -269,10 +269,10 @@ static int support_ok(void) {
 #define SAROS_SUPPORT_ROOT "/data/helixsr-saros-full"
 #endif
 static const hs_file saros_support_default[]={
- {"tile.bin","tile.bin",{NULL,NULL},{"e37aefda5023a8e782df15dd4d0a7e0248b647d7acb6d8ecd34fe3a69f91edfd",NULL}}
+ {"tile.bin","tile.bin",{NULL,NULL},{"1be3a14f7f25ea298929b485ad0cdf5e17441cd5ea94cb85f22a4f8500c9eb8e",NULL}}
 };
 static const hs_file *saros_support_files=saros_support_default;
-static off_t saros_support_bytes=2201024;
+static off_t saros_support_bytes=2315936;
 static int saros_support_ok(void) {
  static cache_t fresh;memset(&fresh,0,sizeof fresh);char path[512],sha[65];struct stat st;
  hs_package check={"PPSA07631","01.000.000","saros-native-v1","",1,saros_support_files,1};

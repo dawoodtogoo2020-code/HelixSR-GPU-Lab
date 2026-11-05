@@ -1,13 +1,13 @@
 # Compatibility
 
-Last reviewed: 2026-11-05 (v0.3.0-saros-beta).
+Last reviewed: 2026-11-05 (v0.3.1-saros-effects-beta).
 
 | Game / build | Console | Public install | What runs | Limits |
 | --- | --- | --- | --- | --- |
 | CONTROL Resonant / PPSA34547 / 01.300.300 | regular PS5 | **Public beta** | HelixSR r18 replaces FSR2. Performance: 1505×847 → 2560×1440. Quality (Cinematic): 2258×1270 → 3840×2160 | R17 dipped to about 58 FPS in the first heavy pans after loading. R18 has not been frame-timed. A rejected frame has no fresh fallback. Reset after a mode switch is unproven. Never run on a PS5 Pro. |
 | Alan Wake 2 / PPSA02572 / 01.200.007 | regular PS5 | **Public beta** | HelixSR t12 replaces FSR2 in Performance (1505×847 → 2560×1440) on the game's own colour, depth and motion. 60 FPS (mean 59.95, minimum 59) | Performance only (other modes run stock FSR2). No sharpening: stock FSR2 looks crisper at rest. GPU Lab Cross selects ON/OFF; Triangle applies and launches. Never run on a PS5 Pro. |
 | SHADOW OF THE COLOSSUS / CUSA08809 / 01.00 | PS5 Pro | **Public beta** | HelixSR live3 replaces the game's own upscale in Cinematic (2560×1440 → 3840×2160) through a GNM driver hook | About 38 FPS ON vs 60 OFF. The input is the game's finished image (flat depth, no motion vectors, no jitter). Not run on a regular PS5. |
-| SAROS / PPSA07631 / 01.000.000 | regular PS5, FW 11.60 | Public beta | Full Model E replaces TSR; 1536×864 dynamic input → 3840×2160; measured 59.93 FPS CPU callback cadence | Shadows and volumetric fog off; tested initial room and short movement only, not every area or HDMI frame delivery. [Evidence and limits](saros.md). |
+| SAROS / PPSA07631 / 01.000.000 | regular PS5, FW 11.60 | Public beta | Stock dynamic input → 1440p Model E → 4K; 59.93 FPS display-counter sample | Shadows and volumetric fog on; no TSR fallback. Tested room and short movement only. [Evidence and limits](saros.md). |
 | Other PS5 FSR titles | — | None | Future work | Each game and build needs its own adapter |
 
 **Exact versions only.** The installer checks the installed version and every game file it reads. Anything different is refused before the PS5 is changed.
@@ -25,6 +25,6 @@ An FSR label does not identify a universal replaceable interface on PS5. Each in
 - follow the game's motion and depth conventions
 - honour its barriers and lifetimes
 - write the correct output
-- fall back to the original path
+- define and verify how unsupported frames are handled
 
 A game update can change any of that. This is why each entry above names one exact build.

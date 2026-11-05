@@ -41,6 +41,6 @@ Raw ticks are not calibrated milliseconds, gameplay FPS or input latency. No mat
 
 The CI workflow validates the bundle verifier, benchmark comparator, standalone C metadata contract and public site/repository consistency. Synthetic host tests establish those tools' behavior only. They do not validate GPU submission, live resources, PS5 firmware compatibility or console installation.
 
-## SAROS v27 (2026-11-05)
+## SAROS effects-on v6 (2026-11-05)
 
-See [native SAROS qualification](saros.md) for four nominal-60 callback captures, full 4K output, graphics tradeoffs, model validation, controller ON/OFF and stock restoration. Other-game findings above are unchanged.
+See [SAROS qualification](saros.md) for the clean 90-second 59.93 FPS display-counter capture, native callback traces, full-frame scaler readbacks, enabled visual effects, unchanged dynamic input and no-TSR contract. Other-game findings above are unchanged.

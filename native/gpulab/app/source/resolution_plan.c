@@ -9,8 +9,8 @@
  * work/cinematic/quality-2258x1270 + quality-game-bounds) passed the native six-frame model test and a short Quality-only
  * gameplay smoke; R18 (29 Oct) is the installed two-mode package with both layouts. */
 static const struct { const char *title,*version; rp_known_pair known; } known_pairs[]={
-    {"PPSA07631","01.000.000",{{1536,864,3840,2160},"Dynamic (observed)",RP_PACKAGE_TRIAL,
-        "SAROS 4K performance","4K output; ~60 FPS in tests; shadows and volumetric fog off"}},
+    {"PPSA07631","01.000.000",{{1600,900,3840,2160},"Dynamic (observed)",RP_PACKAGE_TRIAL,
+        "SAROS 4K effects on","4K output; tested ~60 FPS; shadows and volumetric fog on"}},
     {"PPSA02572","01.200.007",{{1505,847,2560,1440},"Performance",RP_PACKAGE_BUILT,
         "HelixSR AW2 t12 package","AW2 developer-console t12 evidence; Quality uses FSR 2"}},
     {"PPSA34547","01.300.300",{{1505,847,2560,1440},"Performance",RP_PACKAGE_BUILT,
@@ -24,7 +24,7 @@ static const struct { const char *title,*version; rp_known_pair known; } known_p
 /* Pairs of packages whose READY line names no sizes: r18 writes "HelixSR r18, Performance + Cinematic, ..." and runs
  * HelixSR at both of these layouts; every other layout runs stock FSR2 (work/r18-dual-cinematic/RESULTS.md). */
 static const struct { const char *id; rp_pair pair; } package_pairs[]={
-    {"saros-native-v1",{1536,864,3840,2160}},{"saros-native-v1",{1600,900,3840,2160}},{"saros-native-v1",{1866,1050,3840,2160}},{"saros-native-v1",{2304,1296,3840,2160}},
+    {"saros-native-v1",{1600,900,3840,2160}},{"saros-native-v1",{1866,1050,3840,2160}},{"saros-native-v1",{2304,1296,3840,2160}},
     {"aw2-t12",{1505,847,2560,1440}},
     {"control-r18-20261029",{1505,847,2560,1440}},{"control-r18-20261029",{2258,1270,3840,2160}}};
 

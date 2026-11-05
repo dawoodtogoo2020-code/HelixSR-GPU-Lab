@@ -1,49 +1,38 @@
-# SAROS: HelixSR v27 performance preset
+# SAROS: shadows and fog on, 60 FPS target
 
-SAROS **PPSA07631 01.000.000** on a **regular PS5, firmware 11.60** reconstructs a full **3840×2160** output using HelixSR Model E. GPU Lab's controller ON/OFF switch and Triangle launch were tested in both modes, with the actual mounted executable checked byte for byte. OFF restores the original executable and visual settings.
-
-This is reconstructed 4K, with dynamic input commonly **1536×864**. The performance preset disables **dynamic shadows and volumetric fog**, and sets the minimum dynamic render percentage to 40% for that launch. General fog, SSGI, ambient occlusion and depth of field keep their default values. The changes do not modify saved settings. The lighting is visibly different from stock.
+SAROS **PPSA07631 01.000.000** on a **regular PS5, firmware 11.60** uses HelixSR Model E at **2560×1440**, followed by scaling to **3840×2160**. This is 1440p neural reconstruction presented at 4K. **Dynamic shadows and volumetric fog remain on. There is no TSR fallback.** Stock dynamic-resolution settings remain unchanged: 41.666% minimum, 60% maximum, 16.67 ms budget. Probes observed 1600×900 and 2304×1296 inputs; the game selects its input each frame.
 
 ## Measurements and scope
 
-Four calibrated PS5 CPU render-callback captures reached the nominal **59.94 Hz** cadence:
+A clean 90-second gameplay capture using **ps5-exporter v0.3.1's display-controller flip counter** averaged **59.933 FPS**. All **90 samples were 59–60 FPS**, with the SAROS title, running state and FPS collector valid throughout. A separate stationary capture averaged 59.95 FPS over 60 valid samples. These are once-per-second counter readings, not per-frame frametimes, HDMI capture or a guarantee for every scene.
 
-| Capture | Consecutive intervals | Mean FPS | P99 interval | Maximum |
-| --- | ---: | ---: | ---: | ---: |
-| Stationary | 1,662 | 59.933 | 17.57 ms | 17.97 ms |
-| Camera / movement 1 | 1,660 | 59.934 | 17.82 ms | 18.56 ms |
-| Camera / movement 2 | 1,662 | 59.935 | 17.71 ms | 18.36 ms |
-| Fresh GPU Lab launch, settled gameplay | 1,663 | 59.935 | 17.53 ms | 17.81 ms |
+Three native traces during camera movement, walking and a ledge-return sequence recorded no missing callback ticks, zero stock TSR calls and zero withheld outputs. The final trace covered 1,662 consecutive intervals: mean 16.686 ms, P99 17.599 ms, maximum 18.039 ms. Callback timing uses PS5 TSC calibrated against PS5 CLOCK_MONOTONIC; it does not measure GPU duration. A separate mixed capture included Remote Play reconnection and a pause menu and is excluded from the headline gameplay result.
 
-All four traces had no missing callback ticks, stock TSR calls or withheld publications, and used 1536×864 input with 3840×2160 output. A separate startup capture includes loading pauses and resolution changes; it is not counted as steady gameplay. Timing uses PS5 TSC calibrated against PS5 CLOCK_MONOTONIC. It does **not** measure GPU duration, HDMI refresh delivery, Remote Play/network FPS or every part of the game. Combat, every area, and comprehensive temporal image quality remain outside this qualification.
+Read-only probes verified ShadowQuality=5, virtual shadows=1, general fog=1, volumetric fog=1 and fog grid size=10. Native full-frame scaler readbacks passed independent FP16 reference comparisons with one packed-channel code-step tolerance: 8,294,400 primary pixels, 518,400 quarter-output pixels, and 8,294,400 larger-input primary pixels. No invalid/non-finite pixels were found. These establish scaler correctness in captured frames, not neural fidelity or comprehensive temporal image quality.
 
-Native full-model comparison validated the qualified scheduling changes, and full-output readback validated all 8,294,400 output pixels against the format conversion reference. Walking, camera movement, a fall/recovery and cold launch were visually exercised. Supported frames bypass the stock TSR call entirely. Unsupported shapes retain stock fallback, with a history reset before returning to HelixSR; a separate native fallback/re-entry test verified that path. Input widths below 1536 are not enabled. The private feature arena is 464,790,784 bytes (about 443 MiB), plus a 1,923,840-byte parameter buffer and engine output/history resources.
-
-GPU Lab's frame-rate screen displays imported, verified callback logs and labels their timing basis. These logs are examples from the developer console; the SAROS build does not provide an in-game FPS HUD or a new live recorder. See the `examples/SAROS-v27-*-frame-log.txt` files in the download.
+Coverage is limited to the tested room, camera motion, walking, startup and a ledge-return/postprocess sequence. Combat, other areas and full death/respawn coverage remain unqualified. Unsupported render contracts stop execution rather than invoking TSR. Earlier network outages remain unexplained, including one before SAROS launched; the successful run remained reachable through normal game closure. GPU Lab controller OFF and ON launches passed: full mounted hashes matched stock and the effects-on candidate. Both reached gameplay and closed normally. The fresh ON launch then averaged 59.917 FPS over 60 valid display-counter samples (59–60 FPS); a 1,661-interval native trace again recorded zero TSR calls, withheld outputs or tick gaps.
 
 ## Install and use
 
-Download and extract **HelixSR-GPU-Lab-v0.3.0-saros-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). From its directory:
+Download **HelixSR-GPU-Lab-v0.3.1-saros-effects-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). With Python 3.10+, ftpsrv, pldmgr and ShadowMount+ running:
 
 ```sh
 python tools/gpulab.py install --game saros-native-v1
 ```
 
-Use Python 3.10 or newer. Have ftpsrv, pldmgr and ShadowMount+ running. Follow the existing installer prompts, including NVIDIA's license decision. The installer reads the exact native executable and a bounded shader-archive range from your own running game, reconstructs the patched executable and sidecar on your PC, checks their hashes, then asks you to close applications before installation. A different title version or input is refused.
+Follow the installer prompts, including NVIDIA's license decision. It reads the exact executable and a bounded shader range from your own game, reconstructs the package locally, and checks every hash. No game executable or NVIDIA weights ship.
 
-Open GPU Lab, select SAROS, press **Cross** to enter its settings, then **Cross** on HelixSR to choose ON/OFF. **Triangle** applies the selection and launches the game. **Square** opens available frame logs. Resolution examples describe observed dynamic inputs; this release does not offer an arbitrary resolution override.
+In GPU Lab, select SAROS, press **Cross** to enter details and **Cross** on HelixSR to choose ON/OFF. **Triangle** applies the choice and launches. OFF restores the original executable. **Square** opens imported callback logs; their timing basis is labelled. There is no built-in SAROS FPS HUD or arbitrary resolution override.
 
-For an existing matching v27 installation, `install --game saros-native-v1 --adopt` verifies its executable and sidecar, updates the app/metadata and records the existing mode. It does not accept an older SAROS trial. Preserve the installer's `my-ps5` directory for rollback. The existing `on`, `off`, `status` and `uninstall` commands remain available. Adoption uninstall restores the adopted mode and any app/metadata it replaced; it does not delete pre-existing game files.
+For an earlier v0.3.0/v27 installation, use that release's installer and retained `my-ps5` journal to uninstall before installing this release. `--adopt` accepts only the exact matching effects-on package; it cannot upgrade an older trial. Preserve installer journals needed for rollback.
 
 ## Reproduction and identities
 
-The release contains only patches, application components and source; it contains no retail game executable, private native capture or NVIDIA model weights. HXD patches rebuild from your files, with a model-weight hole filled locally. The native executable patch is 7,210 bytes; the sidecar patch is 80,997 bytes. Both reconstructed results were compared with the installed, tested files.
+HXD recipes reconstruct the exact tested executable and asset from owner-provided inputs and locally generated weights. Wrong executable, shader archive and model weights are rejected. See [native source](../native/saros/README.md) and [GPU Lab build instructions](../native/gpulab/README.md).
 
 | Component | SHA-256 |
 | --- | --- |
-| SAROS patched SELF | `68a69da47a55e10aa524f778e2bfd6a9a4fa83ecdc73c97f29b7f64cdd0c6c22` |
-| Model sidecar | `e37aefda5023a8e782df15dd4d0a7e0248b647d7acb6d8ecd34fe3a69f91edfd` |
-| GPU Lab app | `36bb48d73d5fb2d88b6193fd58635d608e281fd4b854b5cbf6a28904e49d9d61` |
-| Launch payload | `3b462f3124ba2a84d5a4541051acb5ec447d908cfffdf2f9bd2de758fe34f297` |
-
-See [native SAROS source](../native/saros/README.md) and [GPU Lab build instructions](../native/gpulab/README.md). The delivered portable build scripts reproduced the qualified hook, app and payload hashes. Reproducibility with the pinned dependencies is distinct from a fresh toolchain bootstrap or testing another console.
+| SAROS patched SELF | `6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11` |
+| Model asset | `1be3a14f7f25ea298929b485ad0cdf5e17441cd5ea94cb85f22a4f8500c9eb8e` |
+| GPU Lab app | `bf874cddfee0fc71d8cf8e89ced003e891f705d38abc5740151dc9c74095a80c` |
+| Launch payload | `925184fee2a3f3daa53a1512f8213f35e4ac694085c583ca5d6e3cfebf9eb3c9` |

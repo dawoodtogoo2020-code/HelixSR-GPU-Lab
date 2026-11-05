@@ -67,7 +67,7 @@ int main(void)
     assert(!rp_known("PPSA34547","01.300.300",2)&&!rp_known("PPSA34547","01.400.000",0));
     assert(rp_known("PPSA07631","01.000.000",0)->package==RP_PACKAGE_TRIAL);
     assert(!rp_known("PPSA07631","01.000.001",0));
-    assert(rp_package_pairs("saros-native-v1",pairs,4)==4&&pairs[0].input_width==1536&&pairs[3].output_height==2160);
+    assert(rp_package_pairs("saros-native-v1",pairs,4)==3&&pairs[0].input_width==1600&&pairs[2].output_height==2160);
     /* HRO1: an odd custom render size is valid; presets stay even; odd outputs stay invalid. */
     ro_options o;ro_defaults(&o);
     o.preset=RO_CUSTOM;o.input_width=1505;o.input_height=847;o.output_width=2560;o.output_height=1440;assert(ro_valid(&o));

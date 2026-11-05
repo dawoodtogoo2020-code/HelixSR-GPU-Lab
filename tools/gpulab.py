@@ -34,7 +34,7 @@ ROOT = HERE.parent
 GAMES = ROOT / 'games'
 CONSOLES = ROOT / 'console'
 HOME = ROOT / 'my-ps5'
-VERSION = '0.3.0-saros-beta'
+VERSION = '0.3.1-saros-effects-beta'
 CONSOLE = Console   # tests swap in a simulated PS5
 APP0 = ('/mnt/sandbox/{title}_000/app0', '/mnt/sandbox/pfsmnt/{title}-app0')
 

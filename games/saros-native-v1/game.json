@@ -6,7 +6,7 @@
  "models": [
   "ps5"
  ],
- "about": "Full Model E reconstruction to 3840x2160. Tested nominal 60 FPS (59.93): shadows and volumetric fog disabled, dynamic input minimum 1536x864. Limited scene coverage; see docs/saros.md.",
+ "about": "Model E reconstruction at 2560x1440 scaled to 3840x2160. Tested 59.93 FPS with shadows and volumetric fog on, stock DRS, no TSR fallback. Limited scene coverage; see docs/saros.md.",
  "howto": "Open GPU Lab, select SAROS, use Cross to switch HelixSR ON/OFF and Triangle to launch. OFF restores the original executable and visual settings. Square opens imported native timing logs.",
  "param": {
   "paths": [
@@ -42,15 +42,11 @@
  "files": [
   {
    "remote": "/data/homebrew/backports/PPSA07631/eboot.bin",
-   "sha256": "68a69da47a55e10aa524f778e2bfd6a9a4fa83ecdc73c97f29b7f64cdd0c6c22",
+   "sha256": "6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11",
    "accept": [
     [
      191835315,
-     "68a69da47a55e10aa524f778e2bfd6a9a4fa83ecdc73c97f29b7f64cdd0c6c22"
-    ],
-    [
-     191497804,
-     "120780e33371c5cde2223fd32c7fa7cabb434634e9b6eaa4b7fff49e74618311"
+     "6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11"
     ]
    ],
    "patches": [
@@ -59,11 +55,11 @@
   },
   {
    "remote": "/data/helixsr-saros-full/tile.bin",
-   "sha256": "e37aefda5023a8e782df15dd4d0a7e0248b647d7acb6d8ecd34fe3a69f91edfd",
+   "sha256": "1be3a14f7f25ea298929b485ad0cdf5e17441cd5ea94cb85f22a4f8500c9eb8e",
    "accept": [
     [
-     2201024,
-     "e37aefda5023a8e782df15dd4d0a7e0248b647d7acb6d8ecd34fe3a69f91edfd"
+     2315936,
+     "1be3a14f7f25ea298929b485ad0cdf5e17441cd5ea94cb85f22a4f8500c9eb8e"
     ]
    ],
    "patches": [
@@ -72,23 +68,23 @@
   },
   {
    "remote": "/data/helixsr-speed/packages/PPSA07631-01.000.000/CATALOG",
-   "text": "ps5-regular\tPPSA07631\t01.000.000\t68a69da47a55e10aa524f778e2bfd6a9a4fa83ecdc73c97f29b7f64cdd0c6c22\tSAROS\n",
-   "sha256": "321da06ff7ece9ab24779ac121f3a57a0dc8f0df383be71bd91a558b226f34a9",
+   "text": "ps5-regular\tPPSA07631\t01.000.000\t6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11\tSAROS\n",
+   "sha256": "519971530fbf4d4764ed8a38744be3373401482e52c3ba6a6b5e4c99dbe5e0d2",
    "accept": [
     [
      104,
-     "321da06ff7ece9ab24779ac121f3a57a0dc8f0df383be71bd91a558b226f34a9"
+     "519971530fbf4d4764ed8a38744be3373401482e52c3ba6a6b5e4c99dbe5e0d2"
     ]
    ]
   },
   {
    "remote": "/data/helixsr-speed/packages/PPSA07631-01.000.000/READY",
-   "text": "HPKG1 saros-native-v1\n4K ~60; shadows and vol. fog off\n",
-   "sha256": "96ea2b2fdd9562d8a4acf1aa7fc88fc2d4e991a5618621c54c01bb8a3e5bbdb4",
+   "text": "HPKG1 saros-native-v1\n4K ~60; shadows and volumetric fog on\n",
+   "sha256": "ffa9ba702fefff5f7fc5dcddd0ec06a763708802f5f24c1aadd2412fbb21b89c",
    "accept": [
     [
-     55,
-     "96ea2b2fdd9562d8a4acf1aa7fc88fc2d4e991a5618621c54c01bb8a3e5bbdb4"
+     60,
+     "ffa9ba702fefff5f7fc5dcddd0ec06a763708802f5f24c1aadd2412fbb21b89c"
     ]
    ]
   }

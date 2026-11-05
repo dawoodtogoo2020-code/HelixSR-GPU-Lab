@@ -1,0 +1,2605 @@
+{
+  "plan": {
+    "shape": [
+      2560,
+      1440,
+      1505,
+      847
+    ],
+    "table_rows": 122,
+    "table_stride": 768,
+    "t0_bytes": 1923840,
+    "u0_bytes": 231255296,
+    "table_seed_bytes": 19456,
+    "feature_layout": {
+      "buffer0": {
+        "offset": 19712,
+        "bytes": 3686400
+      },
+      "buffer1": {
+        "offset": 3706368,
+        "bytes": 3686400
+      },
+      "buffer2": {
+        "offset": 7393024,
+        "bytes": 7864320
+      },
+      "buffer3": {
+        "offset": 15257600,
+        "bytes": 7864320
+      },
+      "buffer4": {
+        "offset": 23122176,
+        "bytes": 19660800
+      },
+      "buffer5": {
+        "offset": 42783232,
+        "bytes": 983040
+      },
+      "buffer6": {
+        "offset": 43766528,
+        "bytes": 3932160
+      },
+      "buffer7": {
+        "offset": 47698944,
+        "bytes": 983040
+      },
+      "buffer8": {
+        "offset": 48682240,
+        "bytes": 1966080
+      },
+      "ENGINE_AUX": {
+        "offset": 50648576,
+        "bytes": 7372800,
+        "width": 2560,
+        "height": 1440,
+        "format": 54,
+        "bpp": 2,
+        "row_pitch": 5120
+      },
+      "ENGINE_COLOR": {
+        "offset": 58021632,
+        "bytes": 29491200,
+        "width": 2560,
+        "height": 1440,
+        "format": 10,
+        "bpp": 8,
+        "row_pitch": 20480
+      },
+      "EXPOSURE_CUR": {
+        "offset": 87513088,
+        "bytes": 256,
+        "width": 1,
+        "height": 1,
+        "format": 54,
+        "bpp": 2,
+        "row_pitch": 256
+      },
+      "EXPOSURE_STATE": {
+        "offset": 87513600,
+        "bytes": 256,
+        "width": 1,
+        "height": 1,
+        "format": 54,
+        "bpp": 2,
+        "row_pitch": 256
+      },
+      "GAME_COLOR": {
+        "offset": 87514112,
+        "bytes": 23887872,
+        "width": 1505,
+        "height": 847,
+        "format": 10,
+        "bpp": 8,
+        "row_pitch": 12288
+      },
+      "GAME_DEPTH": {
+        "offset": 111402240,
+        "bytes": 11943936,
+        "width": 1505,
+        "height": 847,
+        "format": 41,
+        "bpp": 4,
+        "row_pitch": 6144
+      },
+      "GAME_MV": {
+        "offset": 123346432,
+        "bytes": 14745600,
+        "width": 2560,
+        "height": 1440,
+        "format": 34,
+        "bpp": 4,
+        "row_pitch": 10240
+      },
+      "HIST_COLOR": {
+        "offset": 138092288,
+        "bytes": 29491200,
+        "width": 2560,
+        "height": 1440,
+        "format": 10,
+        "bpp": 8,
+        "row_pitch": 20480
+      },
+      "MV_HIST_READ": {
+        "offset": 167583744,
+        "bytes": 14745600,
+        "width": 2560,
+        "height": 1440,
+        "format": 34,
+        "bpp": 4,
+        "row_pitch": 10240
+      },
+      "MV_HIST_WRITE": {
+        "offset": 182329600,
+        "bytes": 14745600,
+        "width": 2560,
+        "height": 1440,
+        "format": 34,
+        "bpp": 4,
+        "row_pitch": 10240
+      },
+      "OUTPUT": {
+        "offset": 197075456,
+        "bytes": 29491200,
+        "width": 2560,
+        "height": 1440,
+        "format": 10,
+        "bpp": 8,
+        "row_pitch": 20480
+      },
+      "SKBUF": {
+        "offset": 226566912,
+        "bytes": 4194304
+      },
+      "PXOVER": {
+        "offset": 230761472,
+        "bytes": 493440
+      }
+    },
+    "records": [
+      {
+        "kernel": "cuda_luma_convert_kernel",
+        "tech": 0,
+        "occurrence": 0,
+        "table_offset": 4096,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              4096,
+              4096,
+              64,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "linear T#",
+            "semantic": "GAME_COLOR",
+            "recipe": [
+              4112,
+              87514112,
+              74448896,
+              2
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "feature V#",
+            "semantic": "buffer0",
+            "recipe": [
+              4144,
+              19712,
+              3686400,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          160,
+          90,
+          1
+        ],
+        "local": [
+          8,
+          8,
+          1
+        ],
+        "args_sha256": "3902498de350c5437ad403096439ce27cb4dae88c8026c57c2ca2c7fc982f546"
+      },
+      {
+        "kernel": "cuda_reduce_sum_kernel",
+        "tech": 1,
+        "occurrence": 0,
+        "table_offset": 4864,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              4864,
+              4864,
+              48,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer0",
+            "recipe": [
+              4880,
+              19712,
+              3686400,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer1",
+            "recipe": [
+              4896,
+              3706368,
+              3686400,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          1800,
+          1,
+          1
+        ],
+        "local": [
+          256,
+          1,
+          1
+        ],
+        "args_sha256": "9f6c7d4f3d601baf701f25b24d98d0b622a12782f7dcbd2e1786739ec6119d44"
+      },
+      {
+        "kernel": "cuda_reduce_sum_kernel",
+        "tech": 1,
+        "occurrence": 1,
+        "table_offset": 5632,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              5632,
+              5632,
+              48,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer1",
+            "recipe": [
+              5648,
+              3706368,
+              3686400,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer0",
+            "recipe": [
+              5664,
+              19712,
+              3686400,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          4,
+          1,
+          1
+        ],
+        "local": [
+          256,
+          1,
+          1
+        ],
+        "args_sha256": "b3b0ce5db3f65c0b5a9cd095a93b43c11cd33eeca7c148131532d964295d1071"
+      },
+      {
+        "kernel": "cuda_reduce_sum_kernel",
+        "tech": 1,
+        "occurrence": 2,
+        "table_offset": 6400,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              6400,
+              6400,
+              48,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer0",
+            "recipe": [
+              6416,
+              19712,
+              3686400,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer1",
+            "recipe": [
+              6432,
+              3706368,
+              3686400,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          1,
+          1,
+          1
+        ],
+        "local": [
+          256,
+          1,
+          1
+        ],
+        "args_sha256": "17e0940b5aece1b3d89d12de9639c88710483626e99b3d239e9f66bd1f30033e"
+      },
+      {
+        "kernel": "cuda_auto_exposure_copy_kernel",
+        "tech": 2,
+        "occurrence": 0,
+        "table_offset": 7168,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              7168,
+              7168,
+              48,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer1",
+            "recipe": [
+              7184,
+              3706368,
+              3686400,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "linear T#",
+            "semantic": "EXPOSURE_CUR",
+            "recipe": [
+              7200,
+              87513088,
+              13631488,
+              2
+            ]
+          }
+        ],
+        "dispatch": [
+          1,
+          1,
+          1
+        ],
+        "local": [
+          1,
+          1,
+          1
+        ],
+        "args_sha256": "ba2ac009c4dba844801e21c8b03ddf1d839ee90a6168c43e33911cbb601771d7"
+      },
+      {
+        "kernel": "cuda_clear_buffer_kernel",
+        "tech": 3,
+        "occurrence": 0,
+        "table_offset": 7936,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              7936,
+              7936,
+              64,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer2",
+            "recipe": [
+              7952,
+              7393024,
+              7864320,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          1280,
+          24,
+          1
+        ],
+        "local": [
+          16,
+          16,
+          1
+        ],
+        "args_sha256": "3df1a874bf2050957ab7d25e4feadd9394a5ad0df0687272a9f1c236da09836c"
+      },
+      {
+        "kernel": "cuda_engine_input_kernel_rel_hdr_mvdiff_mvlo",
+        "tech": 4,
+        "occurrence": 0,
+        "table_offset": 8704,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              8704,
+              8704,
+              432,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "linear T#",
+            "semantic": "EXPOSURE_STATE",
+            "recipe": [
+              8720,
+              87513600,
+              13631488,
+              2
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "sampler",
+            "semantic": "point"
+          },
+          {
+            "slot": 64,
+            "type": "linear T#",
+            "semantic": "EXPOSURE_CUR",
+            "recipe": [
+              8768,
+              87513088,
+              13631488,
+              2
+            ]
+          },
+          {
+            "slot": 96,
+            "type": "sampler",
+            "semantic": "point"
+          },
+          {
+            "slot": 112,
+            "type": "linear T#",
+            "semantic": "EXPOSURE_CUR",
+            "recipe": [
+              8816,
+              87513088,
+              13631488,
+              2
+            ]
+          },
+          {
+            "slot": 144,
+            "type": "sampler",
+            "semantic": "point"
+          },
+          {
+            "slot": 160,
+            "type": "linear T#",
+            "semantic": "GAME_DEPTH",
+            "recipe": [
+              8864,
+              111402240,
+              23068672,
+              2
+            ]
+          },
+          {
+            "slot": 192,
+            "type": "linear T#",
+            "semantic": "GAME_MV",
+            "recipe": [
+              8896,
+              123346432,
+              3251634176,
+              2
+            ]
+          },
+          {
+            "slot": 224,
+            "type": "linear T#",
+            "semantic": "GAME_COLOR",
+            "recipe": [
+              8928,
+              87514112,
+              74448896,
+              2
+            ]
+          },
+          {
+            "slot": 256,
+            "type": "linear T#",
+            "semantic": "HIST_COLOR",
+            "recipe": [
+              8960,
+              138092288,
+              3295674368,
+              2
+            ]
+          },
+          {
+            "slot": 288,
+            "type": "sampler",
+            "semantic": "linear"
+          },
+          {
+            "slot": 304,
+            "type": "linear T#",
+            "semantic": "MV_HIST_READ",
+            "recipe": [
+              9008,
+              167583744,
+              3251634176,
+              2
+            ]
+          },
+          {
+            "slot": 336,
+            "type": "sampler",
+            "semantic": "linear"
+          },
+          {
+            "slot": 352,
+            "type": "feature V#",
+            "semantic": "buffer2",
+            "recipe": [
+              9056,
+              7393024,
+              7864320,
+              1
+            ]
+          },
+          {
+            "slot": 368,
+            "type": "linear T#",
+            "semantic": "MV_HIST_WRITE",
+            "recipe": [
+              9072,
+              182329600,
+              3251634176,
+              2
+            ]
+          },
+          {
+            "slot": 400,
+            "type": "linear T#",
+            "semantic": "ENGINE_AUX",
+            "recipe": [
+              9104,
+              50648576,
+              3234856960,
+              2
+            ]
+          },
+          {
+            "slot": 432,
+            "type": "linear T#",
+            "semantic": "ENGINE_COLOR",
+            "recipe": [
+              9136,
+              58021632,
+              3295674368,
+              2
+            ]
+          }
+        ],
+        "dispatch": [
+          160,
+          90,
+          1
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "c1ba5f89339ab4e013d53c6b0d6392dcd5adb09daa624d21955c8f8660567fbc"
+      },
+      {
+        "kernel": "dltss_nchw8_conv_3x3_pool_conv_1x1_pool_512_032_008_fp16_e5m3_kernel",
+        "tech": 5,
+        "occurrence": 0,
+        "table_offset": 9472,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              9472,
+              9472,
+              400,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "PXOVER",
+            "recipe": [
+              9488,
+              230761472,
+              493440,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer2",
+            "recipe": [
+              9504,
+              7393024,
+              7864320,
+              1
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              9520,
+              19712,
+              9216,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              9536,
+              33024,
+              64,
+              0
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              9552,
+              28928,
+              4096,
+              0
+            ]
+          },
+          {
+            "slot": 96,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              9568,
+              33280,
+              128,
+              0
+            ]
+          },
+          {
+            "slot": 112,
+            "type": "feature V#",
+            "semantic": "buffer3",
+            "recipe": [
+              9584,
+              15257600,
+              7864320,
+              1
+            ]
+          },
+          {
+            "slot": 128,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              9600,
+              23122176,
+              19660800,
+              1
+            ]
+          },
+          {
+            "slot": 144,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              9616,
+              27054336,
+              15728640,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          1,
+          480,
+          1
+        ],
+        "local": [
+          256,
+          1,
+          1
+        ],
+        "args_sha256": "4ed5769d066f5d8e7b1b53b0f71c8fe5301e02ecd05053b36818368c6fdd7533"
+      },
+      {
+        "kernel": "dltss_nchw8_conv_3x3_pool_128_064_008_e5m3_fp16_kernel",
+        "tech": 6,
+        "occurrence": 0,
+        "table_offset": 10240,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              10240,
+              10240,
+              416,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              10256,
+              27054336,
+              15728640,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              10272,
+              33536,
+              147456,
+              0
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              10288,
+              180992,
+              256,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "feature V#",
+            "semantic": "buffer6",
+            "recipe": [
+              10304,
+              43766528,
+              3932160,
+              1
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              10320,
+              42783232,
+              983040,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          2,
+          120,
+          1
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "6b6034bfa92203f5ce70dad4454c2e8a5213e8f61b0826c09d49a0e6c6b9401c"
+      },
+      {
+        "kernel": "dltss_nchw8_conv_3x3_pool_128_064_008_fp16_fp16_kernel",
+        "tech": 7,
+        "occurrence": 0,
+        "table_offset": 11008,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              11008,
+              11008,
+              416,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              11024,
+              42783232,
+              983040,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              11040,
+              181248,
+              294912,
+              0
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              11056,
+              476160,
+              256,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "feature V#",
+            "semantic": "buffer7",
+            "recipe": [
+              11072,
+              47698944,
+              983040,
+              1
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              11088,
+              27054336,
+              15728640,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          2,
+          30,
+          1
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "50e5dc0f693b1590360030cad4f389fbf1975d8fda6308b090285c3891bc86e9"
+      },
+      {
+        "kernel": "dltss_nchw8_conv_3x3_pool_064_064_008_fp16_fp16_kernel",
+        "tech": 8,
+        "occurrence": 0,
+        "table_offset": 11776,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              11776,
+              11776,
+              416,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              11792,
+              27054336,
+              15728640,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              11808,
+              476416,
+              589824,
+              0
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              11824,
+              1066240,
+              512,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "feature V#",
+            "semantic": "buffer8",
+            "recipe": [
+              11840,
+              48682240,
+              1966080,
+              1
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              11856,
+              42783232,
+              983040,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          4,
+          15,
+          1
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "ad382f503d1b3c5952a3bb82566abc4f72cc7e569eaee43c7306863d2ef89520"
+      },
+      {
+        "kernel": "dltss_nchw8_conv_1x1_064_032_032_fp16_fp16_kernel",
+        "tech": 9,
+        "occurrence": 0,
+        "table_offset": 12544,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              12544,
+              12544,
+              400,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              12560,
+              42783232,
+              983040,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              12576,
+              1066752,
+              262144,
+              0
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              12592,
+              1328896,
+              1024,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              12608,
+              42906112,
+              860160,
+              1
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "feature V#",
+            "semantic": "SKBUF",
+            "recipe": [
+              12624,
+              226566912,
+              4194304,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          3,
+          2,
+          16
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "1f92d574e16e12c06f270ea3e6e587baaba692fdf431c5b0ca1b1c40587241b1"
+      },
+      {
+        "kernel": "dltss_nchw8_conv_1x1_064_032_032_fp16_fp16_kernel",
+        "tech": 9,
+        "occurrence": 1,
+        "table_offset": 13312,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              13312,
+              13312,
+              400,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              13328,
+              42906112,
+              860160,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              13344,
+              1329920,
+              262144,
+              0
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              13360,
+              1592064,
+              512,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              13376,
+              43151872,
+              614400,
+              1
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "feature V#",
+            "semantic": "SKBUF",
+            "recipe": [
+              13392,
+              226566912,
+              4194304,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          3,
+          2,
+          8
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "20477584ba3f182a04c847a8740b90e247ea2b7b1c2fb33fb19b7c094206c6fe"
+      },
+      {
+        "kernel": "dltss_nchw8_bilinear_upsample_conv_1x1_128_128_032_fp16_fp16_kernel",
+        "tech": 10,
+        "occurrence": 0,
+        "table_offset": 14080,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              14080,
+              14080,
+              416,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer5",
+            "recipe": [
+              14096,
+              43151872,
+              614400,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer8",
+            "recipe": [
+              14112,
+              48682240,
+              1966080,
+              1
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              14128,
+              1592576,
+              131072,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              14144,
+              1723648,
+              512,
+              0
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "feature V#",
+            "semantic": "buffer8",
+            "recipe": [
+              14160,
+              49173760,
+              1474560,
+              1
+            ]
+          },
+          {
+            "slot": 96,
+            "type": "feature V#",
+            "semantic": "SKBUF",
+            "recipe": [
+              14176,
+              226566912,
+              4194304,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          3,
+          3,
+          2
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "4370f1fa43340bc0537222b72ab0891bb0e52a474860f22137e4acf2d3b3f9f5"
+      },
+      {
+        "kernel": "dltss_nchw8_conv_1x1_064_032_032_fp16_fp16_kernel",
+        "tech": 9,
+        "occurrence": 2,
+        "table_offset": 14848,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              14848,
+              14848,
+              400,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer8",
+            "recipe": [
+              14864,
+              49173760,
+              1474560,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              14880,
+              1724160,
+              65536,
+              0
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              14896,
+              1789696,
+              256,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              14912,
+              27054336,
+              15728640,
+              1
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "feature V#",
+            "semantic": "SKBUF",
+            "recipe": [
+              14928,
+              226566912,
+              4194304,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          5,
+          3,
+          4
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "6476c094d6ead88629655b445fc16a80b7720ba47b63fdd3937c6aa486baea9a"
+      },
+      {
+        "kernel": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_064_128_032_128_064_fp16_fp16_kernel",
+        "tech": 11,
+        "occurrence": 0,
+        "table_offset": 15616,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              15616,
+              15616,
+              672,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              15632,
+              27054336,
+              15728640,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer7",
+            "recipe": [
+              15648,
+              47698944,
+              983040,
+              1
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              15664,
+              1789952,
+              32768,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              15680,
+              1822720,
+              256,
+              0
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              15696,
+              1822976,
+              32768,
+              0
+            ]
+          },
+          {
+            "slot": 96,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              15712,
+              1855744,
+              256,
+              0
+            ]
+          },
+          {
+            "slot": 112,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              15728,
+              28037376,
+              14745600,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          5,
+          12,
+          1
+        ],
+        "local": [
+          128,
+          1,
+          1
+        ],
+        "args_sha256": "438ee1f70e4190c2c7a3bce9dbc7e0b1c6196b2ebab5a44101820763ad5a68f5"
+      },
+      {
+        "kernel": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_128_128_032_064_128_fp16_e5m3_kernel",
+        "tech": 12,
+        "occurrence": 0,
+        "table_offset": 16384,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              16384,
+              16384,
+              672,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              16400,
+              28037376,
+              14745600,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer6",
+            "recipe": [
+              16416,
+              43766528,
+              3932160,
+              1
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              16432,
+              1856000,
+              32768,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              16448,
+              1888768,
+              256,
+              0
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              16464,
+              1889024,
+              16384,
+              0
+            ]
+          },
+          {
+            "slot": 96,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              16480,
+              1905408,
+              128,
+              0
+            ]
+          },
+          {
+            "slot": 112,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              16496,
+              27054336,
+              15728640,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          10,
+          12,
+          1
+        ],
+        "local": [
+          256,
+          1,
+          1
+        ],
+        "args_sha256": "caa1aa971fc13262449db86ca8865971c80579c66afbbee751a4c101914b2840"
+      },
+      {
+        "kernel": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_128_064_064_032_064_e5m3_e5m3_kernel",
+        "tech": 13,
+        "occurrence": 0,
+        "table_offset": 17152,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              17152,
+              17152,
+              672,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              17168,
+              27054336,
+              15728640,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer4",
+            "recipe": [
+              17184,
+              23122176,
+              19660800,
+              1
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              17200,
+              1905664,
+              8192,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              17216,
+              1913856,
+              128,
+              0
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              17232,
+              1914112,
+              4096,
+              0
+            ]
+          },
+          {
+            "slot": 96,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              17248,
+              1918208,
+              64,
+              0
+            ]
+          },
+          {
+            "slot": 112,
+            "type": "feature V#",
+            "semantic": "buffer8",
+            "recipe": [
+              17264,
+              48682240,
+              1966080,
+              1
+            ]
+          }
+        ],
+        "dispatch": [
+          20,
+          24,
+          1
+        ],
+        "local": [
+          256,
+          1,
+          1
+        ],
+        "args_sha256": "637ead30e5ad87e47b49b0877a3e5753689c531f4fddfd361ecfba4a2742e529"
+      },
+      {
+        "kernel": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_aniso_gaussian_dfn_fastpath_3x3_128_032_032_048_032_e5m3_fp16_kernel",
+        "tech": 14,
+        "occurrence": 0,
+        "table_offset": 17920,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              17920,
+              17920,
+              672,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "feature V#",
+            "semantic": "buffer8",
+            "recipe": [
+              17936,
+              48682240,
+              1966080,
+              1
+            ]
+          },
+          {
+            "slot": 32,
+            "type": "feature V#",
+            "semantic": "buffer3",
+            "recipe": [
+              17952,
+              15257600,
+              7864320,
+              1
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              17968,
+              1918464,
+              2048,
+              0
+            ]
+          },
+          {
+            "slot": 64,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              17984,
+              1920512,
+              64,
+              0
+            ]
+          },
+          {
+            "slot": 80,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              18000,
+              1920768,
+              2560,
+              0
+            ]
+          },
+          {
+            "slot": 96,
+            "type": "immutable V#",
+            "semantic": "weights",
+            "recipe": [
+              18016,
+              1923328,
+              80,
+              0
+            ]
+          },
+          {
+            "slot": 112,
+            "type": "linear T#",
+            "semantic": "EXPOSURE_CUR",
+            "recipe": [
+              18032,
+              87513088,
+              13631488,
+              2
+            ]
+          },
+          {
+            "slot": 144,
+            "type": "sampler",
+            "semantic": "linear"
+          },
+          {
+            "slot": 160,
+            "type": "linear T#",
+            "semantic": "GAME_COLOR",
+            "recipe": [
+              18080,
+              87514112,
+              74448896,
+              2
+            ]
+          },
+          {
+            "slot": 192,
+            "type": "linear T#",
+            "semantic": "ENGINE_COLOR",
+            "recipe": [
+              18112,
+              58021632,
+              3295674368,
+              2
+            ]
+          },
+          {
+            "slot": 224,
+            "type": "linear T#",
+            "semantic": "HIST_COLOR",
+            "recipe": [
+              18144,
+              138092288,
+              3295674368,
+              2
+            ]
+          },
+          {
+            "slot": 256,
+            "type": "linear T#",
+            "semantic": "OUTPUT",
+            "recipe": [
+              18176,
+              197075456,
+              3295674368,
+              2
+            ]
+          }
+        ],
+        "dispatch": [
+          40,
+          45,
+          1
+        ],
+        "local": [
+          256,
+          1,
+          1
+        ],
+        "args_sha256": "7c054eb3745ea2db34bdef96f604c5e29214c0117f57ed7a97d14fecdb7bd293"
+      },
+      {
+        "kernel": "cuda_copy_exposure_kernel",
+        "tech": 15,
+        "occurrence": 0,
+        "table_offset": 18688,
+        "rows": [
+          {
+            "slot": 0,
+            "type": "immutable V#",
+            "semantic": "args",
+            "recipe": [
+              18688,
+              18688,
+              32,
+              0
+            ]
+          },
+          {
+            "slot": 16,
+            "type": "linear T#",
+            "semantic": "EXPOSURE_CUR",
+            "recipe": [
+              18704,
+              87513088,
+              13631488,
+              2
+            ]
+          },
+          {
+            "slot": 48,
+            "type": "sampler",
+            "semantic": "point"
+          },
+          {
+            "slot": 64,
+            "type": "linear T#",
+            "semantic": "EXPOSURE_STATE",
+            "recipe": [
+              18752,
+              87513600,
+              13631488,
+              2
+            ]
+          }
+        ],
+        "dispatch": [
+          1,
+          1,
+          1
+        ],
+        "local": [
+          1,
+          1,
+          1
+        ],
+        "args_sha256": "7b14488d5253badc92e469e86eae6ac29c7f9e45c7f21f4ee18edc2d9508b6ee"
+      }
+    ],
+    "weight_base_t0": 19712,
+    "mode": "full-resolution sparse GPU-initialized arena",
+    "temporal_frame": "INIT, reset, zero jitter/motion; fixed training exposure 1.0"
+  },
+  "native_records": [
+    {
+      "role": "initialize GPU feature arena",
+      "sha256": "2ec573f730f64ada2b20e0ec7c6450b40d32786f8d37adafcddd1996700f00bb",
+      "bytes": 1118,
+      "identity_sha1": "c97da05b594d16867e38fbd64814912152f5c8b7",
+      "ISA_bytes": 348,
+      "ISA_sha256": "9ab28517f72737de2c0061954f73eac9220a9af13f902994cd29013c3f3f5ee4",
+      "local": [
+        16,
+        16,
+        1
+      ]
+    },
+    {
+      "role": "GAME_COLOR",
+      "sha256": "4a9da541dd0cbf8fd65727378c55e7315a964b42b4cd59017187908408d3675f",
+      "bytes": 990,
+      "identity_sha1": "c06ad6b296246c44b1a17c2f54b10b648510f8fe"
+    },
+    {
+      "role": "GAME_DEPTH",
+      "sha256": "a628744623be686ddfe4c8165d8f8c005c0523ff6903588559219d2135ccd109",
+      "bytes": 974,
+      "identity_sha1": "96c78d6b5d21b1439e1138503ed9b3d2c3553d47"
+    },
+    {
+      "role": "GAME_MV",
+      "sha256": "29e6d61cb05194aba869a5a150f6469bc743ac9e40d9315aef02c1cb0793b67d",
+      "bytes": 974,
+      "identity_sha1": "a56572a038b9a786cae47b241727ef1b9b0fcd76"
+    },
+    {
+      "role": "populate-native-raw-tables",
+      "sha256": "c96061ee8217b5ebfeb2a675e6180745a6ff933bce20a07bf5ae98e644df707a",
+      "bytes": 1246,
+      "identity_sha1": "ecfdcc113903036ebc6b84d3ed8294e36c0f8dc3",
+      "ISA_bytes": 472,
+      "ISA_sha256": "2243b1e6a855413a07fbfa370454c27ee7cbb03c50118315c216ac6c8f8b8f86",
+      "local": [
+        16,
+        16,
+        1
+      ]
+    },
+    {
+      "role": "cuda_luma_convert_kernel",
+      "tech": 0,
+      "occurrence": 0,
+      "table_offset": 4096,
+      "donor_ISA_sha256": "fd67e697e7d7b5b63f0cb9470c1731136be1cf05468177cf31e906d388fd4667",
+      "donor_ISA_bytes": 452,
+      "sha256": "6cd550731f167eb3860dd05f7780e0fd941e2e97137f8b11c8d7bab83782336d",
+      "bytes": 1486,
+      "identity_sha1": "778e3862d08aeb98c9d07e5832e4224779c906f0",
+      "ISA_bytes": 708,
+      "ISA_sha256": "e56723ae20775f95911d57902418f5877ed3b795edd2effde9e15b481a48fe2f",
+      "local": [
+        8,
+        8,
+        1
+      ]
+    },
+    {
+      "role": "cuda_reduce_sum_kernel",
+      "tech": 1,
+      "occurrence": 0,
+      "table_offset": 4864,
+      "donor_ISA_sha256": "8fc273c2e4ece75cf3b61284bab21a30b8adc2e208b61f78df4c2410346a24a7",
+      "donor_ISA_bytes": 576,
+      "sha256": "14592cd947238cdf9a544fc284fb2e92698cce5a741478c2eb78a5d313a6b74a",
+      "bytes": 1598,
+      "identity_sha1": "0acbd17f0ade3b30419d1c208c8cb07819e71c2b",
+      "ISA_bytes": 832,
+      "ISA_sha256": "f3c6b1afaa881b4b236d398d683f00e3b279a7d8f7512224a597fc08a4d825f2",
+      "local": [
+        256,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "cuda_reduce_sum_kernel",
+      "tech": 1,
+      "occurrence": 1,
+      "table_offset": 5632,
+      "donor_ISA_sha256": "8fc273c2e4ece75cf3b61284bab21a30b8adc2e208b61f78df4c2410346a24a7",
+      "donor_ISA_bytes": 576,
+      "sha256": "544d6cd64ac54a3c15996af8988e19be68141c57fdad3614fcc47da297444db8",
+      "bytes": 1598,
+      "identity_sha1": "d83fbd3564f1365d51aee9640ba98a81a6777c6a",
+      "ISA_bytes": 832,
+      "ISA_sha256": "6f1411365219d5e5cc197afd22db919185031241cb9f1d83676a7fe4d46c7f84",
+      "local": [
+        256,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "cuda_reduce_sum_kernel",
+      "tech": 1,
+      "occurrence": 2,
+      "table_offset": 6400,
+      "donor_ISA_sha256": "8fc273c2e4ece75cf3b61284bab21a30b8adc2e208b61f78df4c2410346a24a7",
+      "donor_ISA_bytes": 576,
+      "sha256": "96ae61b831b71bbca5474ecb3f86b3bb680439fce69c75ade249a141106d4c7d",
+      "bytes": 1598,
+      "identity_sha1": "d579bac54e7329cb2d846036d609ec1887a1e025",
+      "ISA_bytes": 832,
+      "ISA_sha256": "a2c074866dbd5364fa971c6474fa6a72cfc45de1482bfc99e8e2bb8232d5109e",
+      "local": [
+        256,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "cuda_auto_exposure_copy_kernel",
+      "tech": 2,
+      "occurrence": 0,
+      "table_offset": 7168,
+      "donor_ISA_sha256": "223fb6225cba55aee05b3b84688263eb5995350dd582b62823a43d61f9787721",
+      "donor_ISA_bytes": 136,
+      "sha256": "5952dd554c6873576576eddef5fb4677a544a288f4dc35d9e904095548eed5cb",
+      "bytes": 1166,
+      "identity_sha1": "80161a1322af056e138fad640b9415a44aa99ce4",
+      "ISA_bytes": 392,
+      "ISA_sha256": "477eddcb0930ddef8976219fe9e042350763079fee2f4643bcf29161fda4e95b",
+      "local": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "cuda_clear_buffer_kernel",
+      "tech": 3,
+      "occurrence": 0,
+      "table_offset": 7936,
+      "donor_ISA_sha256": "413900ef3d15f521f405a6a029904986b80fb8d7a54872f1f6bda80d0b42bc8d",
+      "donor_ISA_bytes": 400,
+      "sha256": "5399f77cc8f170e252781c9eabaef6df79a1d11fa1e55a2bd5976c955d1853e3",
+      "bytes": 1422,
+      "identity_sha1": "cfb4edb68d3e7c076bb37cc3ae46d4a8d8341a32",
+      "ISA_bytes": 656,
+      "ISA_sha256": "20a2fa5d0a8a9f7d017836add9df3c92d7655de9c13f3db7388f9e6e2b9c51a0",
+      "local": [
+        16,
+        16,
+        1
+      ]
+    },
+    {
+      "role": "cuda_engine_input_kernel_rel_hdr_mvdiff_mvlo",
+      "tech": 4,
+      "occurrence": 0,
+      "table_offset": 8704,
+      "donor_ISA_sha256": "809d3f8de5512e39d91c05c6eace442ef67ebbf621e0b7035c1f9c7a5d1e7f93",
+      "donor_ISA_bytes": 20112,
+      "sha256": "53929f30a5be696fabdefe53779d68778952a3b931bee7fdc943aa51cd7d9b37",
+      "bytes": 21134,
+      "identity_sha1": "4146c73c2d27855a8d7d91f7decb1f0fb64abc1d",
+      "ISA_bytes": 20368,
+      "ISA_sha256": "b821fcf4181ed03693258962a8aa682ad83c392d426c6e3da05f3e97d1303d09",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_conv_3x3_pool_conv_1x1_pool_512_032_008_fp16_e5m3_kernel",
+      "tech": 5,
+      "occurrence": 0,
+      "table_offset": 9472,
+      "donor_ISA_sha256": "d9f1f40f636142a81c0608d4559430ff588fe15450dbdcc4ac54e8cb0a0546dc",
+      "donor_ISA_bytes": 7856,
+      "sha256": "afb96fcdab66977fb3d41189b4fcdf9c366e7abf42dcf1f1e94417de8451628b",
+      "bytes": 8878,
+      "identity_sha1": "cc4530bdfcba612cfa44bd32361dab317a0e2f34",
+      "ISA_bytes": 8112,
+      "ISA_sha256": "b953c8a14f87e5ad66707ced261f79acf370a180ee929299d5232b1185247ca9",
+      "local": [
+        256,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_conv_3x3_pool_128_064_008_e5m3_fp16_kernel",
+      "tech": 6,
+      "occurrence": 0,
+      "table_offset": 10240,
+      "donor_ISA_sha256": "ba23d978cef5e21649982a00788b14ea042d3648fb618fc7d3c7a87043f35c73",
+      "donor_ISA_bytes": 4404,
+      "sha256": "6a679dd03c2ac65539a7109312d3eb95c6d5127648aaacdc5932e69b07b1bc4e",
+      "bytes": 5438,
+      "identity_sha1": "38b29c86230a2cd8f35549d9526d377952af17d8",
+      "ISA_bytes": 4660,
+      "ISA_sha256": "192d7ab7b065dfb9af84154c6c8837008e75dd63703b3b1993ed321e02988bf3",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_conv_3x3_pool_128_064_008_fp16_fp16_kernel",
+      "tech": 7,
+      "occurrence": 0,
+      "table_offset": 11008,
+      "donor_ISA_sha256": "06b187b423b34f003dab8dcae17812d25008ff98327e83c548fa6bf6be07f333",
+      "donor_ISA_bytes": 4056,
+      "sha256": "4783dccb57919400057978a78d334a8d18d59ffdd79203b6a944041ccc416bf1",
+      "bytes": 5278,
+      "identity_sha1": "1e8325a056bb061c17f5d45e2a52aff8fee0e79b",
+      "ISA_bytes": 4500,
+      "ISA_sha256": "3140ccb7e7d70bd874de2f5426f37121b78e5072612dfb583136b07aa11e8d1d",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_conv_3x3_pool_064_064_008_fp16_fp16_kernel",
+      "tech": 8,
+      "occurrence": 0,
+      "table_offset": 11776,
+      "donor_ISA_sha256": "a875579612e13d58e005eee7128f26abf9793d72e1ff76fe89359844a73aa667",
+      "donor_ISA_bytes": 4060,
+      "sha256": "2c3cc094a54cfc040cffcf576ff1bd192d5853ebff2aa43d0b075f1819a7e6da",
+      "bytes": 5278,
+      "identity_sha1": "9210f13413f42a86fb98c4027abb1f963a9ab17a",
+      "ISA_bytes": 4504,
+      "ISA_sha256": "64ef8b5ff511683fdb6fcc2268aa85214fe8581ae58fc4561f998b9282c3c3ef",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_conv_1x1_064_032_032_fp16_fp16_kernel",
+      "tech": 9,
+      "occurrence": 0,
+      "table_offset": 12544,
+      "donor_ISA_sha256": "e5cebec0b68af5b63f9e8e247d6067ddb38b363b5f4fd51a44af46e2e0045401",
+      "donor_ISA_bytes": 5368,
+      "sha256": "f5433d040f0083e1c39f6a1a35b31cf3721eeedda73299083d0304ceca571886",
+      "bytes": 6398,
+      "identity_sha1": "fd156e07d87da5048bc2d0cc4f8d079348a95217",
+      "ISA_bytes": 5624,
+      "ISA_sha256": "1be62e94bfd0fa541d57ce33e300fb652678d35840b774acaa5b5b798ca9bcf1",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_conv_1x1_064_032_032_fp16_fp16_kernel",
+      "tech": 9,
+      "occurrence": 1,
+      "table_offset": 13312,
+      "donor_ISA_sha256": "e5cebec0b68af5b63f9e8e247d6067ddb38b363b5f4fd51a44af46e2e0045401",
+      "donor_ISA_bytes": 5368,
+      "sha256": "b0f2a9a32b0ae74a1c9c67bad6543699c1470fb3d7cde9d6939bf9258a857fbc",
+      "bytes": 6398,
+      "identity_sha1": "b6c33e2e5b918904e1f64463d4f7628ffc313c25",
+      "ISA_bytes": 5624,
+      "ISA_sha256": "1eef15a9cdbb0ca78f82721d436c56de3263c70ffef91aae8c29c580fac2efd5",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_bilinear_upsample_conv_1x1_128_128_032_fp16_fp16_kernel",
+      "tech": 10,
+      "occurrence": 0,
+      "table_offset": 14080,
+      "donor_ISA_sha256": "5a5654d1a279485ea0fb851d82c458da08c816f9f4c972c0af5aba33c6084b9b",
+      "donor_ISA_bytes": 28396,
+      "sha256": "b4340d5625b460cfca14965d9f57378ce76dd1baeda04e4b37d57b386a2543a4",
+      "bytes": 29422,
+      "identity_sha1": "b6f37f44518ca027f9dc84126e3356d76c92ce0a",
+      "ISA_bytes": 28652,
+      "ISA_sha256": "d4620e69e5708312de0b5efafa723681777a240a32db959cdf568beb21a1b566",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_conv_1x1_064_032_032_fp16_fp16_kernel",
+      "tech": 9,
+      "occurrence": 2,
+      "table_offset": 14848,
+      "donor_ISA_sha256": "e5cebec0b68af5b63f9e8e247d6067ddb38b363b5f4fd51a44af46e2e0045401",
+      "donor_ISA_bytes": 5368,
+      "sha256": "7516372197e3172e902a32fc465473a60be0677d003da05f28f45effaa917d86",
+      "bytes": 6398,
+      "identity_sha1": "7105a1daab17c2c2bbc31d1a105dea168378739a",
+      "ISA_bytes": 5624,
+      "ISA_sha256": "6e397c124291cb3951193fdcb5d1e89c14f21417f2733b5b1e10fae6d62dcaa3",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_064_128_032_128_064_fp16_fp16_kernel",
+      "tech": 11,
+      "occurrence": 0,
+      "table_offset": 15616,
+      "donor_ISA_sha256": "a2e9758275bc8a83964b95a20e4e9ef25ac01c26db8e5a0aedd4e10abe0216f6",
+      "donor_ISA_bytes": 33816,
+      "sha256": "e4b2d1c4653038d7b871068c8e46f75bfc045a1f7b443e456258f7ece996e29e",
+      "bytes": 34846,
+      "identity_sha1": "a59d25d3826f019639fa30ea7f66be750f5c869c",
+      "ISA_bytes": 34072,
+      "ISA_sha256": "85c7346b86c67ebc75475f52999c91521063768f9d2d22215edf84ba41b6cce1",
+      "local": [
+        128,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_128_128_032_064_128_fp16_e5m3_kernel",
+      "tech": 12,
+      "occurrence": 0,
+      "table_offset": 16384,
+      "donor_ISA_sha256": "9689ff1ab81a2a8a78f100d85d4390db76732ea4d2ba998300e551114eb31ed0",
+      "donor_ISA_bytes": 23696,
+      "sha256": "4b6f147e33266b6b41b648e5ec30dc970facd6fc28eabfa8d970ac74c594cbc6",
+      "bytes": 24718,
+      "identity_sha1": "82a9b0820b0747650c82be13660b33b119c3ae18",
+      "ISA_bytes": 23952,
+      "ISA_sha256": "89a3d2e6b720de13f5e96ca59c4f954281b79f2bb4445662da9140d98653c5e6",
+      "local": [
+        256,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_128_064_064_032_064_e5m3_e5m3_kernel",
+      "tech": 13,
+      "occurrence": 0,
+      "table_offset": 17152,
+      "donor_ISA_sha256": "787fca68a44c7da348ae6c3af79d52cde83dff86e7f69680be5cfccbd0c58d3e",
+      "donor_ISA_bytes": 17104,
+      "sha256": "f373096d6d04615d0fad099c2fa67c067afe4a4377a1fe659711a15f82339996",
+      "bytes": 18126,
+      "identity_sha1": "a52268125bc3bdce8358f0671f0b16747109d0de",
+      "ISA_bytes": 17360,
+      "ISA_sha256": "0fd09bcc38cf45de36d2536252ae017d36b9ace427f5126f66de35c319cc7060",
+      "local": [
+        256,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "dltss_nchw8_bilinear_upsample_conv_1x1_conv_1x1_aniso_gaussian_dfn_fastpath_3x3_128_032_032_048_032_e5m3_fp16_kernel",
+      "tech": 14,
+      "occurrence": 0,
+      "table_offset": 17920,
+      "donor_ISA_sha256": "b394b76a44bf02cccbb2f056d627071cc680435b0d02081bf0559df44904f389",
+      "donor_ISA_bytes": 31316,
+      "sha256": "cf109cb7603d15c24975b2f1115290571afc11560a9e0f65e7a8717f0c98f279",
+      "bytes": 32350,
+      "identity_sha1": "a53df1aa30ddb7835bfdcf8f11b6e808f2dfa0a4",
+      "ISA_bytes": 31572,
+      "ISA_sha256": "fbb4577f766e8544534d8429dd7c4cdceea94f22bb15708f032638967510dd4c",
+      "local": [
+        256,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "cuda_copy_exposure_kernel",
+      "tech": 15,
+      "occurrence": 0,
+      "table_offset": 18688,
+      "donor_ISA_sha256": "bed50b30a1b60eb054e2f4f1af0c17046f0575b6c9bc217a264e167341fb1382",
+      "donor_ISA_bytes": 116,
+      "sha256": "93a1c374cba7c18aa3f4f871e21ef908b7cc8006655e072d8de698a932c065fd",
+      "bytes": 1150,
+      "identity_sha1": "58e22a3f7364096bb6e5307c8c604b0a7f4a09a4",
+      "ISA_bytes": 372,
+      "ISA_sha256": "a620e27c1e78ff43425043262aab6651e81f498a3b60e44ba2c56412b0063389",
+      "local": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "role": "scale4k from 1440p Model E",
+      "sha256": "ea0b8600eb7e950b5916e71cc68a97669c06fa4c34867bc1037b6b1b8a6b21b2",
+      "bytes": 1646,
+      "identity_sha1": "5d23dd98605f28e1d13b2ec5dbedc489b1c4e265",
+      "ISA_bytes": 876,
+      "ISA_sha256": "9e0afbf15a91b654374a923a22c441e20d9bf84262531fdb1b48b3d12e9ea277",
+      "scope": "Four read-only loads before wait; identical tap order and scalar math; same32VGPR allocation"
+    },
+    {
+      "role": "quarter from 1440p Model E",
+      "sha256": "43d4f59db8b3005828eab02b50a950a6361aabccea829dc323a58f95b8107fc9",
+      "bytes": 3182,
+      "identity_sha1": "fa03b35ba4101e79f8cacd6c86d554ae30e48819",
+      "ISA_bytes": 2408,
+      "ISA_sha256": "2f6ef4639387a19aa94e21cd574a352242143cdbd8d7a13051879d82a0e44861",
+      "scope": "Four read-only loads before wait; identical tap order and scalar math; same32VGPR allocation"
+    },
+    {
+      "role": "dfn_mid k5",
+      "sha256": "1b036990bbc07fe478f49206b11e5edace5a27e8529a8f2494eabf6c287f386c",
+      "bytes": 33262,
+      "identity_sha1": "df844565213fe58b3d8e39c3ca7eec9d556501cc",
+      "original_code_sha256": "cdf32207b07c66dd1b14dd2d272be51613e933612a5e569d654cb7785e818e4f"
+    },
+    {
+      "role": "dfn_3x3_256 k5n lower-ratio output",
+      "bytes": 112590,
+      "sha256": "41806988a8fa4188f220dcc11d932ddc6d94deff09a31445051309b3f603343c",
+      "identity_sha1": "e43de315e1a1d1ba7c427e2b536e9a873abdca30",
+      "ISA_bytes": 111820,
+      "ISA_sha256": "f96a25656fe79f07e2a4b237624a9c9eadfc733d3cc1dc63fcf0c24aaa07d954",
+      "original_code_sha256": "62490cfa9847e640222b224869f122c43c7b0940b68ab305d753ccfbe09cf456",
+      "hardware_qualified": false
+    }
+  ],
+  "grids": [
+    [
+      256,
+      221,
+      1
+    ],
+    [
+      128,
+      72,
+      1
+    ],
+    [
+      128,
+      72,
+      1
+    ],
+    [
+      128,
+      72,
+      1
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      160,
+      90,
+      1
+    ],
+    [
+      1800,
+      1,
+      1
+    ],
+    [
+      4,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      1280,
+      24,
+      1
+    ],
+    [
+      160,
+      90,
+      1
+    ],
+    [
+      1,
+      480,
+      1
+    ],
+    [
+      2,
+      120,
+      1
+    ],
+    [
+      2,
+      30,
+      1
+    ],
+    [
+      4,
+      15,
+      1
+    ],
+    [
+      3,
+      2,
+      16
+    ],
+    [
+      3,
+      2,
+      8
+    ],
+    [
+      3,
+      3,
+      2
+    ],
+    [
+      5,
+      3,
+      4
+    ],
+    [
+      5,
+      12,
+      1
+    ],
+    [
+      10,
+      12,
+      1
+    ],
+    [
+      20,
+      24,
+      1
+    ],
+    [
+      40,
+      45,
+      1
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      240,
+      135,
+      1
+    ],
+    [
+      60,
+      34,
+      1
+    ],
+    [
+      40,
+      45,
+      1
+    ],
+    [
+      40,
+      23,
+      1
+    ]
+  ],
+  "sidecar_bytes": 2315936,
+  "sidecar_sha256": "1be3a14f7f25ea298929b485ad0cdf5e17441cd5ea94cb85f22a4f8500c9eb8e",
+  "sidecar_fnv1a64": "67686be6ad7fc338",
+  "reconstruction": [
+    2560,
+    1440
+  ],
+  "presentation": [
+    3840,
+    2160
+  ],
+  "qualification": "Offline pipelined scaler candidate; not exercised",
+  "filter": "pixel-centred bilinear 3:2 upscale; quarter integrates each 4x4 full-output footprint before R11 conversion",
+  "shader_body_preservation": [
+    {
+      "index": 5,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 6,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 7,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 8,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 9,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 10,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 11,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 12,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 13,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 14,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 15,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 16,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 17,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 18,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 19,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 20,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 21,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 22,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 23,
+      "qualified_body_preserved": true
+    },
+    {
+      "index": 24,
+      "qualified_body_preserved": true
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-05",
+  "title": "PPSA07631",
+  "version": "01.000.000",
+  "console": "regular PS5 FW 11.60",
+  "candidate_sha256": "6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11",
+  "asset_sha256": "1be3a14f7f25ea298929b485ad0cdf5e17441cd5ea94cb85f22a4f8500c9eb8e",
+  "reconstruction": [
+    2560,
+    1440
+  ],
+  "presentation": [
+    3840,
+    2160
+  ],
+  "shadow_quality": 5,
+  "volumetric_fog": 1,
+  "stock_drs_min_percent": 41.666,
+  "stock_drs_max_percent": 60,
+  "frame_budget_ms": 16.67,
+  "gameplay_display_counter": {
+    "valid_samples": 90,
+    "total_samples": 90,
+    "mean_fps": 59.93333333333333,
+    "min_fps": 59.0,
+    "max_fps": 60.0
+  },
+  "post_install_display_counter": {
+    "valid_samples": 60,
+    "total_samples": 60,
+    "mean_fps": 59.916666666666664,
+    "min_fps": 59.0,
+    "max_fps": 60.0
+  },
+  "controller_off_mounted_sha256": "18a27d890ff5089ac8b0bc4e8d057b32a46271f5a3f1958c193e7e4aa3924cb3",
+  "controller_on_mounted_sha256": "6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11",
+  "post_install_trace": {
+    "intervals": 1661,
+    "mean_ms": 16.695023566509946,
+    "p99_ms": 17.645632007498904,
+    "max_ms": 18.12550556031904,
+    "tsr_calls": 0,
+    "withheld": 0,
+    "tick_gaps": 0
+  },
+  "limits": "Tested room, camera, walking and ledge-return sequence; normal close. Not all scenes, full death/respawn, HDMI or temporal image-quality qualification.",
+  "reproducible": {
+    "hook_sha256": "5cd54c7a72d8a93b08db9670f649b535eeb9533f6177a1a23a29da475e1620b2",
+    "app_sha256": "bf874cddfee0fc71d8cf8e89ced003e891f705d38abc5740151dc9c74095a80c",
+    "launch_sha256": "925184fee2a3f3daa53a1512f8213f35e4ac694085c583ca5d6e3cfebf9eb3c9"
+  }
+}

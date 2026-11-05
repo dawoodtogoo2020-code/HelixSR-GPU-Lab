@@ -26,7 +26,7 @@ typedef struct {
     const char *basis;
 } gl_measured;
 static const gl_measured measured[]={
-    {"PPSA07631","01.000.000","Unreal TSR","Unreal Engine",3840,2160,1536,864,1,"4K output; ~60 FPS in tests; shadows and volumetric fog off"},
+    {"PPSA07631","01.000.000","Unreal TSR","Unreal Engine",3840,2160,1600,900,1,"4K output; tested ~60 FPS; shadows and volumetric fog on"},
     {"PPSA02572","01.200.007","FSR 2","Northlight",2560,1440,1505,847,1,"AW2 t12: Performance 1505x847 to 2560x1440; Quality uses FSR 2"},
     {"PPSA34547","01.300.300","FSR 2","Northlight",2560,1440,1506,848,1,"Measured in-game: FSR 2 Balanced, 1505x847 to 2560x1440"},
     {"CUSA08809","01.00","Game upscale","Bluepoint",3840,2160,2560,1440,1,"Measured on PS5 Pro: native 2560x1440, game upscale to 4K"}};

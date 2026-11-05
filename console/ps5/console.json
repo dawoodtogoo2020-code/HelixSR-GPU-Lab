@@ -1,25 +1,25 @@
 {
  "model": "ps5",
  "name": "PS5 (regular)",
- "gpulab": "SAROS v27: native PS5 controller ON/OFF, launch, stock restoration and 4K nominal-60 gameplay verified; prior other-game scope unchanged",
+ "gpulab": "SAROS effects-on v6: controller ON/OFF launch, mounted identity and nominal-60 gameplay verified on regular PS5 FW 11.60; other-game scope unchanged",
  "files": [
   {
    "remote": "/data/homebrew/PPSA99272/eboot.bin",
    "bundle": "console/ps5/PPSA99272/eboot.bin",
-   "sha256": "36bb48d73d5fb2d88b6193fd58635d608e281fd4b854b5cbf6a28904e49d9d61",
+   "sha256": "bf874cddfee0fc71d8cf8e89ced003e891f705d38abc5740151dc9c74095a80c",
    "accept": [
     [
-     1443957,
-     "36bb48d73d5fb2d88b6193fd58635d608e281fd4b854b5cbf6a28904e49d9d61"
+     1443893,
+     "bf874cddfee0fc71d8cf8e89ced003e891f705d38abc5740151dc9c74095a80c"
     ],
     [
-     1721208,
-     "a6a176503abeb2692374a235d301a8997952f181d258cdeb99635cda457eae10"
+     1721184,
+     "145aa57a0e7f64af8eea6e329b8ab0483a7dd218fa8e2f06139d0e412118fd09"
     ]
    ],
    "normalized_elf": {
-    "bytes": 1721208,
-    "sha256": "e373a1d9ca43b136f7cece8d6590fb12bf9da39155620684b592a427eade5cfc",
+    "bytes": 1721184,
+    "sha256": "2da57b452b3b34cd2ef17ff06e763f7c9e9f60d4ea922e52552fd7b0bd9fda56",
     "zero_ranges": [
      [
       40,
@@ -88,11 +88,11 @@
   {
    "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-launch.elf",
    "bundle": "console/ps5/payloads/helixsr-launch.elf",
-   "sha256": "3b462f3124ba2a84d5a4541051acb5ec447d908cfffdf2f9bd2de758fe34f297",
+   "sha256": "925184fee2a3f3daa53a1512f8213f35e4ac694085c583ca5d6e3cfebf9eb3c9",
    "accept": [
     [
      143208,
-     "3b462f3124ba2a84d5a4541051acb5ec447d908cfffdf2f9bd2de758fe34f297"
+     "925184fee2a3f3daa53a1512f8213f35e4ac694085c583ca5d6e3cfebf9eb3c9"
     ]
    ]
   },

@@ -6,11 +6,11 @@
 
 [Join Blackheart 909 Gaming on Discord](https://discord.gg/k4UWq8DqK) · [Support my work on Ko-fi](https://ko-fi.com/blackheart909)
 
-> **Public beta (v0.3.0-saros-beta).** The HelixSR builds it installs ran on the developer's own regular PS5 and PS5 Pro. SAROS v27 and its GPU Lab controls were tested on a regular PS5, firmware 11.60. Other consoles and areas remain untested. Everything it does is checked and can be undone with `uninstall`. Please [report your results](docs/install-ps5.md#help).
+> **Public beta (v0.3.1-saros-effects-beta).** The HelixSR builds it installs ran on the developer's own regular PS5 and PS5 Pro. SAROS effects-on gameplay was tested on a regular PS5, firmware 11.60. Other consoles and areas remain untested. Everything it does is checked and can be undone with `uninstall`. Please [report your results](docs/install-ps5.md#help).
 
 ## Install in three steps
 
-1. **Download** `HelixSR-GPU-Lab-v0.3.0-saros-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it on your PC.
+1. **Download** `HelixSR-GPU-Lab-v0.3.1-saros-effects-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it on your PC.
 2. **Run** `install.bat` (Windows: double-click) or `sh install.sh` (Mac / Linux).
 3. **Answer its questions:**
    - your PS5's IP address
@@ -26,7 +26,7 @@ Then open **HelixSR GPU Lab** on the PS5. **Cross** switches HelixSR on or off, 
 
 | Game | Version | Console | HelixSR |
 | --- | --- | --- | --- |
-| SAROS (PPSA07631) | 01.000.000 | regular PS5 | 1536×864 dynamic input → 4K; nominal 60 FPS in tested gameplay, with shadows and volumetric fog off ([details](docs/saros.md)) |
+| SAROS (PPSA07631) | 01.000.000 | regular PS5 | Stock dynamic input → 1440p reconstruction → 4K; measured 59.93 FPS, shadows and volumetric fog on ([details](docs/saros.md)) |
 | CONTROL Resonant (PPSA34547) | 01.300.300 | regular PS5 | Performance 1505×847 → 1440p (60 FPS target) · Quality 2258×1270 → 4K (30 FPS) |
 | Alan Wake 2 (PPSA02572) | 01.200.007 | regular PS5 | Performance 1505×847 → 1440p, 60 FPS (mean 59.95, minimum 59) |
 | SHADOW OF THE COLOSSUS (CUSA08809) | 01.00 | PS5 Pro | Cinematic 1440p → 4K, about 38 FPS |
@@ -41,7 +41,7 @@ All the details are in the [install guide](docs/install-ps5.md): what each quest
 - **Everything can be undone.** Each change on the PS5 is journalled on your PC. Anything replaced is backed up first, and `uninstall` restores it.
 
 On the PS5, HelixSR replaces the game's own upscaler:
-- **SAROS:** full Model E replaces TSR on supported frames, with stock fallback and a history reset on re-entry.
+- **SAROS:** Model E reconstructs at 1440p and scales to 4K, with shadows and fog on, stock dynamic input, and no TSR fallback.
 - **CONTROL and Alan Wake 2:** it replaces FSR2, inside the game's own render graph.
 - **SHADOW OF THE COLOSSUS** (a PS4 title on the Pro): it hooks the game's GNM graphics driver.
 
