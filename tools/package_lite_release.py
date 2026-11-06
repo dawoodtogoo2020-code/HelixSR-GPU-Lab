@@ -9,7 +9,7 @@ import subprocess
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'HelixSR-GPU-Lab-v0.3.3-lite-a53-beta'
+NAME = 'HelixSR-GPU-Lab-v0.3.4-lite-a53-beta'
 BASE_NAME = 'HelixSR-GPU-Lab-v0.3.1-saros-effects-beta'
 BASE_SHA = 'c4544ab7cf1f53327f655caed092b2ec9fae722d376b4370fd4e8f57c5d74941'
 SOURCE_SHA = '1f5545a91b9a2629b8265fb9c8c7e5e7538e5203a981f4f4d96bb1441f536470'

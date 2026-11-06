@@ -34,7 +34,7 @@ ROOT = HERE.parent
 GAMES = ROOT / 'games'
 CONSOLES = ROOT / 'console'
 HOME = ROOT / 'my-ps5'
-VERSION = '0.3.3-lite-a53-beta'
+VERSION = '0.3.4-lite-a53-beta'
 CONSOLE = Console   # tests swap in a simulated PS5
 APP0 = tuple('/mnt/sandbox/{title}_%03d/app0' % slot for slot in range(10)) + (
     '/mnt/sandbox/pfsmnt/{title}-app0',)
@@ -724,6 +724,34 @@ def adopt(c, journal, chosen, b, ui):
     return 0
 
 
+def prepare_startup_payload(c, journal, ui, model, firmware=None):
+    if model != 'ps5':
+        return None
+    firmware = firmware or journal.data.get('firmware') or ui.ask(
+        'PS5 firmware version (e.g. 11.60; Enter skips the Lite startup payload):')
+    firmware = str(firmware).strip()
+    if firmware:
+        parts = firmware.split('.')
+        need(len(parts) == 2 and 1 <= len(parts[0]) <= 2 and len(parts[1]) == 2 and
+             all(p.isascii() and p.isdigit() for p in parts),
+             'Enter the short firmware version, such as 11.60 (use --firmware 11.60 for scripts).')
+        journal.data['firmware'] = firmware
+        journal.save()
+    if firmware != '11.60':
+        say('  Lite + A53 startup payload skipped: it is qualified for regular PS5 firmware 11.60 only.')
+        return None
+    from lite1160 import setup as lite_setup
+    prepared = lite_setup.prepare(c, ui)
+    lite_setup.preflight(c, journal, sys.modules[__name__], prepared)
+    return prepared
+
+
+def install_startup_payload(c, journal, ui, prepared):
+    if prepared is not None:
+        from lite1160 import setup as lite_setup
+        lite_setup.install(c, journal, ui, sys.modules[__name__], prepared=prepared)
+
+
 def install(args, ui):
     say(f'HelixSR GPU Lab {VERSION} installer\n')
     host = connect(args, ui)
@@ -747,8 +775,12 @@ def install(args, ui):
             say('\nNo supported game is installed on this PS5, so nothing was changed. Supported games and versions are '
                 'listed in docs/install-ps5.md.')
             return 1
+        startup = prepare_startup_payload(c, journal, ui, model, args.firmware)
         if args.adopt:
-            return adopt(c, journal, chosen, b, ui)
+            result = adopt(c, journal, chosen, b, ui)
+            if result == 0:
+                install_startup_payload(c, journal, ui, startup)
+            return result
         weights = ensure_weights(ui, args.dlss)
         built = {}
         for g in chosen:
@@ -790,9 +822,14 @@ def install(args, ui):
                 put(target, journal, remote, data, accept, kind)
             journal.data['games'][g['id']] = dict(state='installed', utc=now())
             journal.save()
+        install_startup_payload(c, journal, ui, startup)
         say('\nDone. On your PS5:')
-        say('  1. Open HelixSR GPU Lab from the home screen (if it is not there yet, restart the PS5 and run your '
-            'jailbreak and ShadowMount+ again).')
+        if startup is not None:
+            say('  1. Restart normally, run your jailbreak, load ShadowMount+, then load '
+                'Kstuff-Lite-v1.11-A53-11.60.elf once from Local. Open HelixSR GPU Lab.')
+        else:
+            say('  1. Open HelixSR GPU Lab from the home screen (if it is not there yet, restart the PS5 and run your '
+                'jailbreak and ShadowMount+ again).')
         for g in chosen:
             say(f"  - {g['name']}: {g['howto']}")
         say(f'\nTo remove everything again: run uninstall. Your journal: {journal.path}')
@@ -979,6 +1016,7 @@ def main(argv=None, ui=None):
             p.add_argument('--test5', help='developer rebuild: exact Test5 reference ELF on this PC')
             p.add_argument('--lite', help='developer rebuild: original Lite v1.11 ELF on this PC')
         if name == 'install':
+            p.add_argument('--firmware', help='PS5 firmware, e.g. 11.60; includes bundled Lite + A53 on regular PS5 11.60')
             p.add_argument('--adopt', action='store_true', help='upgrade app and metadata using already installed verified game files')
             p.add_argument('--dlss', help="your own copy of NVIDIA's nvngx_dlss.dll (DLSS 310.7.0) instead of the download")
             p.add_argument('--game', action='append', help='only this game (control-r18, aw2-t12, saros-native-v1, sotc-live3)')

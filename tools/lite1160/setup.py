@@ -61,10 +61,8 @@ def acquire(c, ui, explicit, size, digest, label):
     return read_local(path, size, digest, label)
 
 
-def install(c, journal, ui, helpers, test5=None, lite=None):
-    c.gate()
-    print('Installing K-Stuff Lite + A53 for firmware 11.60.\n'
-          'This installs a new Local entry. Existing payloads and autoload settings are preserved.', flush=True)
+def prepare(c, ui, test5=None, lite=None):
+    """Verify/build locally before the main installer changes console files."""
     rebuilding = bool(test5 or lite)
     if rebuilding:
         reference = acquire(c, ui, test5, REFERENCE_BYTES, REFERENCE_SHA256, 'Test5 A53 reference')
@@ -81,16 +79,12 @@ def install(c, journal, ui, helpers, test5=None, lite=None):
                    'separate_bridge_required': False}
         print('  Verified bundled payload. No Test5 file or build is needed.', flush=True)
     need(integrate.sha(payload) == OUTPUT_SHA256, 'The integrated output did not match the qualified build.')
-    local = journal.dir / 'lite1160'
-    local.mkdir(parents=True, exist_ok=True)
-    if rebuilding:
-        output = local / FILENAME
-        if output.exists():
-            need(output.is_file() and integrate.sha(output.read_bytes()) == OUTPUT_SHA256,
-                 'A different file occupies the local output path; move it before trying again.')
-        else:
-            output.write_bytes(payload)
-        need(integrate.sha(output.read_bytes()) == OUTPUT_SHA256, 'Local output verification failed.')
+    return payload, receipt, rebuilding
+
+
+def preflight(c, journal, helpers, prepared):
+    payload, _, _ = prepared
+    need(integrate.sha(payload) == OUTPUT_SHA256, 'The prepared payload did not match the qualified build.')
     journal.data.setdefault('lite_setup_utc', helpers.now())
     journal.save()
     meta = {
@@ -104,6 +98,27 @@ def install(c, journal, ui, helpers, test5=None, lite=None):
     for name, data in files:
         helpers.preflight_put(c, PAYLOAD_ROOT + '/' + SLOT + '/' + name,
                               data, [(len(data), integrate.sha(data))])
+    return files
+
+
+def install(c, journal, ui, helpers, test5=None, lite=None, prepared=None):
+    c.gate()
+    print('Installing K-Stuff Lite + A53 for firmware 11.60.\n'
+          'This installs a new Local entry. Existing payloads and autoload settings are preserved.', flush=True)
+    prepared = prepared if prepared is not None else prepare(c, ui, test5, lite)
+    payload, receipt, rebuilding = prepared
+    receipt = dict(receipt)
+    files = preflight(c, journal, helpers, prepared)
+    local = journal.dir / 'lite1160'
+    local.mkdir(parents=True, exist_ok=True)
+    if rebuilding:
+        output = local / FILENAME
+        if output.exists():
+            need(output.is_file() and integrate.sha(output.read_bytes()) == OUTPUT_SHA256,
+                 'A different file occupies the local output path; move it before trying again.')
+        else:
+            output.write_bytes(payload)
+        need(integrate.sha(output.read_bytes()) == OUTPUT_SHA256, 'Local output verification failed.')
     for name, data in files:
         helpers.put(c, journal, PAYLOAD_ROOT + '/' + SLOT + '/' + name,
                     data, [(len(data), integrate.sha(data))])

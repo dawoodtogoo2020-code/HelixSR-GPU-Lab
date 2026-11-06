@@ -12,8 +12,9 @@ import struct
 import sys
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stdout, contextmanager
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / 'tools'), str(ROOT / 'tests')]
@@ -127,6 +128,74 @@ class GpuLabTest(unittest.TestCase):
         with redirect_stdout(out):
             rc = gpulab.main(list(argv) + ['--ps5', '10.0.0.9'], ui=user)
         return rc, out.getvalue(), user
+
+    @contextmanager
+    def bundled_lite(self):
+        from lite1160 import setup
+        payload = b'tested combined payload fixture'
+        path = self.release.root / 'payloads/lite1160' / setup.FILENAME
+        path.parent.mkdir(parents=True)
+        path.write_bytes(payload)
+        with patch.object(setup, 'BUNDLED_FILE', path), \
+             patch.object(setup, 'OUTPUT_BYTES', len(payload)), \
+             patch.object(setup, 'OUTPUT_SHA256', sha(payload)):
+            yield setup, path, payload
+
+    def test_main_install_includes_lite_and_reuses_firmware_on_repeat(self):
+        before = self.ps5.snapshot()
+        with self.bundled_lite() as (setup, _, payload):
+            with patch.object(User, 'ask', return_value='11.60') as ask:
+                rc, out, _ = self.run_cli('install', '--model', 'ps5')
+            self.assertEqual(rc, 0, out)
+            ask.assert_called_once()
+            target = setup.PAYLOAD_ROOT + '/' + setup.SLOT + '/' + setup.FILENAME
+            self.assertEqual(self.ps5.files[target], payload)
+            self.assertIn('load Kstuff-Lite-v1.11-A53-11.60.elf once', out)
+            writes = self.ps5.writes
+            with patch.object(User, 'ask', side_effect=AssertionError('firmware already saved')):
+                self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
+            self.assertEqual(self.ps5.writes, writes)
+            self.assertEqual(self.run_cli('uninstall')[0], 0)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_main_install_refuses_corrupt_lite_before_building_or_writing(self):
+        before = self.ps5.snapshot()
+        with self.bundled_lite() as (_, path, payload), \
+             patch.object(gpulab, 'ensure_weights', side_effect=AssertionError('must preflight first')):
+            path.write_bytes(b'X' * len(payload))
+            rc, out, _ = self.run_cli('install', '--model', 'ps5', '--firmware', '11.60')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_main_install_preflights_lite_destination_before_app_write(self):
+        with self.bundled_lite() as (setup, _, _):
+            target = setup.PAYLOAD_ROOT + '/' + setup.SLOT + '/' + setup.FILENAME
+            self.ps5.add_dir(target)
+            before = self.ps5.snapshot()
+            rc, out, _ = self.run_cli('install', '--model', 'ps5', '--firmware', '11.60')
+        self.assertEqual(rc, 2, out)
+        self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_other_firmware_and_pro_do_not_prepare_1160_payload(self):
+        from lite1160 import setup
+        with patch.object(setup, 'prepare', side_effect=AssertionError('unsupported console')):
+            rc, out, _ = self.run_cli('install', '--model', 'ps5', '--firmware', '13.60')
+            self.assertEqual(rc, 0, out)
+            with patch.object(User, 'ask', side_effect=AssertionError('Pro needs no Lite question')):
+                self.assertIsNone(gpulab.prepare_startup_payload(
+                    self.ps5, gpulab.Journal('10.0.0.9'), User(self.ps5), 'ps5-pro', '11.60'))
+
+    def test_main_adopt_also_installs_lite_without_rebuilding_games(self):
+        g, _ = self.existing_aw2_for_adoption()
+        before = self.ps5.snapshot()
+        self.ps5.app0.clear()
+        with self.bundled_lite() as (setup, _, payload), \
+             patch.object(gpulab, 'ensure_weights', side_effect=AssertionError('adoption must not rebuild')):
+            rc, out, _ = self.run_cli('install', '--model', 'ps5', '--firmware', '11.60', '--adopt')
+            self.assertEqual(rc, 0, out)
+            self.assertEqual(self.ps5.files[setup.PAYLOAD_ROOT + '/' + setup.SLOT + '/' + setup.FILENAME], payload)
+            self.assertEqual(self.run_cli('uninstall')[0], 0)
+        self.assertEqual(self.ps5.snapshot(), before)
 
     def test_install_switch_uninstall_restores_console(self):
         before = self.ps5.snapshot()

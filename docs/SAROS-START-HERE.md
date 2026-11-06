@@ -1,10 +1,10 @@
 # SAROS startup on the tested PS5 11.60 setup
 
-Updated 6 November 2026 for v0.3.3-lite-a53-beta. The SAROS game and app binaries remain the v0.3.1 effects-on build.
+Updated 6 November 2026 for v0.3.4-lite-a53-beta. The SAROS game and app binaries remain the v0.3.1 effects-on build.
 
 ## One-time Lite setup on firmware 11.60
 
-Run **setup-kstuff-lite.bat** on Windows, or **sh setup-kstuff-lite.sh** on Mac/Linux, from the extracted download. Enter the PS5 IP with Payload Manager and ftpsrv running and games closed. The release ZIP includes the tested combined payload. Setup verifies its hash and installs it as one Local entry; users do not need Test5, a separate Lite file or a build step. See [the setup guide](lite-1160-integrated.md) for the manual-copy alternative.
+Run **install.bat** on Windows, or **sh install.sh** on Mac/Linux, from the full release download. Choose regular PS5 and enter firmware **11.60**. This single run installs GPU Lab, the supported game integration and the bundled combined Lite + A53 payload. No second installer, Test5 download or build is needed. The `--adopt` upgrade path includes it too; scripted installs can use `--firmware 11.60`. If GPU Lab is already installed and you only want the payload, `setup-kstuff-lite.*` remains available. [Setup details](lite-1160-integrated.md).
 
 ## After every full restart — integrated Lite recipe
 
@@ -29,7 +29,7 @@ If SAROS still fails at the launch card, record the error and collect `/data/hel
 
 ## Exact tested scope and payloads
 
-Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.1-saros-effects-beta** game binaries, with **v0.3.3-lite-a53-beta** host setup. These instructions are not a compatibility claim for other firmware or payload revisions.
+Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.1-saros-effects-beta** game binaries, with **v0.3.4-lite-a53-beta** host setup. These instructions are not a compatibility claim for other firmware or payload revisions.
 
 | Payload | SHA-256 |
 | --- | --- |
