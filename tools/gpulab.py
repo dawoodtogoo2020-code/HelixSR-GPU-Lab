@@ -34,7 +34,7 @@ ROOT = HERE.parent
 GAMES = ROOT / 'games'
 CONSOLES = ROOT / 'console'
 HOME = ROOT / 'my-ps5'
-VERSION = '0.3.2-lite-a53-beta'
+VERSION = '0.3.3-lite-a53-beta'
 CONSOLE = Console   # tests swap in a simulated PS5
 APP0 = tuple('/mnt/sandbox/{title}_%03d/app0' % slot for slot in range(10)) + (
     '/mnt/sandbox/pfsmnt/{title}-app0',)
@@ -976,8 +976,8 @@ def main(argv=None, ui=None):
         if name in ('on', 'off'):
             p.add_argument('target_game', metavar='GAME', help='control-r18, aw2-t12, saros-native-v1 or sotc-live3')
         if name == 'setup-lite':
-            p.add_argument('--test5', help='exact Test5 reference ELF on this PC, if absent from Payload Manager')
-            p.add_argument('--lite', help='original Lite v1.11 ELF on this PC, if absent from Payload Manager')
+            p.add_argument('--test5', help='developer rebuild: exact Test5 reference ELF on this PC')
+            p.add_argument('--lite', help='developer rebuild: original Lite v1.11 ELF on this PC')
         if name == 'install':
             p.add_argument('--adopt', action='store_true', help='upgrade app and metadata using already installed verified game files')
             p.add_argument('--dlss', help="your own copy of NVIDIA's nvngx_dlss.dll (DLSS 310.7.0) instead of the download")

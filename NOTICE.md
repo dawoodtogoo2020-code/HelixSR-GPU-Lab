@@ -8,6 +8,7 @@
 | GPU Lab app (`PPSA99272`), launch/inventory payloads, SHADOW OF THE COLOSSUS GNM hook | release zip | Built with [PS5_Vulkan](https://github.com/mihawk-99/PS5_Vulkan) and the [PS5 payload SDK](https://github.com/ps5-payload-dev/sdk) (GPL-3.0). The corresponding source is the `-source.zip` attached to the same release, under GPL-3.0-or-later. |
 | `sce_module/libc.prx` | release zip | PS5_Vulkan's generated clean-room runtime module (GPL-3.0-or-later). Its source and rebuild instructions are in PS5_Vulkan. |
 | Mesa RADV / ACO | inside the GPU Lab app and the shader builds | MIT. See [Mesa](https://docs.mesa3d.org/license.html). |
+| Combined Lite v1.11 + A53 helper | `payloads/lite1160/` in the full release ZIP; standalone ELF asset | GPU Lab's binary integration of EchoStretch's K-Stuff Lite, Drakmor's Test5 A53 initializer and the PS5 payload SDK. [Exact provenance and modifications](docs/lite-1160-integrated.md), [PPR project](https://github.com/drakmor/ppr-patch), [Lite project](https://github.com/EchoStretch/kstuff-lite), [GPL-3.0 text](payloads/lite1160/GPL-3.0.txt). The included integration scripts are not the source implementation of the retained A53 binary. |
 | Python (Windows, only when you have none) | downloaded by `tools/get_python.ps1` from python.org | [PSF License](https://docs.python.org/3/license.html) |
 
 Original tools and documentation in this repository are MIT licensed ([LICENSE](LICENSE)). The MIT license does not cover the components above.

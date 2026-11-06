@@ -8,6 +8,7 @@
 | HXD1 patches (`games/*/patches`, release zip) | HelixSR's changes to each game file. They hold HelixSR kernels, plans, math tables and our own code, plus copy instructions into your own game files. The NVIDIA network range ships as zeros. |
 | `tools/helixsr_model_tables.py` | Tables from Lone Wolf's HelixSR 1.8.1: where each network tensor sits in NVIDIA's DLL, and the layout the kernels read. Distributed with the author's permission. It holds no NVIDIA data. |
 | GPU Lab app, launch/inventory payloads, SHADOW OF THE COLOSSUS GNM hook (release zip) | Built from this project's sources with PS5_Vulkan, the PS5 payload SDK and Mesa. GPL-3.0 source zip attached to the release. |
+| Combined Lite v1.11 + A53 (full release ZIP and standalone ELF) | Exact hardware-tested binary integration of Lite and the Test5 A53 initializer; input/output identities and modifications are in [the integration guide](lite-1160-integrated.md). The integration scripts are published; the retained A53 binary implementation is not rebuilt from source, and the full Test5 reference is not bundled. |
 | `libc.prx` (release zip) | PS5_Vulkan's generated clean-room runtime module (GPL-3.0-or-later) |
 
 HelixSR's PS5 ports (the kernels compiled for the PS5 and PS4 GPUs, the plans and the integrations) are distributed with **Lone Wolf's permission**. Upstream: [lonewolf0622/HelixSR](https://github.com/lonewolf0622/HelixSR).

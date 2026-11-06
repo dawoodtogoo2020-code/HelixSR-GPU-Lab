@@ -1,10 +1,10 @@
 # SAROS startup on the tested PS5 11.60 setup
 
-Updated 6 November 2026 for v0.3.2-lite-a53-beta. The SAROS game and app binaries remain the v0.3.1 effects-on build.
+Updated 6 November 2026 for v0.3.3-lite-a53-beta. The SAROS game and app binaries remain the v0.3.1 effects-on build.
 
 ## One-time Lite setup on firmware 11.60
 
-Run **setup-kstuff-lite.bat** on Windows, or **sh setup-kstuff-lite.sh** on Mac/Linux, from the extracted download. Enter the PS5 IP with Payload Manager and ftpsrv running and games closed. It finds the exact original Lite v1.11 and Test5 A53 reference on the console, or asks for the original files, then builds and verifies one combined Local entry. See [the setup guide](lite-1160-integrated.md) for input hashes and missing-file help.
+Run **setup-kstuff-lite.bat** on Windows, or **sh setup-kstuff-lite.sh** on Mac/Linux, from the extracted download. Enter the PS5 IP with Payload Manager and ftpsrv running and games closed. The release ZIP includes the tested combined payload. Setup verifies its hash and installs it as one Local entry; users do not need Test5, a separate Lite file or a build step. See [the setup guide](lite-1160-integrated.md) for the manual-copy alternative.
 
 ## After every full restart — integrated Lite recipe
 
@@ -29,7 +29,7 @@ If SAROS still fails at the launch card, record the error and collect `/data/hel
 
 ## Exact tested scope and payloads
 
-Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.1-saros-effects-beta** game binaries, with **v0.3.2-lite-a53-beta** host setup. These instructions are not a compatibility claim for other firmware or payload revisions.
+Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.1-saros-effects-beta** game binaries, with **v0.3.3-lite-a53-beta** host setup. These instructions are not a compatibility claim for other firmware or payload revisions.
 
 | Payload | SHA-256 |
 | --- | --- |
@@ -37,7 +37,7 @@ Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.
 | `Kstuff-Lite-v1.11-A53-11.60.elf` | `d02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7` |
 | Full Test5 alternative: `FPKG-11.60-Kstuff-test5.elf` | `829b45fe871dd64fbd53874ae4558076c2f1e1f203fe1ab52db5510d5fc45923` |
 
-The local K-Stuff metadata identifies the tested file as a mirrored **Drakmor 1.13-fpkg-dr-test5** build. Payload names alone are insufficient: verify the SHA-256. These third-party payloads are not included in the HelixSR archive. If the matching build is not already available in your setup, obtain it from its maintainer and verify its identity before following this procedure; a generic K-Stuff download is not a verified replacement.
+The local K-Stuff metadata identifies the tested file as a mirrored **Drakmor 1.13-fpkg-dr-test5** build. Payload names alone are insufficient: verify the SHA-256. The combined Lite + A53 payload is included in the full v0.3.3 release ZIP. ShadowMount and the full Test5 alternative are not included. Only users choosing the full Test5 alternative need to obtain that matching build from its maintainer; it is not needed for the integrated Lite recipe.
 
 ## What was checked
 

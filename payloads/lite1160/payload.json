@@ -1,0 +1,23 @@
+{
+  "format": 1,
+  "firmware": "11.60 only",
+  "lite_sha256": "ab9a6cb4d3b1daf139d4d646e402b1cf569071acd64599c936d7a3a6164dc779",
+  "a53_reference_sha256": "829b45fe871dd64fbd53874ae4558076c2f1e1f203fe1ab52db5510d5fc45923",
+  "output_sha256": "d02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7",
+  "output_bytes": 3592568,
+  "a53_file_offset": 1753088,
+  "a53_virtual_offset": 2097152,
+  "a53_loader_relative_relocations": 1475,
+  "lite_original_main_preserved": true,
+  "embedded_test5_kernel_erased": true,
+  "kernel_payloads": 1,
+  "processes": 1,
+  "separate_bridge_required": false,
+  "hardware_qualification": "2026-11-06: regular PS5 FW11.60, SAROS PPSA07631 01.000.000 gameplay, relaunch and two normal closes",
+  "filename": "Kstuff-Lite-v1.11-A53-11.60.elf",
+  "bytes": 3592568,
+  "sha256": "d02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7",
+  "bundled_in": "full release ZIP and standalone ELF asset",
+  "integration_source": "tools/lite1160/integrate.py",
+  "a53_implementation": "retained binary initializer from exact Test5 reference; not rebuilt from source"
+}

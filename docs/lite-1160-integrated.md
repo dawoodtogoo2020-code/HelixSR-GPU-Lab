@@ -1,35 +1,37 @@
-# One-load K-Stuff Lite + A53 setup for firmware 11.60
+# One-load K-Stuff Lite + A53 for firmware 11.60
 
-GPU Lab can build and install one combined **Kstuff-Lite-v1.11-A53-11.60.elf**. Its A53 initialization and original Lite kernel run in one process from one Payload Manager entry. The separate bridge is no longer part of this recipe. This is a GPU Lab integration of exact existing inputs, not an official upstream Lite release.
+The GPU Lab release ZIP includes the tested **Kstuff-Lite-v1.11-A53-11.60.elf**. Its A53 initialization and original Lite kernel run in one process from one Payload Manager entry. **Users do not need Test5, a separate Lite download or a local build.** This is a GPU Lab integration, not an official upstream Lite release.
 
 ## Set it up once
 
-1. Download and unzip **HelixSR-GPU-Lab-v0.3.2-lite-a53-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). Keep the extracted folder intact.
+1. Download and unzip **HelixSR-GPU-Lab-v0.3.3-lite-a53-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). Keep the extracted folder intact.
 2. On the PS5, close games and run the usual jailbreak, Payload Manager and ftpsrv. Setup only copies files; it does not inject a kernel payload.
 3. Double-click **setup-kstuff-lite.bat** on Windows, or run **sh setup-kstuff-lite.sh** on Mac/Linux. Enter the PS5's IP address.
-4. Setup finds the matching original Lite and Test5 A53 reference in Payload Manager. If a file is absent, it asks you to drag the original ELF into the terminal or paste its full path. It checks complete hashes automatically and stops on different builds.
-5. After **Installed and verified**, restart normally. Run the usual jailbreak, load **ShadowMount**, then select **Kstuff-Lite-v1.11-A53-11.60.elf** in Payload Manager's Local list **once**. Open GPU Lab and launch SAROS normally.
+4. Setup checks the bundled ELF's complete hash, installs it in Payload Manager's Local list and verifies the transfer. It asks for no reference files and performs no build.
+5. After **Installed and verified**, restart normally. Run the usual jailbreak, load **ShadowMount**, then select **Kstuff-Lite-v1.11-A53-11.60.elf** in **Local once**. Open GPU Lab and launch SAROS normally.
 
-Use the combined entry instead of plain Lite, full Test5 and the earlier A53 bridge. Do not add it to an already configured K-Stuff boot. Setup preserves existing payloads, favorites and autoload settings. It journals its own file changes, and GPU Lab's normal `uninstall` removes them or restores anything it replaced.
+Use this combined entry instead of plain Lite, full Test5 and the earlier A53 bridge. Disable any other K-Stuff autoload entry before using this boot recipe. Do not add it to an already configured K-Stuff boot. Setup preserves existing payloads, favorites and autoload settings. It journals its own file changes, and GPU Lab's normal `uninstall` removes them or restores anything it replaced. Setup stores a receipt in `my-ps5/<console>/lite1160/` and reuses the bundled ELF without making another PC copy.
 
-Windows uses GPU Lab's existing Python launcher, including its pinned official Python download when needed. Mac/Linux require Python 3.10+. The setup and binary integration use only Python's standard library; users do not need an SDK, compiler or Unicorn.
+Windows uses GPU Lab's existing Python launcher, including its pinned official Python download when needed. Mac/Linux require Python 3.10+. No SDK, compiler or Unicorn is needed.
 
-Optional command-line inputs:
+## Manual installation alternative
+
+The ELF is at **payloads/lite1160/Kstuff-Lite-v1.11-A53-11.60.elf** inside the full ZIP and is also a standalone release asset. Import it into Payload Manager as a Local payload using your usual method, then follow step 5 from a fresh restart. The standalone ELF is identical to the bundled and hardware-tested file. The `-source.zip` is for developers; use the full ZIP for guided installation.
+
+## Developer rebuild inputs
+
+The optional binary linker remains available for reproducing the ELF from the exact original inputs below. Rebuilding is separate from normal setup:
 
 ```sh
 python3 tools/gpulab.py setup-lite --ps5 YOUR_PS5_IP --test5 /path/to/Test5.elf --lite /path/to/Lite-v1.11.elf
 ```
-
-If you do not already have the matching Test5 reference, obtain that exact build from its maintainer, [Drakmor](https://github.com/drakmor), before setup. The download does not bundle the reference or a prebuilt combined ELF. Setup does not substitute another similarly named version or download an unverified build.
-
-## Supported input files
 
 | Input | Bytes | SHA-256 |
 | --- | ---: | --- |
 | `FPKG-11.60-Kstuff-test5.elf` | 1,802,280 | `829b45fe871dd64fbd53874ae4558076c2f1e1f203fe1ab52db5510d5fc45923` |
 | Original `kstuff-lite_v1.11.elf` | 1,737,080 | `ab9a6cb4d3b1daf139d4d646e402b1cf569071acd64599c936d7a3a6164dc779` |
 
-The combined output is **3,592,568 bytes**, SHA-256 **`d02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7`**. Setup verifies this hash locally and after transfer. It keeps the final ELF and receipt in `my-ps5/<console>/lite1160/`, and creates the console entry `local/gpulab-kstuff-lite-a53-1160`.
+The combined output is **3,592,568 bytes**, SHA-256 **`d02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7`**. Setup verifies this hash locally and after transfer, and creates the console entry `local/gpulab-kstuff-lite-a53-1160`.
 
 ## How the integration works
 
@@ -37,7 +39,7 @@ The [binary linker](../tools/lite1160/integrate.py) preserves Lite's original ma
 
 The module is placed at a separate virtual offset. Additional ELF load segments and 1,475 loader relocations establish its private namespace; both original dynamic tables remain intact. Its runtime returns status to Lite instead of terminating the process or finalizing Lite's shared dependencies. No second ELF is injected, no child process is created, and the integration makes no Payload Manager load request. The outer Lite runtime owns process exit.
 
-This is reproducible binary integration using owner-supplied files. It does not rebuild the reference's A53 implementation from source. The integrated helper refuses firmware outside 11.60 and stops before Lite's kernel when A53 initialization fails.
+The included ELF is the exact binary integration qualified below. The linker can reproduce it from the original inputs; it does not rebuild the reference's A53 implementation from source. The Test5 reference itself is not bundled. The integrated helper refuses firmware outside 11.60 and stops before Lite's kernel when A53 initialization fails.
 
 ## Verification and limits
 

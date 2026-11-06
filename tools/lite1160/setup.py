@@ -11,6 +11,8 @@ PAYLOAD_ROOT = '/data/pldmgr/payloads'
 SLOT = 'local/gpulab-kstuff-lite-a53-1160'
 FILENAME = 'Kstuff-Lite-v1.11-A53-11.60.elf'
 OUTPUT_SHA256 = 'd02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7'
+OUTPUT_BYTES = 3592568
+BUNDLED_FILE = Path(__file__).resolve().parents[2] / 'payloads' / 'lite1160' / FILENAME
 
 
 def read_local(path, size, digest, label):
@@ -61,21 +63,34 @@ def acquire(c, ui, explicit, size, digest, label):
 
 def install(c, journal, ui, helpers, test5=None, lite=None):
     c.gate()
-    print('Building K-Stuff Lite + A53 for firmware 11.60.\n'
+    print('Installing K-Stuff Lite + A53 for firmware 11.60.\n'
           'This installs a new Local entry. Existing payloads and autoload settings are preserved.', flush=True)
-    reference = acquire(c, ui, test5, REFERENCE_BYTES, REFERENCE_SHA256, 'Test5 A53 reference')
-    original_lite = acquire(c, ui, lite, integrate.LITE_BYTES, integrate.LITE_SHA256, 'K-Stuff Lite v1.11')
-    payload, receipt = integrate.build(reference, original_lite)
+    rebuilding = bool(test5 or lite)
+    if rebuilding:
+        reference = acquire(c, ui, test5, REFERENCE_BYTES, REFERENCE_SHA256, 'Test5 A53 reference')
+        original_lite = acquire(c, ui, lite, integrate.LITE_BYTES, integrate.LITE_SHA256, 'K-Stuff Lite v1.11')
+        payload, receipt = integrate.build(reference, original_lite)
+        receipt['payload_source'] = 'explicit local rebuild'
+    else:
+        need(BUNDLED_FILE.is_file(),
+             'The bundled Lite + A53 payload is missing. Download and extract the complete GPU Lab release ZIP, '
+             'then run setup-kstuff-lite again. The source ZIP does not include console binaries.')
+        payload = read_local(BUNDLED_FILE, OUTPUT_BYTES, OUTPUT_SHA256, 'Bundled Lite + A53 payload')
+        receipt = {'format': 1, 'firmware': '11.60 only', 'output_sha256': OUTPUT_SHA256,
+                   'output_bytes': OUTPUT_BYTES, 'payload_source': 'bundled release',
+                   'separate_bridge_required': False}
+        print('  Verified bundled payload. No Test5 file or build is needed.', flush=True)
     need(integrate.sha(payload) == OUTPUT_SHA256, 'The integrated output did not match the qualified build.')
     local = journal.dir / 'lite1160'
     local.mkdir(parents=True, exist_ok=True)
-    output = local / FILENAME
-    if output.exists():
-        need(output.is_file() and integrate.sha(output.read_bytes()) == OUTPUT_SHA256,
-             'A different file occupies the local output path; move it before trying again.')
-    else:
-        output.write_bytes(payload)
-    need(integrate.sha(output.read_bytes()) == OUTPUT_SHA256, 'Local output verification failed.')
+    if rebuilding:
+        output = local / FILENAME
+        if output.exists():
+            need(output.is_file() and integrate.sha(output.read_bytes()) == OUTPUT_SHA256,
+                 'A different file occupies the local output path; move it before trying again.')
+        else:
+            output.write_bytes(payload)
+        need(integrate.sha(output.read_bytes()) == OUTPUT_SHA256, 'Local output verification failed.')
     journal.data.setdefault('lite_setup_utc', helpers.now())
     journal.save()
     meta = {

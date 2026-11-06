@@ -1,3 +1,3 @@
 #!/bin/sh
-# Build and install one Lite + A53 Local payload from your verified inputs.
+# Install the bundled Lite + A53 Local payload; no reference files or build needed.
 exec sh "$(dirname "$0")/gpulab.sh" setup-lite "$@"

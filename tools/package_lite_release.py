@@ -9,10 +9,14 @@ import subprocess
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'HelixSR-GPU-Lab-v0.3.2-lite-a53-beta'
+NAME = 'HelixSR-GPU-Lab-v0.3.3-lite-a53-beta'
 BASE_NAME = 'HelixSR-GPU-Lab-v0.3.1-saros-effects-beta'
 BASE_SHA = 'c4544ab7cf1f53327f655caed092b2ec9fae722d376b4370fd4e8f57c5d74941'
 SOURCE_SHA = '1f5545a91b9a2629b8265fb9c8c7e5e7538e5203a981f4f4d96bb1441f536470'
+PAYLOAD_NAME = 'Kstuff-Lite-v1.11-A53-11.60.elf'
+PAYLOAD_PATH = 'payloads/lite1160/' + PAYLOAD_NAME
+PAYLOAD_BYTES = 3592568
+PAYLOAD_SHA = 'd02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7'
 
 
 def sha(raw):
@@ -55,7 +59,7 @@ def write_archive(path, prefix, files):
             assert archive.read(prefix + '/' + name) == raw
 
 
-def build(base_zip, base_source_zip, output):
+def build(base_zip, base_source_zip, output, combined_elf):
     subprocess.run([__import__('sys').executable, '-B', str(ROOT / 'tools/check_public_tree.py')], check=True)
     baseline = read_archive(base_zip, BASE_SHA, BASE_NAME)
     original_source = read_archive(base_source_zip, SOURCE_SHA, BASE_NAME + '-source')
@@ -71,6 +75,12 @@ def build(base_zip, base_source_zip, output):
     runtime = dict(baseline)
     runtime.update({k: v for k, v in source.items() if k != 'baseline-native-source.zip'})
     runtime.pop('SHA256SUMS', None)
+    payload = combined_elf.read_bytes()
+    if len(payload) != PAYLOAD_BYTES or sha(payload) != PAYLOAD_SHA:
+        raise ValueError('Combined ELF is not the exact hardware-qualified payload')
+    runtime[PAYLOAD_PATH] = payload
+    manifest = json.loads(runtime['payloads/lite1160/payload.json'])
+    assert manifest['sha256'] == PAYLOAD_SHA and manifest['bytes'] == PAYLOAD_BYTES
     for folder in ('console', 'games'):
         suffix = '/console.json' if folder == 'console' else '/game.json'
         for name, raw in runtime.items():
@@ -83,7 +93,9 @@ def build(base_zip, base_source_zip, output):
     binaries = {name: sha(raw) for name, raw in baseline.items() if name.endswith(binary_suffixes)}
     for name, digest in binaries.items():
         assert sha(runtime[name]) == digest, name
-    assert not any('test5' in name.lower() or name.lower().endswith('a53-11.60.elf') for name in runtime)
+    assert not any('test5' in name.lower() for name in runtime)
+    assert [n for n in runtime if n.lower().endswith('a53-11.60.elf')] == [PAYLOAD_PATH]
+    assert PAYLOAD_PATH not in source
     assert 'setup-kstuff-lite.bat' in runtime and 'setup-kstuff-lite.sh' in runtime
     output.mkdir(parents=True, exist_ok=True)
     artifacts = {}
@@ -91,11 +103,14 @@ def build(base_zip, base_source_zip, output):
         path = output / (NAME + suffix + '.zip')
         write_archive(path, NAME + suffix, files)
         artifacts[path.name] = {'bytes': path.stat().st_size, 'sha256': sha(path.read_bytes())}
+    # Reuse the retained verified ELF for the standalone release asset.
+    artifacts[PAYLOAD_NAME] = {'bytes': len(payload), 'sha256': sha(payload)}
     (output / 'SHA256SUMS').write_text(''.join(f"{v['sha256']}  {k}\n" for k, v in artifacts.items()))
     receipt = {'release': NAME, 'base_runtime_sha256': BASE_SHA, 'base_source_sha256': SOURCE_SHA,
                'artifacts': artifacts, 'unchanged_binary_hashes': binaries,
                'source_files': len(source), 'runtime_files': len(runtime),
-               'derived_a53_or_reference_payloads_bundled': False}
+               'combined_payload_bundled': PAYLOAD_PATH,
+               'test5_reference_bundled': False}
     (output / 'release-verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(json.dumps(receipt, indent=2))
 
@@ -105,5 +120,6 @@ if __name__ == '__main__':
     parser.add_argument('--base-zip', type=Path, required=True)
     parser.add_argument('--base-source-zip', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--combined-elf', type=Path, required=True)
     args = parser.parse_args()
-    build(args.base_zip, args.base_source_zip, args.output)
+    build(args.base_zip, args.base_source_zip, args.output, args.combined_elf)

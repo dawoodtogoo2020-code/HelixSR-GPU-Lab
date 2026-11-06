@@ -54,10 +54,43 @@ class LiteSetup(unittest.TestCase):
 
     def install_fixture(self):
         payload = b'fixture-combined-elf'
-        with patch.object(setup, 'acquire', side_effect=[b'reference', b'lite']), \
-             patch.object(setup.integrate, 'build', return_value=(payload, {'hardware_qualification': 'fixture'})), \
+        bundle = Path(self.temp.name) / setup.FILENAME
+        bundle.write_bytes(payload)
+        with patch.object(setup, 'BUNDLED_FILE', bundle), \
+             patch.object(setup, 'OUTPUT_BYTES', len(payload)), \
              patch.object(setup, 'OUTPUT_SHA256', g.sha(payload)):
             return setup.install(self.c, g.Journal('console'), g.UI(True), g)
+
+    def test_bundled_install_needs_no_inputs_build_or_prompt(self):
+        with patch.object(setup, 'acquire', side_effect=AssertionError('must not search for Test5')), \
+             patch.object(setup.integrate, 'build', side_effect=AssertionError('must not build')), \
+             patch.object(g.UI, 'ask', side_effect=AssertionError('must not ask for inputs')):
+            result = self.install_fixture()
+        self.assertEqual(result['payload_source'], 'bundled release')
+        self.assertEqual(self.c.files[self.output], b'fixture-combined-elf')
+        self.assertFalse((g.Journal('console').dir / 'lite1160' / setup.FILENAME).exists())
+
+    def test_missing_or_corrupt_bundle_refuses_before_console_writes(self):
+        bundle = Path(self.temp.name) / setup.FILENAME
+        before = self.c.snapshot()
+        with patch.object(setup, 'BUNDLED_FILE', bundle), \
+             patch.object(setup, 'acquire', side_effect=AssertionError('must not request Test5')):
+            with self.assertRaises(g.Refused):
+                setup.install(self.c, g.Journal('console'), g.UI(True), g)
+            bundle.write_bytes(b'wrong ELF')
+            with self.assertRaises(g.Refused):
+                setup.install(self.c, g.Journal('console'), g.UI(True), g)
+        self.assertEqual(self.c.snapshot(), before)
+
+    def test_explicit_developer_rebuild_remains_available(self):
+        payload = b'rebuilt-fixture'
+        with patch.object(setup, 'acquire', side_effect=[b'reference', b'lite']), \
+             patch.object(setup.integrate, 'build', return_value=(payload, {})), \
+             patch.object(setup, 'OUTPUT_SHA256', g.sha(payload)):
+            result = setup.install(self.c, g.Journal('console'), g.UI(True), g,
+                                   test5='explicit-reference.elf', lite='explicit-lite.elf')
+        self.assertEqual(result['payload_source'], 'explicit local rebuild')
+        self.assertEqual((g.Journal('console').dir / 'lite1160' / setup.FILENAME).read_bytes(), payload)
 
     def uninstall(self):
         with patch.object(g, 'CONSOLE', return_value=self.c):
