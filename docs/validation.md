@@ -1,5 +1,9 @@
 # Validation record
 
+## 6 Nov 2026: discovery fixes and bounded game audit
+
+See the [6 November audit](audit-2026-11-06.md) for 81 passing host regressions, new native AW2 hair stills, unresolved rendering issues and a failed fresh-boot SAROS/Lite v1.11 comparison. The October motion-quality statements below describe their original observations and are not a blanket qualification. No game rendering binary was changed by this audit.
+
 ## 30 Oct 2026: what the v0.2.0-beta release installs
 
 | Game | Build | Lab result |

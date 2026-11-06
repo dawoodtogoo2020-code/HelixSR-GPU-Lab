@@ -36,7 +36,8 @@ CONSOLES = ROOT / 'console'
 HOME = ROOT / 'my-ps5'
 VERSION = '0.3.1-saros-effects-beta'
 CONSOLE = Console   # tests swap in a simulated PS5
-APP0 = ('/mnt/sandbox/{title}_000/app0', '/mnt/sandbox/pfsmnt/{title}-app0')
+APP0 = tuple('/mnt/sandbox/{title}_%03d/app0' % slot for slot in range(10)) + (
+    '/mnt/sandbox/pfsmnt/{title}-app0',)
 
 
 def now():
@@ -238,27 +239,48 @@ def game_version(c, g):
     raw = c.read(path, 1 << 20)
     if p['format'] == 'json':
         try:
-            return json.loads(raw).get(p['key'])
+            metadata = json.loads(raw)
+            value = metadata.get(p['key']) if isinstance(metadata, dict) else None
+            return value if isinstance(value, str) and value else 'unreadable'
         except ValueError:
             return 'unreadable'
     return sfo_value(raw, p['key']) or 'unreadable'
 
 
 def sfo_value(raw, key):
-    """A string value from a PS4 param.sfo."""
+    """A bounded UTF-8 string from a PS4 param.sfo; damaged metadata is unreadable."""
     if raw[:4] != b'\0PSF' or len(raw) < 20:
         return None
     keys, data, count = int.from_bytes(raw[8:12], 'little'), int.from_bytes(raw[12:16], 'little'), \
         int.from_bytes(raw[16:20], 'little')
+    if not (20 + 16 * count <= keys <= data <= len(raw)):
+        return None
+    result = None
     for i in range(count):
         e = 20 + 16 * i
         k_off = int.from_bytes(raw[e:e + 2], 'little')
+        fmt = int.from_bytes(raw[e + 2:e + 4], 'little')
         length = int.from_bytes(raw[e + 4:e + 8], 'little')
+        capacity = int.from_bytes(raw[e + 8:e + 12], 'little')
         d_off = int.from_bytes(raw[e + 12:e + 16], 'little')
-        name = raw[keys + k_off:raw.index(b'\0', keys + k_off)].decode('ascii', 'replace')
+        end = raw.find(b'\0', keys + k_off, data)
+        if end < 0 or length > capacity or data + d_off + capacity > len(raw):
+            return None
+        try:
+            name = raw[keys + k_off:end].decode('ascii')
+        except UnicodeError:
+            return None
         if name == key:
-            return raw[data + d_off:data + d_off + length].rstrip(b'\0').decode('utf-8', 'replace')
-    return None
+            value = raw[data + d_off:data + d_off + length]
+            if fmt != 0x204 or not value or value[-1:] != b'\0' or result is not None:
+                return None
+            try:
+                result = value[:-1].decode('utf-8')
+            except UnicodeError:
+                return None
+            if not result or any(ord(c) < 32 for c in result):
+                return None
+    return result
 
 
 def detect_model(c, ui, forced=None):
@@ -332,7 +354,7 @@ def app0_root(c, title):
     for pattern in APP0:
         root = pattern.format(title=title)
         listing = c.listing(root)
-        if listing and 'eboot.bin' in listing:
+        if listing and 'eboot.bin' in listing and not listing['eboot.bin']['dir']:
             return root
     return None
 

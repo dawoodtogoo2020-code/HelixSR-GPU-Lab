@@ -59,15 +59,23 @@ class Console:
             raise Refused(f'Cannot reach the payload manager (pldmgr) on {self.host}:{self.pldmgr_port} ({e}). '
                           'Load pldmgr on the PS5.')
         need(len(raw) <= 262144, 'Oversized process list')
-        return json.loads(raw)['processes']
+        try:
+            document = json.loads(raw)
+        except (ValueError, UnicodeError):
+            raise Refused('The payload manager returned an invalid process list') from None
+        need(isinstance(document, dict) and isinstance(document.get('processes'), list),
+             'The payload manager returned an invalid process list')
+        return document['processes']
 
     def running(self):
         """Names of running games/apps, after checking the list is a full console list."""
         rows = self.processes()
         need(isinstance(rows, list) and 40 <= len(rows) <= 2048 and
-             all(isinstance(p, dict) and isinstance(p.get('name'), str) for p in rows),
+             all(isinstance(p, dict) and type(p.get('pid')) is int and p['pid'] >= 0 and
+                 isinstance(p.get('name'), str) and p['name'] and '\0' not in p['name'] for p in rows),
              'The payload manager returned a partial process list')
-        names = {p.get('pid'): p['name'] for p in rows}
+        names = {p['pid']: p['name'] for p in rows}
+        need(len(names) == len(rows), 'The payload manager returned duplicate process IDs')
         need(names.get(0) == 'kernel' and 'SceShellUI' in names.values(), 'The process list is not a full console list')
         return [p['name'] for p in rows if 'eboot' in p['name'].casefold()]
 
