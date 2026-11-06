@@ -14,6 +14,8 @@ Coverage is limited to the tested room, camera motion, walking, startup and a le
 
 ## Install and use
 
+**Before launching after a reboot, follow [the tested firmware 11.60 startup sequence](SAROS-START-HERE.md).** It uses ShadowMount+ 1.7-beta5fix1 and the exact local FPKG-11.60-Kstuff-test5 build. K-Stuff Lite v1.11 is not the verified boot setup. GPU Lab's package Ready state does not certify kernel-payload readiness.
+
 Download **HelixSR-GPU-Lab-v0.3.1-saros-effects-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). With Python 3.10+, ftpsrv, pldmgr and ShadowMount+ running:
 
 ```sh
