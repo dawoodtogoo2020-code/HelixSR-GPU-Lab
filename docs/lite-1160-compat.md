@@ -1,5 +1,7 @@
 # Lite v1.11 compatibility on the tested firmware 11.60 setup
 
+**Historical separate-bridge control.** For the simpler current setup, use [integrated Lite + A53](lite-1160-integrated.md), which creates one payload and removes the separate bridge from the boot sequence.
+
 The separate A53-only bridge restored SAROS startup with the original, unchanged K-Stuff Lite v1.11. The tested scope is regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, and the existing effects-on HelixSR package. This is a local compatibility helper, not an upstream Lite release.
 
 ## Fresh-boot order

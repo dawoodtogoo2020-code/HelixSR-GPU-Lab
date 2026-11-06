@@ -6,11 +6,11 @@
 
 [Join Blackheart 909 Gaming on Discord](https://discord.gg/k4UWq8DqK) · [Support my work on Ko-fi](https://ko-fi.com/blackheart909)
 
-> **Public beta (v0.3.1-saros-effects-beta).** The HelixSR builds it installs ran on the developer's own regular PS5 and PS5 Pro. SAROS effects-on gameplay was tested on a regular PS5, firmware 11.60. Other consoles and areas remain untested. Everything it does is checked and can be undone with `uninstall`. Please [report your results](docs/install-ps5.md#help).
+> **Public beta (v0.3.2-lite-a53-beta).** The HelixSR builds it installs ran on the developer's own regular PS5 and PS5 Pro. SAROS effects-on gameplay was tested on a regular PS5, firmware 11.60. Other consoles and areas remain untested. Everything it does is checked and can be undone with `uninstall`. Please [report your results](docs/install-ps5.md#help).
 
 ## Install in three steps
 
-1. **Download** `HelixSR-GPU-Lab-v0.3.1-saros-effects-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it on your PC.
+1. **Download** `HelixSR-GPU-Lab-v0.3.2-lite-a53-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it on your PC.
 2. **Run** `install.bat` (Windows: double-click) or `sh install.sh` (Mac / Linux).
 3. **Answer its questions:**
    - your PS5's IP address
@@ -19,6 +19,8 @@
    - then start, and later close, the game when it asks
 
 For SAROS only, run `python tools/gpulab.py install --game saros-native-v1`.
+
+**Using K-Stuff Lite on firmware 11.60?** Run `setup-kstuff-lite.bat` (Windows) or `sh setup-kstuff-lite.sh` (Mac/Linux). It finds your matching Test5 A53 reference and original Lite in Payload Manager, or asks you to drag in the files, then builds and installs one combined Local payload. After restarting: jailbreak → ShadowMount → the combined payload once. No separate bridge is needed. [Setup and exact supported files](docs/lite-1160-integrated.md). This host update retains the v0.3.1 game/app binaries.
 
 Then open **HelixSR GPU Lab** on the PS5. **Cross** switches HelixSR on or off, and **Triangle** starts the game.
 

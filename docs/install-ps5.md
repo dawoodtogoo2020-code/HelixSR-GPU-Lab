@@ -24,7 +24,7 @@ HelixSR GPU Lab puts [Lone Wolf's HelixSR](https://github.com/lonewolf0622/Helix
 
 ## Install (about 10 minutes)
 
-1. **Download** `HelixSR-GPU-Lab-v0.3.1-saros-effects-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
+1. **Download** `HelixSR-GPU-Lab-v0.3.2-lite-a53-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
 2. **Start the installer:**
    - **Windows:** double-click `install.bat`.
    - **Mac / Linux:** open a terminal in the folder and run `sh install.sh`.
@@ -79,5 +79,7 @@ To report a result, good or bad, post in the [#helixsr-playstation-5](https://di
 Leave out your IP address and your `my-ps5` folder.
 
 ## SAROS
+
+On firmware **11.60** with K-Stuff Lite, run **setup-kstuff-lite.bat** (Windows) or **sh setup-kstuff-lite.sh** (Mac/Linux) once. The [guided Lite + A53 setup](lite-1160-integrated.md) creates one combined Local payload from verified original inputs. After a full restart: jailbreak → ShadowMount → combined Lite + A53 once → GPU Lab. See [the startup recipe](SAROS-START-HERE.md).
 
 See [SAROS setup and measured limits](saros.md). To install only SAROS: `python tools/gpulab.py install --game saros-native-v1`. To recognize an already installed, matching SAROS effects-on v6 integration and update the app, add `--adopt`. Adoption verifies the existing executable and sidecar; it cannot upgrade an older SAROS trial.

@@ -34,7 +34,7 @@ ROOT = HERE.parent
 GAMES = ROOT / 'games'
 CONSOLES = ROOT / 'console'
 HOME = ROOT / 'my-ps5'
-VERSION = '0.3.1-saros-effects-beta'
+VERSION = '0.3.2-lite-a53-beta'
 CONSOLE = Console   # tests swap in a simulated PS5
 APP0 = tuple('/mnt/sandbox/{title}_%03d/app0' % slot for slot in range(10)) + (
     '/mnt/sandbox/pfsmnt/{title}-app0',)
@@ -968,13 +968,16 @@ def uninstall(args, ui):
 def main(argv=None, ui=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='cmd')
-    for name in ('install', 'status', 'uninstall', 'on', 'off'):
+    for name in ('install', 'status', 'uninstall', 'on', 'off', 'setup-lite'):
         p = sub.add_parser(name)
         p.add_argument('--ps5', help="your PS5's IP address")
         p.add_argument('--model', choices=('ps5', 'ps5-pro'), help='skip the PS5 Pro question')
         p.add_argument('--yes', action='store_true', help='answer every question with its default (scripts)')
         if name in ('on', 'off'):
             p.add_argument('target_game', metavar='GAME', help='control-r18, aw2-t12, saros-native-v1 or sotc-live3')
+        if name == 'setup-lite':
+            p.add_argument('--test5', help='exact Test5 reference ELF on this PC, if absent from Payload Manager')
+            p.add_argument('--lite', help='original Lite v1.11 ELF on this PC, if absent from Payload Manager')
         if name == 'install':
             p.add_argument('--adopt', action='store_true', help='upgrade app and metadata using already installed verified game files')
             p.add_argument('--dlss', help="your own copy of NVIDIA's nvngx_dlss.dll (DLSS 310.7.0) instead of the download")
@@ -987,6 +990,9 @@ def main(argv=None, ui=None):
         args = ap.parse_args(['install'] + (argv or []))
     ui = ui or UI(args.yes)
     try:
+        if args.cmd == 'setup-lite':
+            from lite1160 import setup as lite_setup
+            return lite_setup.run(args, ui, sys.modules[__name__])
         if args.cmd == 'install':
             return install(args, ui)
         if args.cmd == 'status':
