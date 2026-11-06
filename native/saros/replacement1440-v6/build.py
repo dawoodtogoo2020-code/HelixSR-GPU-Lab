@@ -35,7 +35,7 @@ with tempfile.TemporaryDirectory(dir=target) as td:
  v=dev/'velocity-trial'
  fragments=[v/'hook.ld',v/'velocity.ld',dev/'scene-triplet/triplet.ld',dev/'clear-trial/graph_buffers.ld',dev/'learned-trial/enc0_imports.ld',a.clone_dir/'graph_clone.ld',dev/'image-publication/image.ld',dev/'composition/composition.ld']
  ld='\n'.join(k.read_text() for k in fragments)
- ld+='\nht_postprocess_color_name = 0x7096c12;\n'
+ ld+='\nht_postprocess_color_name = 0x7096c12; ht_dof_color_name = 0x72f8ca0; ht_composed_color_name = 0x713b316;\n'
  ld+='\nhx_extract_texture = 0xb6bc36;\n'
  ld+='\nhx_import_buffer = 0x74e1fa; hx_extract_buffer = 0xb6b956;\n'
  ld+='\nrhi_global = 0x8ed14a8; rhi_vtable = 0x7dd2290; shader_factory = 0xe0a57a; shader_vtable = 0x7dd3138;\n'

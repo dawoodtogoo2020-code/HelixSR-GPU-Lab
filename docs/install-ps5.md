@@ -24,7 +24,7 @@ HelixSR GPU Lab puts [Lone Wolf's HelixSR](https://github.com/lonewolf0622/Helix
 
 ## Install (about 10 minutes)
 
-1. **Download** `HelixSR-GPU-Lab-v0.3.5-lite-a53-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
+1. **Download** `HelixSR-GPU-Lab-v0.3.6-saros-dof-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
 2. **Start the installer:**
    - **Windows:** double-click `install.bat`.
    - **Mac / Linux:** open a terminal in the folder and run `sh install.sh`.
@@ -84,4 +84,4 @@ Leave out your IP address and your `my-ps5` folder.
 
 The main **install.bat** / **install.sh** flow automatically detects firmware. On a regular PS5 running **11.60**, it installs the bundled combined Lite + A53 payload together with GPU Lab. The same applies to `install --adopt`. No separate setup run is required. No firmware argument is needed for scripts. Detection reads the current console on each install; saved versions never select the helper. See [Lite + A53 setup](lite-1160-integrated.md). After a full restart: jailbreak → ShadowMount → combined Lite + A53 once → GPU Lab. See [the startup recipe](SAROS-START-HERE.md).
 
-See [SAROS setup and measured limits](saros.md). To install only SAROS: `python tools/gpulab.py install --game saros-native-v1`. To recognize an already installed, matching SAROS effects-on v6 integration and update the app, add `--adopt`. Adoption verifies the existing executable and sidecar; it cannot upgrade an older SAROS trial.
+See [SAROS setup and measured limits](saros.md). To install only SAROS: `python tools/gpulab.py install --game saros-native-v1`. To recognize an already installed, matching SAROS effects-on v6 integration and update the app, add `--adopt`. Adoption verifies the existing executable and sidecar; it cannot upgrade an older SAROS package. For v0.3.1–v0.3.5, follow the [SAROS upgrade steps](saros.md#upgrade-from-an-earlier-release).

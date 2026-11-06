@@ -1,6 +1,6 @@
 # SAROS startup on the tested PS5 11.60 setup
 
-Updated 6 November 2026 for v0.3.5-lite-a53-beta. The SAROS game and app binaries remain the v0.3.1 effects-on build.
+Updated 6 November 2026 for v0.3.6-saros-dof-beta, which includes the [SAROS gameplay crash and separate-translucency fixes](saros.md). The boot recipe and combined Lite + A53 payload remain unchanged.
 
 ## One-time Lite setup on firmware 11.60
 
@@ -29,7 +29,7 @@ If SAROS still fails at the launch card, record the error and collect `/data/hel
 
 ## Exact tested scope and payloads
 
-Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.1-saros-effects-beta** game binaries, with **v0.3.5-lite-a53-beta** host setup. These instructions are not a compatibility claim for other firmware or payload revisions.
+Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.6-saros-dof-beta** corrected SAROS executable and launcher. Earlier boot qualification below used the v0.3.1 effects-on game executable. These instructions are not a compatibility claim for other firmware or payload revisions.
 
 | Payload | SHA-256 |
 | --- | --- |
@@ -46,3 +46,5 @@ On 6 November, a fresh jailbreak-only boot was checked before loading one copy o
 This establishes a working startup sequence. A later [fresh-boot Lite v1.11 comparison](audit-2026-11-06.md) stalled at the SAROS splash screen with PPR/mount and storage I/O errors before gameplay. Only Lite was loaded on that comparison boot. A subsequent fresh boot with the separate A53-only bridge and the same original Lite file passed gameplay, a relaunch and two normal closes; see the [bridge qualification](lite-1160-compat.md). The previous release instructions omitted the exact tested boot dependency. These instructions correct that omission; they do not introduce a new upscaler binary or a new FPS benchmark. Shadows and volumetric fog remain enabled, stock dynamic resolution remains unchanged, the target remains 60 FPS, and there is no TSR fallback.
 
 The integrated Lite + A53 route was then qualified on another fresh boot with ShadowMount followed by the combined ELF only. It passed all 72 A53 patch-word readbacks, responsive SAROS gameplay, relaunch and two normal closes, with the same mounted game hash. [Integrated setup and limits](lite-1160-integrated.md).
+
+The v0.3.6 DOF correction was subsequently verified with this integrated boot setup: 21,543 published frames including 1,986 DOF frames, followed by a GPU Lab On relaunch and 7,583 more published frames. Both sessions closed normally, with zero withheld outputs or stock TSR calls. This does not add full-area, combat, death/respawn or extended-session qualification.

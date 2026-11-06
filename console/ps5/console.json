@@ -88,11 +88,11 @@
   {
    "remote": "/data/pldmgr/payloads/local/helixsr-devloop/helixsr-launch.elf",
    "bundle": "console/ps5/payloads/helixsr-launch.elf",
-   "sha256": "925184fee2a3f3daa53a1512f8213f35e4ac694085c583ca5d6e3cfebf9eb3c9",
+   "sha256": "ec46352533230bdbb229f8404a7db5b537094bdb584ee480127de53944c3730f",
    "accept": [
     [
      143208,
-     "925184fee2a3f3daa53a1512f8213f35e4ac694085c583ca5d6e3cfebf9eb3c9"
+     "ec46352533230bdbb229f8404a7db5b537094bdb584ee480127de53944c3730f"
     ]
    ]
   },

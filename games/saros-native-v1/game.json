@@ -6,7 +6,7 @@
  "models": [
   "ps5"
  ],
- "about": "Model E reconstruction at 2560x1440 scaled to 3840x2160. Tested 59.93 FPS with shadows and volumetric fog on, stock DRS, no TSR fallback. Limited scene coverage; see docs/saros.md.",
+ "about": "Model E at 2560x1440 scaled to 4K; shadows and fog on, stock DRS. DOF input and native separate-translucency composition fixes; see docs/saros.md for tested scope.",
  "howto": "Open GPU Lab, select SAROS, use Cross to switch HelixSR ON/OFF and Triangle to launch. OFF restores the original executable and visual settings. Square opens imported native timing logs.",
  "param": {
   "paths": [
@@ -42,15 +42,15 @@
  "files": [
   {
    "remote": "/data/homebrew/backports/PPSA07631/eboot.bin",
-   "sha256": "6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11",
+   "sha256": "68917b032b806babb10d3acc162afcd5a91b36fab5392281c38bc92e0553c44d",
    "accept": [
     [
      191835315,
-     "6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11"
+     "68917b032b806babb10d3acc162afcd5a91b36fab5392281c38bc92e0553c44d"
     ],
     [
      191497804,
-     "e894449682b02e720df0eab1852261f7df4e2146c3cfb22ccfa99751815b3bef"
+     "3d7be81745efa6e00c7133286d2f2ca040d7454d73f86be6c6e1588c3bfad5a2"
     ]
    ],
    "patches": [
@@ -72,12 +72,12 @@
   },
   {
    "remote": "/data/helixsr-speed/packages/PPSA07631-01.000.000/CATALOG",
-   "text": "ps5-regular\tPPSA07631\t01.000.000\t6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11\tSAROS\n",
-   "sha256": "519971530fbf4d4764ed8a38744be3373401482e52c3ba6a6b5e4c99dbe5e0d2",
+   "text": "ps5-regular\tPPSA07631\t01.000.000\t68917b032b806babb10d3acc162afcd5a91b36fab5392281c38bc92e0553c44d\tSAROS\n",
+   "sha256": "a28c047368cc746ed47da2e4b0c90385cce00dce3bce10ae5527ac0785225449",
    "accept": [
     [
      104,
-     "519971530fbf4d4764ed8a38744be3373401482e52c3ba6a6b5e4c99dbe5e0d2"
+     "a28c047368cc746ed47da2e4b0c90385cce00dce3bce10ae5527ac0785225449"
     ]
    ]
   },

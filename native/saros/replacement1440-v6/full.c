@@ -4,6 +4,8 @@
 #include "../backend/live_tile.h"
 #include "full_profile.h"
 #include <stddef.h>
+extern const hx8 ht_dof_color_name[] __attribute__((visibility("hidden")));
+extern const hx8 ht_composed_color_name[] __attribute__((visibility("hidden")));
 extern int hx_supported(void*,void*) __attribute__((visibility("hidden")));
 extern const volatile hxptr ht_render_tick __attribute__((visibility("hidden")));
 extern int hx_publish(void*,void*,void*,hxptr,void*) __attribute__((visibility("hidden")));
@@ -212,6 +214,10 @@ static __attribute__((noinline)) int helix_frame(void *result,void *builder,hx8 
     }
     if(j->last_tick==ht_render_tick){finish(0xe4410007,j);return 0;}
     void *textures[3];if(!ht_current(builder,view,inputs,&j->frame,textures)){finish(0xe4400006,j);return 0;}
+    j->history_code=*(void**)((hx8*)textures[0]+8)==(void*)ht_dof_color_name;
+    j->imports+=j->history_code;
+    j->frames=*(void**)((hx8*)textures[0]+8)==(void*)ht_composed_color_name;
+    j->epochs+=j->frames;
     void *key=*(void**)(view+0x2710);hxptr size=*(hxptr*)(view+0x2708);
     j->reset_reason=(!j->r.changed_rgb?1:0)|(key!=j->view_key?2:0)|(size!=j->last_size?4:0)|
         (j->last_tick+1!=ht_render_tick?8:0)|(view[0x1bcc]?16:0);

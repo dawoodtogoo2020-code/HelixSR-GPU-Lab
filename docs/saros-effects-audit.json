@@ -1,0 +1,68 @@
+{
+  "state": "static_audit_complete_bounded_laser_visual_test_passed",
+  "title": "PPSA07631",
+  "version": "01.000.000",
+  "findings": [
+    {
+      "effect": "Post-DOF separate translucency colour (beams, barriers, particles)",
+      "issue": "Native compositor was told to defer colour to TSR; replacement had no composition dispatch.",
+      "change": "At RVA 0xad445b set only CL=0, retain native colour/modulate/depth-aware composition; at RVA 0xad45c4 request FP16 RGBA input; accept exact PostDOFTranslucency.SceneColor producer.",
+      "evidence": "Original compositor CPU paths executed with synthetic resources, with/without modulation; candidate takes complete colour path.",
+      "visual": "Gold doorway laser grid visible in the same saved scene with OFF and corrected ON. R1-breakable wall not encountered."
+    },
+    {
+      "effect": "Modulate translucency",
+      "change": "Retained in the same native compositor; no custom blend math and no second modulation pass.",
+      "evidence": "Both modulation cases executed against original title CPU instructions.",
+      "visual": "No isolated visual qualification; native path preservation audited."
+    },
+    {
+      "effect": "After-motion-blur translucency",
+      "change": "Original downstream native compositor call at RVA 0xad9d39 remains unchanged.",
+      "evidence": "Static caller audit.",
+      "visual": "No isolated visual qualification; native path preservation audited."
+    },
+    {
+      "effect": "Motion blur and velocity flattening",
+      "change": "Original downstream pass remains; null optional TSR velocity cache selects native regeneration at RVA 0x3e34c99 rather than skipping motion blur.",
+      "evidence": "Native consumer 0x3e34bf0 reads optional cache at input+0xc0 and branches to generation when absent.",
+      "visual": "No isolated visual qualification; native path preservation audited."
+    },
+    {
+      "effect": "Bloom and lens-flare input",
+      "change": "Primary and quarter output publication retained.",
+      "evidence": "Prior independent full-frame scaler checks; corrected candidate live output publication and bounded laser comparison.",
+      "visual": "Laser bloom visible in corrected ON; both output resources confirmed by live reader."
+    },
+    {
+      "effect": "Depth of field and postprocess materials",
+      "change": "Original effects before reconstruction retained; exact DOF and postprocess producer admission retained.",
+      "evidence": "Crash-only build had 1986 admitted DOF frames; combined effects build visual qualification pending.",
+      "visual": "No isolated visual qualification; native path preservation audited."
+    },
+    {
+      "effect": "Tonemapping and HUD",
+      "change": "Original downstream pipeline remains outside replacement hook.",
+      "evidence": "Only the identified composition flags, TSR callsite, bounded hook and SELF metadata are patched.",
+      "visual": "Scene tonemapping, HUD and low-health vignette visible in corrected ON."
+    }
+  ],
+  "limitations": [
+    "No claim that every particle asset or scene has been visually qualified.",
+    "Alpha-propagation and lens-distortion modes remain explicitly unsupported by the existing admission guard; they are not silently discarded.",
+    "Neural temporal fidelity, fine particle stability and all-area/death/respawn/rest-mode coverage require separate visual qualification."
+  ],
+  "live_scope": {
+    "reference": "Same saved doorway, stock OFF then corrected GPU Lab ON",
+    "observed": [
+      "gold laser grid",
+      "floating ember/spark particles",
+      "laser bloom",
+      "HUD and low-health vignette"
+    ],
+    "not_encountered": [
+      "R1-breakable wall"
+    ],
+    "runtime_receipt": "All four patched ranges and four stock anchors verified; composed input and both output resources confirmed."
+  }
+}

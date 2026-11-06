@@ -31,7 +31,7 @@ static const hs_file aw2_files[]={
      {"5c6a93a6cec2255b1c412ca74dd9593891ead0d1b4f31c40c1d077b2a07e6521","a4e890645a310ae5aa5818d5aab01d2a10ba191892ab2113c5e190572dd32d18","31a3ffd1b582b6d363da7432c41962e1b48ba59fcaa14befaae916d38cb66c35"}},
 };
 static const hs_file saros_files[]={
- {"eboot.bin","eboot.bin",{NULL,NULL},{"6797e08fe14354bb21b8c0de39e27b8222eeaf712fa4f61c5f170598c389ef11",NULL}}
+ {"eboot.bin","eboot.bin",{NULL,NULL},{"68917b032b806babb10d3acc162afcd5a91b36fab5392281c38bc92e0553c44d",NULL}}
 };
 static const hs_package packages[]={
  {"PPSA07631","01.000.000","saros-native-v1","SAROS 1440p reconstruction to 4K; shadows and fog on",1,saros_files,1},

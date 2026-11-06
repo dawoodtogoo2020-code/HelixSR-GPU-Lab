@@ -4,7 +4,7 @@ The GPU Lab release ZIP includes the tested **Kstuff-Lite-v1.11-A53-11.60.elf**.
 
 ## Set it up once
 
-1. Download and unzip **HelixSR-GPU-Lab-v0.3.5-lite-a53-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). Keep the extracted folder intact.
+1. Download and unzip **HelixSR-GPU-Lab-v0.3.6-saros-dof-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). Keep the extracted folder intact.
 2. On the PS5, close games and run the usual jailbreak, Payload Manager and ftpsrv. Setup only copies files; it does not inject a kernel payload.
 3. Double-click **install.bat** on Windows, or run **sh install.sh** on Mac/Linux. Enter the PS5's IP address and choose regular PS5. Firmware is detected automatically.
 4. The main installer verifies the bundled ELF before changing console files, builds the selected game integrations, then installs GPU Lab, those integrations and the combined payload in one run. It asks for no payload reference files and performs no payload build. The current firmware is read afresh on each install; PS5 Pro and other firmware skip this firmware-specific helper.

@@ -1,0 +1,58 @@
+{
+  "release": "v0.3.6-saros-dof-beta",
+  "date": "2026-11-06",
+  "console": "regular PS5",
+  "firmware": "11.60",
+  "title": "PPSA07631",
+  "version": "01.000.000",
+  "cause": "SIGILL diagnostic e4410003 rejected DOF.Recombine despite expected resource contract",
+  "crash_contract": {
+    "phase": "e4410003",
+    "active": [
+      1652,
+      929
+    ],
+    "allocation": [
+      2304,
+      1296
+    ],
+    "colour_format": "FP16 RGBA",
+    "name_rva": "0x72f8ca0"
+  },
+  "candidate_sha256": "7f98835d660fd693b3bb4a68d2d40a621d0434e2450b1d24229bf8328fa1039d",
+  "hook_sha256": "508fceaef39324b13db6b6ea4ca1e3a30f34d08124a0da34ef374fa823c0d825",
+  "launcher_sha256": "b6f4e4cdf6c94004cc39dba14b83ca23401af413bc77f520cc8538eb865604ea",
+  "unchanged_model_sha256": "1be3a14f7f25ea298929b485ad0cdf5e17441cd5ea94cb85f22a4f8500c9eb8e",
+  "host_checks": {
+    "python_tests_passed": 108,
+    "native_guard_tests_included": 6,
+    "native_switch_cases_passed": 107,
+    "owner_file_patch_reconstruction": "exact byte match",
+    "two_hook_builds": "identical"
+  },
+  "live_checks": [
+    {
+      "frames": 21543,
+      "published": 21543,
+      "withheld": 0,
+      "stock_calls_since_initialization": 0,
+      "dof_frames": 1986,
+      "verified_anchors": 4,
+      "verified_ranges": 2,
+      "runtime_state": "live"
+    },
+    {
+      "frames": 7583,
+      "published": 7583,
+      "withheld": 0,
+      "stock_calls_since_initialization": 0,
+      "dof_frames": 0,
+      "verified_anchors": 4,
+      "verified_ranges": 2,
+      "runtime_state": "live"
+    }
+  ],
+  "gpu_lab_relaunch": "ON accepted corrected hashes; launch_result=c018; gameplay reached; normal closure",
+  "normal_closures": 2,
+  "scope": "SAROS PPSA07631 01.000.000 regular PS5 firmware 11.60; tested gameplay, camera/aim, DOF transition and GPU Lab relaunch. Other areas, combat, death/respawn and long-term stability are not exhaustively qualified."
+}

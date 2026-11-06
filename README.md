@@ -6,11 +6,11 @@
 
 [Join Blackheart 909 Gaming on Discord](https://discord.gg/k4UWq8DqK) · [Support my work on Ko-fi](https://ko-fi.com/blackheart909)
 
-> **Public beta (v0.3.5-lite-a53-beta).** The HelixSR builds it installs ran on the developer's own regular PS5 and PS5 Pro. SAROS effects-on gameplay was tested on a regular PS5, firmware 11.60. Other consoles and areas remain untested. Everything it does is checked and can be undone with `uninstall`. Please [report your results](docs/install-ps5.md#help).
+> **Public beta (v0.3.6-saros-dof-beta).** The HelixSR builds it installs ran on the developer's own regular PS5 and PS5 Pro. SAROS effects-on gameplay was tested on a regular PS5, firmware 11.60. Other consoles and areas remain untested. Everything it does is checked and can be undone with `uninstall`. Please [report your results](docs/install-ps5.md#help).
 
 ## Install in three steps
 
-1. **Download** `HelixSR-GPU-Lab-v0.3.5-lite-a53-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it on your PC.
+1. **Download** `HelixSR-GPU-Lab-v0.3.6-saros-dof-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it on your PC.
 2. **Run** `install.bat` (Windows: double-click) or `sh install.sh` (Mac / Linux).
 3. **Answer its questions:**
    - your PS5's IP address
@@ -20,7 +20,9 @@
 
 For SAROS only, run `python tools/gpulab.py install --game saros-native-v1`.
 
-**One installer includes Lite + A53 on regular PS5 firmware 11.60.** The installer detects firmware automatically from the console. On a regular PS5 running **11.60**, it installs GPU Lab, the selected game integrations and the bundled combined Local payload in the same run. There is no firmware-entry prompt. No second installer, Test5 download or build is needed. After restarting: jailbreak → ShadowMount → the combined payload once → GPU Lab. PS5 Pro and other firmware keep their existing startup setup. The separate `setup-kstuff-lite.*` launchers remain available for payload-only installation. [Details](docs/lite-1160-integrated.md). Game/app and combined-payload binaries are unchanged.
+**SAROS crash and effects corrections:** the adapter accepts the game's depth-of-field output and uses native composition for separate translucent effects; see [verification scope](docs/saros.md). Existing SAROS installations need the [upgrade steps](docs/saros.md#upgrade-from-an-earlier-release); copying the new download over the old PC folder does not update the console.
+
+**One installer includes Lite + A53 on regular PS5 firmware 11.60.** The installer detects firmware automatically from the console. On a regular PS5 running **11.60**, it installs GPU Lab, the selected game integrations and the bundled combined Local payload in the same run. There is no firmware-entry prompt. No second installer, Test5 download or build is needed. After restarting: jailbreak → ShadowMount → the combined payload once → GPU Lab. PS5 Pro and other firmware keep their existing startup setup. The separate `setup-kstuff-lite.*` launchers remain available for payload-only installation. [Details](docs/lite-1160-integrated.md). The combined Lite + A53 payload is unchanged.
 
 Then open **HelixSR GPU Lab** on the PS5. **Cross** switches HelixSR on or off, and **Triangle** starts the game.
 

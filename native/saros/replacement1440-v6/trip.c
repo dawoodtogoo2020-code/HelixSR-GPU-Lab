@@ -4,7 +4,7 @@
 extern const hv8 ht_module[];extern hv32 phase;extern hvptr payload;extern const volatile hvptr ht_render_tick;
 extern void *game_alloc(hvptr);
 extern const hv8 hv_texture_vt[],hv_depth_name[],hv_velocity_name[],hv_output_name[],hv_readback_vt[],hv_fence_vt[],hv_readback_name[];
-extern const hv8 ht_postprocess_color_name[],ht_color_name[],ht_depth_name[],ht_type[],ht_param_meta[],ht_pass_vt[],ht_uav_vt[],ht_formats[];
+extern const hv8 ht_composed_color_name[],ht_dof_color_name[],ht_postprocess_color_name[],ht_color_name[],ht_depth_name[],ht_type[],ht_param_meta[],ht_pass_vt[],ht_uav_vt[],ht_formats[];
 extern void *hv_texture(void *,void *,const void *,int);
 typedef struct { void *shader,*section; } shader_ref;
 extern void ht_type_init(void);extern shader_ref hv_lookup(void *,const void *,int);
@@ -46,9 +46,11 @@ static int eligible(void*v,void*in){
     for(unsigned i=0;i<3;i++){
         unsigned off=starts[i];void *tex=ptr(in,off);if(!valid(tex)||ptr(tex,0)!=hv_texture_vt||word(tex,0x84)!=(2304UL|1296UL<<32)||word(in,off+8)||!eq(pt(in,off+16),s))return 0;
     }
-    /* Death/fall blend material keeps native FP16 scene color; exact-build name verified in v4 fault. */
+    /* These exact-build producers preserve the same FP16 scene-color contract.
+     * DOF.Recombine is used during ordinary gameplay; rejecting its name caused
+     * e4410003 despite the unchanged format, allocation and active rectangle. */
     void *color=ptr(in,8);const void *name=ptr(color,8);
-    return (name==ht_color_name||name==ht_postprocess_color_name)&&shape(color,name,10,8)&&ptr(ptr(in,0x20),8)==hv_depth_name && word(ptr(in,0x20),0x8c)==(11UL<<56|0x10100010001UL) && ptr(ptr(in,0x38),8)==hv_velocity_name && word(ptr(in,0x38),0x8c)==(19UL<<56|0x10100010001UL);
+    return (name==ht_color_name||name==ht_postprocess_color_name||name==ht_dof_color_name||name==ht_composed_color_name)&&shape(color,name,10,8)&&ptr(ptr(in,0x20),8)==hv_depth_name && word(ptr(in,0x20),0x8c)==(11UL<<56|0x10100010001UL) && ptr(ptr(in,0x38),8)==hv_velocity_name && word(ptr(in,0x38),0x8c)==(19UL<<56|0x10100010001UL);
 }
 int ht_motion_shape(void *t){return shape(t,hv_output_name,15,4);}
 static void *depth_output(void *b,void *v,void *d,ht_job *j){
