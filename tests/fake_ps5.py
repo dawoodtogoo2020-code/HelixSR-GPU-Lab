@@ -3,7 +3,7 @@
 executables that read back in another form (as the console serves a SELF)."""
 import hashlib
 
-from ps5_console import Refused, need
+from ps5_console import Refused, need, parse_firmware_index
 
 
 class Sparse:
@@ -22,6 +22,8 @@ class FakePS5:
         self.app0 = {}               # title -> {relative path: bytes}
         self.readback = {}           # sha256 of uploaded bytes -> bytes the console serves instead
         self.writes = 0
+        self.firmware_raw = b'release: 0x13600005\r\nsys-repository-path: releases/13.60\r\n'
+        self.firmware_reads = 0
 
     # ---- set-up helpers
     def add_dir(self, path):
@@ -61,6 +63,11 @@ class FakePS5:
 
     def running(self):
         return ['eboot.bin'] if self.game else []
+
+    def firmware(self):
+        self.firmware_reads += 1
+        need(self.firmware_raw is not None, 'Cannot detect PS5 firmware: system index is unavailable')
+        return parse_firmware_index(self.firmware_raw)
 
     def gate(self):
         need(not self.game, 'A game or app is running on the PS5: close it first')

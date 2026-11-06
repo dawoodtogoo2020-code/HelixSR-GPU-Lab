@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 import gpulab
-from ps5_console import Console, Refused
+from ps5_console import Console, Refused, parse_firmware_index, FIRMWARE_INDEX
 
 
 def sfo(value=b'01.00\0'):
@@ -94,6 +94,42 @@ class ProcessGate(unittest.TestCase):
                 with self.subTest(raw=raw), self.assertRaises(Refused): Console('unused').gate()
             response.raw = json.dumps({'processes': self.rows()}).encode()
             self.assertEqual(Console('unused').running(), [])
+
+
+class FirmwareDiscovery(unittest.TestCase):
+    def test_bcd_release_versions_and_line_endings(self):
+        for release, version in [('01000001', '1.00'), ('04510001', '4.51'),
+                                 ('09000005', '9.00'), ('11600005', '11.60'), ('13600005', '13.60')]:
+            for newline in ('\n', '\r\n'):
+                raw = newline.join(['release: 0x' + release, 'build: cex',
+                                    'sys-repository-path: releases/' + version, '']).encode()
+                self.assertEqual(parse_firmware_index(raw),
+                                 {'version': version, 'release': '0x' + release, 'source': FIRMWARE_INDEX})
+
+    def test_ambiguous_malformed_or_conflicting_index_refuses(self):
+        cases = [b'', b'\xff', b'\0release: 0x11600005', b'X' * 4097,
+                 b'release: 0x11600005\nrelease: 0x13600005', b'release: 0x11a00005',
+                 b'release: 0x00000005', b'release: 0x116000050', b'release: 11.60',
+                 b'sdk-version: 0x11600005', b'release: 0x11600005\ninvalid line']
+        for key in ('security', 'sys', 'middleware', 'vsh'):
+            cases.append(('release: 0x11600005\n' + key + '-repository-path: releases/13.60').encode())
+        for raw in cases:
+            with self.subTest(raw=raw), self.assertRaises(Refused):
+                parse_firmware_index(raw)
+
+    def test_console_detection_reads_only_bounded_system_metadata_each_time(self):
+        c = Console('unused')
+        with patch.object(c, 'read', side_effect=[b'release: 0x11600005', b'release: 0x13600005']) as read:
+            self.assertEqual(c.firmware()['version'], '11.60')
+            self.assertEqual(c.firmware()['version'], '13.60')
+        self.assertEqual(read.call_args_list, [unittest.mock.call(FIRMWARE_INDEX, 4096)] * 2)
+
+    def test_unavailable_system_index_is_a_clear_refusal(self):
+        import ftplib
+        c = Console('unused')
+        for exc in (OSError('offline'), ftplib.error_perm('550 unavailable')):
+            with patch.object(c, 'read', side_effect=exc), self.assertRaisesRegex(Refused, 'Cannot detect PS5 firmware'):
+                c.firmware()
 
 
 if __name__ == '__main__':

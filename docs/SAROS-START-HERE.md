@@ -1,10 +1,10 @@
 # SAROS startup on the tested PS5 11.60 setup
 
-Updated 6 November 2026 for v0.3.4-lite-a53-beta. The SAROS game and app binaries remain the v0.3.1 effects-on build.
+Updated 6 November 2026 for v0.3.5-lite-a53-beta. The SAROS game and app binaries remain the v0.3.1 effects-on build.
 
 ## One-time Lite setup on firmware 11.60
 
-Run **install.bat** on Windows, or **sh install.sh** on Mac/Linux, from the full release download. Choose regular PS5 and enter firmware **11.60**. This single run installs GPU Lab, the supported game integration and the bundled combined Lite + A53 payload. No second installer, Test5 download or build is needed. The `--adopt` upgrade path includes it too; scripted installs can use `--firmware 11.60`. If GPU Lab is already installed and you only want the payload, `setup-kstuff-lite.*` remains available. [Setup details](lite-1160-integrated.md).
+Run **install.bat** on Windows, or **sh install.sh** on Mac/Linux, from the full release download. Choose regular PS5; the installer detects firmware **11.60** automatically. This single run installs GPU Lab, the supported game integration and the bundled combined Lite + A53 payload. No second installer, Test5 download or build is needed. The `--adopt` upgrade path includes it too; scripted installs detect firmware without a version argument. If GPU Lab is already installed and you only want the payload, `setup-kstuff-lite.*` remains available. [Setup details](lite-1160-integrated.md).
 
 ## After every full restart — integrated Lite recipe
 
@@ -29,7 +29,7 @@ If SAROS still fails at the launch card, record the error and collect `/data/hel
 
 ## Exact tested scope and payloads
 
-Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.1-saros-effects-beta** game binaries, with **v0.3.4-lite-a53-beta** host setup. These instructions are not a compatibility claim for other firmware or payload revisions.
+Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.1-saros-effects-beta** game binaries, with **v0.3.5-lite-a53-beta** host setup. These instructions are not a compatibility claim for other firmware or payload revisions.
 
 | Payload | SHA-256 |
 | --- | --- |
@@ -37,7 +37,7 @@ Regular PS5, firmware **11.60**, SAROS **PPSA07631 01.000.000**, HelixSR **v0.3.
 | `Kstuff-Lite-v1.11-A53-11.60.elf` | `d02d0cd18d422ad63af0e573a040f8a26284320ce6a6f259bd230f8383de40a7` |
 | Full Test5 alternative: `FPKG-11.60-Kstuff-test5.elf` | `829b45fe871dd64fbd53874ae4558076c2f1e1f203fe1ab52db5510d5fc45923` |
 
-The local K-Stuff metadata identifies the tested file as a mirrored **Drakmor 1.13-fpkg-dr-test5** build. Payload names alone are insufficient: verify the SHA-256. The combined Lite + A53 payload is included in the full v0.3.3 release ZIP. ShadowMount and the full Test5 alternative are not included. Only users choosing the full Test5 alternative need to obtain that matching build from its maintainer; it is not needed for the integrated Lite recipe.
+The local K-Stuff metadata identifies the tested file as a mirrored **Drakmor 1.13-fpkg-dr-test5** build. Payload names alone are insufficient: verify the SHA-256. The combined Lite + A53 payload is included in the full release ZIP. ShadowMount and the full Test5 alternative are not included. Only users choosing the full Test5 alternative need to obtain that matching build from its maintainer; it is not needed for the integrated Lite recipe.
 
 ## What was checked
 

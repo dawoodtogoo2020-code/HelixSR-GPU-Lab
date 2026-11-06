@@ -34,7 +34,7 @@ ROOT = HERE.parent
 GAMES = ROOT / 'games'
 CONSOLES = ROOT / 'console'
 HOME = ROOT / 'my-ps5'
-VERSION = '0.3.4-lite-a53-beta'
+VERSION = '0.3.5-lite-a53-beta'
 CONSOLE = Console   # tests swap in a simulated PS5
 APP0 = tuple('/mnt/sandbox/{title}_%03d/app0' % slot for slot in range(10)) + (
     '/mnt/sandbox/pfsmnt/{title}-app0',)
@@ -725,19 +725,18 @@ def adopt(c, journal, chosen, b, ui):
 
 
 def prepare_startup_payload(c, journal, ui, model, firmware=None):
+    detected = c.firmware()
+    version = detected['version']
+    need(firmware is None or firmware.strip() == version,
+         'Expected firmware %s, but this PS5 reports %s. --firmware checks the detected version; '
+         'it does not override detection.' % (firmware, version))
+    say('  Detected PS5 firmware ' + version + '.')
+    journal.data['firmware'] = version
+    journal.data['firmware_detection'] = dict(detected, utc=now())
+    journal.save()
     if model != 'ps5':
         return None
-    firmware = firmware or journal.data.get('firmware') or ui.ask(
-        'PS5 firmware version (e.g. 11.60; Enter skips the Lite startup payload):')
-    firmware = str(firmware).strip()
-    if firmware:
-        parts = firmware.split('.')
-        need(len(parts) == 2 and 1 <= len(parts[0]) <= 2 and len(parts[1]) == 2 and
-             all(p.isascii() and p.isdigit() for p in parts),
-             'Enter the short firmware version, such as 11.60 (use --firmware 11.60 for scripts).')
-        journal.data['firmware'] = firmware
-        journal.save()
-    if firmware != '11.60':
+    if version != '11.60':
         say('  Lite + A53 startup payload skipped: it is qualified for regular PS5 firmware 11.60 only.')
         return None
     from lite1160 import setup as lite_setup
@@ -1016,7 +1015,7 @@ def main(argv=None, ui=None):
             p.add_argument('--test5', help='developer rebuild: exact Test5 reference ELF on this PC')
             p.add_argument('--lite', help='developer rebuild: original Lite v1.11 ELF on this PC')
         if name == 'install':
-            p.add_argument('--firmware', help='PS5 firmware, e.g. 11.60; includes bundled Lite + A53 on regular PS5 11.60')
+            p.add_argument('--firmware', help='optional expected version; must match automatic detection, never overrides it')
             p.add_argument('--adopt', action='store_true', help='upgrade app and metadata using already installed verified game files')
             p.add_argument('--dlss', help="your own copy of NVIDIA's nvngx_dlss.dll (DLSS 310.7.0) instead of the download")
             p.add_argument('--game', action='append', help='only this game (control-r18, aw2-t12, saros-native-v1, sotc-live3)')

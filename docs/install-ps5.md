@@ -24,14 +24,14 @@ HelixSR GPU Lab puts [Lone Wolf's HelixSR](https://github.com/lonewolf0622/Helix
 
 ## Install (about 10 minutes)
 
-1. **Download** `HelixSR-GPU-Lab-v0.3.4-lite-a53-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
+1. **Download** `HelixSR-GPU-Lab-v0.3.5-lite-a53-beta.zip` from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases) and unzip it.
 2. **Start the installer:**
    - **Windows:** double-click `install.bat`.
    - **Mac / Linux:** open a terminal in the folder and run `sh install.sh`.
 3. **Answer its questions:**
    - Your PS5's **IP address**: on the PS5, go to *Settings › Network › View Connection Status*.
    - Whether it is a **PS5 Pro**.
-   - On a regular PS5, your **firmware version** (for example **11.60**). Firmware 11.60 includes the bundled combined Lite + A53 payload in this same installation. Other firmware and PS5 Pro keep their existing startup payloads.
+   - **Firmware is detected automatically.** A regular PS5 on 11.60 gets the bundled combined Lite + A53 payload in this same installation. Other firmware and PS5 Pro keep their existing startup payloads.
    - Type **yes** to accept **NVIDIA's DLSS license**. HelixSR's network is built from NVIDIA's DLSS file, which GPU Lab does not ship. The installer downloads it from NVIDIA's GitHub, uses it once on your PC and deletes it. This is the same thing HelixSR's own setup does.
    - When asked, **start the game** on your PS5 and wait at its title screen. The installer reads a few of your game's own files to build HelixSR's versions, because GPU Lab does not ship any game files.
    - When asked, **close the game**. The installer then copies everything to the PS5 and checks each file.
@@ -82,6 +82,6 @@ Leave out your IP address and your `my-ps5` folder.
 
 ## SAROS
 
-On a regular PS5, enter firmware **11.60** in the main **install.bat** / **install.sh** flow to install the bundled combined Lite + A53 payload together with GPU Lab. The same applies to `install --adopt`. No separate setup run is required. For scripts, pass `--firmware 11.60`; the firmware answer is saved for repeat installs. See [Lite + A53 setup](lite-1160-integrated.md). After a full restart: jailbreak → ShadowMount → combined Lite + A53 once → GPU Lab. See [the startup recipe](SAROS-START-HERE.md).
+The main **install.bat** / **install.sh** flow automatically detects firmware. On a regular PS5 running **11.60**, it installs the bundled combined Lite + A53 payload together with GPU Lab. The same applies to `install --adopt`. No separate setup run is required. No firmware argument is needed for scripts. Detection reads the current console on each install; saved versions never select the helper. See [Lite + A53 setup](lite-1160-integrated.md). After a full restart: jailbreak → ShadowMount → combined Lite + A53 once → GPU Lab. See [the startup recipe](SAROS-START-HERE.md).
 
 See [SAROS setup and measured limits](saros.md). To install only SAROS: `python tools/gpulab.py install --game saros-native-v1`. To recognize an already installed, matching SAROS effects-on v6 integration and update the app, add `--adopt`. Adoption verifies the existing executable and sidecar; it cannot upgrade an older SAROS trial.

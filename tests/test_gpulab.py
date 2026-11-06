@@ -138,16 +138,18 @@ class GpuLabTest(unittest.TestCase):
         path.write_bytes(payload)
         with patch.object(setup, 'BUNDLED_FILE', path), \
              patch.object(setup, 'OUTPUT_BYTES', len(payload)), \
-             patch.object(setup, 'OUTPUT_SHA256', sha(payload)):
+             patch.object(setup, 'OUTPUT_SHA256', sha(payload)), \
+             patch.object(self.ps5, 'firmware_raw', b'release: 0x11600005\r\nsys-repository-path: releases/11.60\r\n'):
             yield setup, path, payload
 
-    def test_main_install_includes_lite_and_reuses_firmware_on_repeat(self):
+    def test_main_install_detects_lite_firmware_fresh_without_prompts(self):
         before = self.ps5.snapshot()
         with self.bundled_lite() as (setup, _, payload):
-            with patch.object(User, 'ask', return_value='11.60') as ask:
+            with patch.object(User, 'ask', side_effect=AssertionError('firmware must be automatic')) as ask:
                 rc, out, _ = self.run_cli('install', '--model', 'ps5')
             self.assertEqual(rc, 0, out)
-            ask.assert_called_once()
+            ask.assert_not_called()
+            self.assertIn('Detected PS5 firmware 11.60', out)
             target = setup.PAYLOAD_ROOT + '/' + setup.SLOT + '/' + setup.FILENAME
             self.assertEqual(self.ps5.files[target], payload)
             self.assertIn('load Kstuff-Lite-v1.11-A53-11.60.elf once', out)
@@ -155,6 +157,7 @@ class GpuLabTest(unittest.TestCase):
             with patch.object(User, 'ask', side_effect=AssertionError('firmware already saved')):
                 self.assertEqual(self.run_cli('install', '--model', 'ps5')[0], 0)
             self.assertEqual(self.ps5.writes, writes)
+            self.assertEqual(self.ps5.firmware_reads, 2)
             self.assertEqual(self.run_cli('uninstall')[0], 0)
         self.assertEqual(self.ps5.snapshot(), before)
 
@@ -183,7 +186,35 @@ class GpuLabTest(unittest.TestCase):
             self.assertEqual(rc, 0, out)
             with patch.object(User, 'ask', side_effect=AssertionError('Pro needs no Lite question')):
                 self.assertIsNone(gpulab.prepare_startup_payload(
-                    self.ps5, gpulab.Journal('10.0.0.9'), User(self.ps5), 'ps5-pro', '11.60'))
+                    self.ps5, gpulab.Journal('10.0.0.9'), User(self.ps5), 'ps5-pro'))
+
+    def test_cached_firmware_cannot_enable_a_payload_for_another_firmware(self):
+        from lite1160 import setup
+        journal = gpulab.Journal('10.0.0.9')
+        journal.data['firmware'] = '11.60'
+        journal.save()
+        with patch.object(setup, 'prepare', side_effect=AssertionError('stale firmware must not select Lite')), \
+             patch.object(User, 'ask', side_effect=AssertionError('no firmware prompt')):
+            rc, out, _ = self.run_cli('install', '--model', 'ps5')
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(gpulab.Journal('10.0.0.9').data['firmware'], '13.60')
+
+    def test_unknown_or_conflicting_firmware_stops_before_builds_or_console_writes(self):
+        before = self.ps5.snapshot()
+        with patch.object(gpulab, 'ensure_weights', side_effect=AssertionError('must detect first')):
+            for raw in (None, b'release: not-a-version',
+                        b'release: 0x11600005\nsys-repository-path: releases/13.60\n'):
+                self.ps5.firmware_raw = raw
+                rc, out, _ = self.run_cli('install', '--model', 'ps5')
+                self.assertEqual(rc, 2, out)
+                self.assertEqual(self.ps5.snapshot(), before)
+
+    def test_expected_firmware_option_cannot_override_detection(self):
+        before = self.ps5.snapshot()
+        rc, out, _ = self.run_cli('install', '--model', 'ps5', '--firmware', '11.60')
+        self.assertEqual(rc, 2, out)
+        self.assertIn('this PS5 reports 13.60', out)
+        self.assertEqual(self.ps5.snapshot(), before)
 
     def test_main_adopt_also_installs_lite_without_rebuilding_games(self):
         g, _ = self.existing_aw2_for_adoption()

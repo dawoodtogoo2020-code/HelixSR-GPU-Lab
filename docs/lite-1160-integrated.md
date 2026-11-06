@@ -4,10 +4,10 @@ The GPU Lab release ZIP includes the tested **Kstuff-Lite-v1.11-A53-11.60.elf**.
 
 ## Set it up once
 
-1. Download and unzip **HelixSR-GPU-Lab-v0.3.4-lite-a53-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). Keep the extracted folder intact.
+1. Download and unzip **HelixSR-GPU-Lab-v0.3.5-lite-a53-beta.zip** from [Releases](https://github.com/dawoodtogoo2020-code/HelixSR-GPU-Lab/releases). Keep the extracted folder intact.
 2. On the PS5, close games and run the usual jailbreak, Payload Manager and ftpsrv. Setup only copies files; it does not inject a kernel payload.
-3. Double-click **install.bat** on Windows, or run **sh install.sh** on Mac/Linux. Enter the PS5's IP address, choose regular PS5 and enter firmware **11.60**.
-4. The main installer verifies the bundled ELF before changing console files, builds the selected game integrations, then installs GPU Lab, those integrations and the combined payload in one run. It asks for no payload reference files and performs no payload build. The firmware answer is saved for repeat installs; PS5 Pro and other firmware skip this firmware-specific helper.
+3. Double-click **install.bat** on Windows, or run **sh install.sh** on Mac/Linux. Enter the PS5's IP address and choose regular PS5. Firmware is detected automatically.
+4. The main installer verifies the bundled ELF before changing console files, builds the selected game integrations, then installs GPU Lab, those integrations and the combined payload in one run. It asks for no payload reference files and performs no payload build. The current firmware is read afresh on each install; PS5 Pro and other firmware skip this firmware-specific helper.
 5. After installation completes, restart normally. Run the usual jailbreak, load **ShadowMount**, then select **Kstuff-Lite-v1.11-A53-11.60.elf** in **Local once**. Open GPU Lab and launch SAROS normally.
 
 Use this combined entry instead of plain Lite, full Test5 and the earlier A53 bridge. Disable any other K-Stuff autoload entry before using this boot recipe. Do not add it to an already configured K-Stuff boot. Setup preserves existing payloads, favorites and autoload settings. It journals its own file changes, and GPU Lab's normal `uninstall` removes them or restores anything it replaced. Setup stores a receipt in `my-ps5/<console>/lite1160/` and reuses the bundled ELF without making another PC copy.
@@ -16,9 +16,15 @@ Windows uses GPU Lab's existing Python launcher, including its pinned official P
 
 ## Existing installations and scripts
 
-The main installer's `--adopt` upgrade path includes the combined payload on regular PS5 firmware 11.60. For noninteractive installs, pass `--firmware 11.60` along with the usual arguments. The installer asks for firmware when it has no saved answer; leaving it blank skips this optional firmware-specific helper.
+The main installer's `--adopt` upgrade path includes the combined payload on regular PS5 firmware 11.60. Interactive and scripted installs both detect firmware automatically, with no firmware prompt or required version argument. The optional `--firmware 11.60` argument now checks that detection matches the expected version; it cannot override detection.
 
 For **payload-only installation**, use `setup-kstuff-lite.bat` or `sh setup-kstuff-lite.sh`. These remain optional shortcuts for an existing GPU Lab setup. All files added by either route use the same normal uninstall journal.
+
+## Automatic firmware detection
+
+The installer reads the small system metadata file `/system_ex/etc/index.dat` over the existing FTP connection. It decodes the BCD `release` field (for example `0x11600005` → `11.60`) and checks that any security/system/middleware/VSH release-branch fields agree. This uses read-only file access: no probe payload, console command execution or changes to system files.
+
+Every installation reads the current console; the journal stores the result for diagnostics, not as a substitute for detection. Missing, malformed or conflicting metadata stops installation before builds or console file changes. If detection fails, check that ftpsrv is reachable and can read that system file, then rerun the installer.
 
 ## Manual installation alternative
 

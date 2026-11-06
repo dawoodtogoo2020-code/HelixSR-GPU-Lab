@@ -8,6 +8,7 @@ import ftplib
 import hashlib
 import io
 import json
+import re
 import urllib.request
 from pathlib import Path
 
@@ -19,6 +20,35 @@ class Refused(RuntimeError):
 def need(condition, message):
     if not condition:
         raise Refused(message)
+
+
+FIRMWARE_INDEX = '/system_ex/etc/index.dat'
+
+
+def parse_firmware_index(raw):
+    """Decode the BCD release field, checking any release-branch fields agree."""
+    error = 'Cannot detect PS5 firmware: invalid or conflicting system index metadata.'
+    need(isinstance(raw, bytes) and 0 < len(raw) <= 4096 and
+         all(32 <= b <= 126 or b in (9, 10, 13) for b in raw), error)
+    fields = {}
+    for line in raw.decode('ascii').splitlines():
+        if not line.strip():
+            continue
+        key, separator, value = line.partition(':')
+        key, value = key.strip().lower(), value.strip()
+        need(separator and key and key not in fields, error)
+        fields[key] = value
+    release = fields.get('release', '')
+    match = re.fullmatch(r'0[xX]([0-9a-fA-F]{8})', release)
+    need(match is not None, error)
+    digits = match[1][:4]
+    need(digits.isdigit() and int(digits[:2]) > 0, error)
+    version = '%d.%s' % (int(digits[:2]), digits[2:])
+    for key in ('security-repository-path', 'sys-repository-path',
+                'middleware-repository-path', 'vsh-repository-path'):
+        if key in fields:
+            need(fields[key] == 'releases/' + version, error)
+    return {'version': version, 'release': release.lower(), 'source': FIRMWARE_INDEX}
 
 
 class Console:
@@ -84,6 +114,15 @@ class Console:
         need(not running, 'A game or app is running on the PS5: close it first')
 
     # ---- reads
+    def firmware(self):
+        """Read installed system metadata afresh; no payloads or console writes."""
+        try:
+            raw = self.read(FIRMWARE_INDEX, 4096)
+        except (OSError, ftplib.Error) as exc:
+            raise Refused('Cannot detect PS5 firmware: ftpsrv could not read ' + FIRMWARE_INDEX +
+                          '. Check the FTP connection and system-file access.') from exc
+        return parse_firmware_index(raw)
+
     def listing(self, folder):
         """{name: {'dir': bool, 'bytes': int}}, or None when the folder does not exist."""
         lines = []
