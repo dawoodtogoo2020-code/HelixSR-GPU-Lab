@@ -5,6 +5,7 @@
     python gpulab.py                       guided install: asks for your PS5's IP address and does the rest
     python gpulab.py install   [--ps5 IP]  same, with options (see --help)
     python gpulab.py status    [--ps5 IP]  what is installed, and ON or OFF
+    python gpulab.py compatibility         list game builds in the local manifests
     python gpulab.py on|off GAME [--ps5 IP]
     python gpulab.py uninstall [--ps5 IP]  puts back everything this tool changed
 
@@ -80,6 +81,26 @@ def load_json(path):
 
 def games():
     return {g['id']: g for g in (load_json(p) for p in sorted(GAMES.glob('*/game.json')))}
+
+
+def compatibility(args):
+    query = args.game.strip().casefold() if args.game is not None else None
+    matches = []
+    for game in games().values():
+        if query is not None and query not in (game[key].casefold() for key in ('name', 'id', 'title')):
+            continue
+        if args.model and args.model not in game['models']:
+            continue
+        if args.version and args.version != game['version']:
+            continue
+        matches.append(game)
+    if not matches:
+        say('No matching game build in the local GPU Lab manifests.')
+        return 1
+    for game in matches:
+        say(f"{game['name']} | {game['title']} | {game['version']} | {', '.join(game['models'])}")
+        say(f"  {game['about']}")
+    return 0
 
 
 def bundle(model):
@@ -1004,6 +1025,10 @@ def uninstall(args, ui):
 def main(argv=None, ui=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='cmd')
+    catalog = sub.add_parser('compatibility', help='look up supported builds offline')
+    catalog.add_argument('game', nargs='?', help='game name, title ID or adapter ID')
+    catalog.add_argument('--model', choices=('ps5', 'ps5-pro'))
+    catalog.add_argument('--version', help='exact installed game version')
     for name in ('install', 'status', 'uninstall', 'on', 'off', 'setup-lite'):
         p = sub.add_parser(name)
         p.add_argument('--ps5', help="your PS5's IP address")
@@ -1025,6 +1050,8 @@ def main(argv=None, ui=None):
     args = ap.parse_args(argv)
     if args.cmd is None:
         args = ap.parse_args(['install'] + (argv or []))
+    if args.cmd == 'compatibility':
+        return compatibility(args)
     ui = ui or UI(args.yes)
     try:
         if args.cmd == 'setup-lite':

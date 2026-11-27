@@ -1,5 +1,7 @@
 # Compatibility
 
+From the extracted GPU Lab folder, run `gpulab.bat compatibility` on Windows or `sh gpulab.sh compatibility` on macOS or Linux to list the builds included with your copy. To check one build, for example, run `gpulab.bat compatibility "Alan Wake 2" --version 01.200.007 --model ps5`. You can also search by title ID or adapter ID. This reads local manifests and works with the console offline. A match describes the catalog entry. Installation still checks the files on your console.
+
 Last reviewed: 2026-11-05 (v0.3.1-saros-effects-beta).
 
 | Game / build | Console | Public install | What runs | Limits |

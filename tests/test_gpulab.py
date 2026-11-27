@@ -25,6 +25,22 @@ from fake_ps5 import FakePS5  # noqa: E402
 
 sha = lambda b: hashlib.sha256(b).hexdigest()
 STOCK = b'stock game executable ' * 300
+
+
+class OfflineCompatibilityTests(unittest.TestCase):
+    def test_lookup_with_console_offline(self):
+        with patch.object(gpulab, 'CONSOLE', side_effect=AssertionError('unexpected connection')):
+            for query in ('alan wake 2', 'ppsa02572', 'AW2-T12'):
+                with self.subTest(query=query), redirect_stdout(io.StringIO()) as output:
+                    self.assertEqual(gpulab.main(['compatibility', query, '--model', 'ps5',
+                                                  '--version', '01.200.007']), 0)
+                    self.assertIn('Alan Wake 2 | PPSA02572 | 01.200.007 | ps5', output.getvalue())
+            for args in (['GTA V'], ['Alan Wake 2', '--model', 'ps5-pro'],
+                         ['Alan Wake 2', '--version', '01.200.008']):
+                with self.subTest(args=args), redirect_stdout(io.StringIO()):
+                    self.assertEqual(gpulab.main(['compatibility', *args]), 1)
+
+
 WEIGHTS = bytes(range(256)) * 8
 SHADER = b'stock shader table ' * 50
 
