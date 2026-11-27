@@ -189,9 +189,9 @@ def main(argv=None):
         print("Usage: benchmark.py baseline.json candidate.json", file=sys.stderr)
         return 2
     try:
-        with open(argv[0], encoding="utf-8") as f:
+        with open(argv[0], "rb") as f:
             baseline = json.load(f, object_pairs_hook=unique_object, parse_constant=reject_constant)
-        with open(argv[1], encoding="utf-8") as f:
+        with open(argv[1], "rb") as f:
             candidate = json.load(f, object_pairs_hook=unique_object, parse_constant=reject_constant)
         result = compare(baseline, candidate)
         print(json.dumps(safe_output(result), indent=2, allow_nan=False))

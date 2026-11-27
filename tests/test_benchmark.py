@@ -3,6 +3,9 @@ import copy
 import importlib.util
 import math
 import json
+import io
+import tempfile
+from contextlib import redirect_stdout
 from pathlib import Path
 import unittest
 
@@ -23,6 +26,16 @@ def record():
 
 
 class CompareTests(unittest.TestCase):
+    def test_windows_json_exports(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            baseline = Path(tmp) / 'baseline.json'
+            candidate = Path(tmp) / 'candidate.json'
+            baseline.write_text(json.dumps(record()), encoding='utf-8-sig')
+            candidate.write_text(json.dumps(record()), encoding='utf-16')
+            with redirect_stdout(io.StringIO()) as output:
+                self.assertEqual(benchmark.main([baseline, candidate]), 0)
+            self.assertEqual(json.loads(output.getvalue())['speedup'], 1)
+
     def test_cross_device_and_environment_differences(self):
         a = record(); b = copy.deepcopy(a)
         b.update(device="B", compiler="compiler 2", samples=[2.0] * 10)
